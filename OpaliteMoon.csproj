@@ -8,10 +8,13 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>OpaliteMoonMod</RootNamespace>
   </PropertyGroup>
+
   
-  <PropertyGroup>
+  <PropertyGroup>                 
+                                  <!-- Include your own directories below  -->
     <GameManaged>C:\Program Files (x86)\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed</GameManaged>
     <BepinEx>C:\Users\noah3\AppData\Roaming\Thunderstore Mod Manager\DataFolder\LethalCompany\profiles\Tulip snake weight assist\BepInEx</BepinEx>
+
   </PropertyGroup>
 
   <ItemGroup>

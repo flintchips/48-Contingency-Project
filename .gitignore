@@ -1,17 +1,62 @@
-# root plugin project
+
 bin/
 obj/
 .idea/
+.vs/
 *.user
 *.suo
-.vs/
-# ignore the Unity rip by default
+*.userosscache
+*.sln.docstates
+
 LC Mod Testing/**
+
+!LC Mod Testing/Packages/
+!LC Mod Testing/Packages/**
+
+!LC Mod Testing/ProjectSettings/
+!LC Mod Testing/ProjectSettings/**
 
 !LC Mod Testing/Assets/
 !LC Mod Testing/Assets/LethalCompany/
 !LC Mod Testing/Assets/LethalCompany/Mods/
 !LC Mod Testing/Assets/LethalCompany/Mods/plugins/
 !LC Mod Testing/Assets/LethalCompany/Mods/plugins/OpaliteMod/
-# mod folder 
 !LC Mod Testing/Assets/LethalCompany/Mods/plugins/OpaliteMod/**
+
+LC Mod Testing/Library/
+LC Mod Testing/Temp/
+LC Mod Testing/Obj/
+LC Mod Testing/Logs/
+LC Mod Testing/Build/
+LC Mod Testing/Builds/
+LC Mod Testing/UserSettings/
+LC Mod Testing/MemoryCaptures/
+LC Mod Testing/Recordings/
+LC Mod Testing/.utmp/
+
+LC Mod Testing/*.csproj
+LC Mod Testing/*.sln
+LC Mod Testing/*.suo
+LC Mod Testing/*.tmp
+LC Mod Testing/*.user
+LC Mod Testing/*.userprefs
+LC Mod Testing/*.pidb
+LC Mod Testing/*.booproj
+LC Mod Testing/*.svd
+LC Mod Testing/*.pdb
+LC Mod Testing/*.mdb
+LC Mod Testing/*.opendb
+LC Mod Testing/*.VC.db
+
+LC Mod Testing/ServerData/
+LC Mod Testing/AssetBundles/
+LC Mod Testing/Assets/AssetBundles/
+LC Mod Testing/Assets/AddressableAssetsData/*/*.bin*
+
+LC Mod Testing/sysinfo.txt
+LC Mod Testing/*.stackdump
+LC Mod Testing/crashlytics-build.properties
+
+.DS_Store
+Thumbs.db
+desktop.ini

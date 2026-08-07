@@ -9,6 +9,7 @@ namespace OpaliteMoonMod
 {
     public class ApparatusDockHandler : NetworkBehaviour
     {
+        // hi
         public bool isPowered;
 
         public RoundManager roundManager;

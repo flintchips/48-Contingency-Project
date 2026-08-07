@@ -263,6 +263,7 @@ namespace OpaliteMoonMod
             bool canDock = LocalPlayerHoldingApparatus() && !isPowered;
             triggerScript.interactable = canDock;
             
+            
             triggerScript.hoverTip = canDock ? "[Insert Apparatus]" : "";
             triggerScript.disabledHoverTip = isPowered ? "[Locked]" : "[Requires Apparatus]";
         }

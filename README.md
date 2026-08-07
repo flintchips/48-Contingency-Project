@@ -12,8 +12,9 @@ OpaliteMoonProject/
 │   │   ├──  LethalCompany/          
 │   │   │   ├──  Mods/                 
 │   │   │   │   ├──  plugins/          
-│   │   │   │   │   ├──  OpaliteMod/  -- files here for the project i included here, everything else is removed
-.   .   .   .   .   .    ...
+│   │   │   │   │   └──  OpaliteMod/  -- files here for the project i included here, everything else is removed
+│   ├──  ProjectSettings/
+│   └──  Packages/
 ```
 
 ### How to set up a similar Project

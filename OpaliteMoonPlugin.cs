@@ -25,6 +25,7 @@ namespace OpaliteMoonMod
         public Transform apparatusPoint;
 
         private LungProp dockedApparatus;
+        public Animator DockLightAnimator;
 
         public float timeAtLastUse;
 
@@ -68,7 +69,6 @@ namespace OpaliteMoonMod
             }
 
             thisDockAnimator.SetBool("Open", value: false);
-            PlaySFX(DockingInteractions.Cancel);
             SyncCancelOpeningRpc();
         }
         
@@ -81,7 +81,6 @@ namespace OpaliteMoonMod
             }
 
             thisDockAnimator.SetBool("Open", value: false);
-            PlaySFX(DockingInteractions.Cancel);
         }
 
         private NetworkObject? GetApparatusFromInteractingPlayer()
@@ -127,8 +126,6 @@ namespace OpaliteMoonMod
 
             if (GetDockAnimators())
                 thisDockAnimator.SetBool("Open", false);
-            
-            PlaySFX(DockingInteractions.Late);
             
             isPowered = true;
             
@@ -194,12 +191,13 @@ namespace OpaliteMoonMod
                 triggerScript.hoverTip = "[Locked]";
             }
             
-            
             if (GetDockAnimators())
             {
                 thisDockAnimator.SetBool("Powered", true);
                 thisDockAnimator.SetBool("Open", false);
             }
+            
+            dockedApparatus = prop;
             
             if (connectAnimation == null)
                 connectAnimation = StartCoroutine(ConnectToMachinery());
@@ -208,17 +206,32 @@ namespace OpaliteMoonMod
 
         private IEnumerator ConnectToMachinery()
         {
-            if (dockingAudios.Length > 2)
+            GameObject newSparkParticle = null;
+            if (dockedApparatus != null && dockedApparatus.sparkParticle != null)
             {
-                dockingPointAudio.Stop();
-                dockingPointAudio.PlayOneShot(dockingAudios[2], 0.7f);
+                newSparkParticle = Object.Instantiate(
+                    dockedApparatus.sparkParticle,
+                    dockedApparatus.transform.position,
+                    Quaternion.identity,
+                    null);
             }
-
-            yield return new WaitForSeconds(1f);
-
-            roundManager.FlickerLights();
+            
+            dockingPointAudio.PlayOneShot(dockingAudios[0], 0.7f);
+            yield return new WaitForSeconds(0.1f);
+            if (newSparkParticle != null)
+                newSparkParticle.SetActive(true);
+            
+            yield return new WaitForSeconds(0.3f); 
+            
+            if (DockLightAnimator != null)
+                DockLightAnimator.SetBool("Light Begin", true);
+            if (roundManager != null)
+                roundManager.FlickerLights();
             
             yield return new WaitForSeconds(1f);
+            
+            if (newSparkParticle != null)
+                Object.Destroy(newSparkParticle, 2f); 
             connectAnimation = null;
             yield return null;
         }
@@ -231,7 +244,6 @@ namespace OpaliteMoonMod
                 return;
             timeAtLastUse = Time.realtimeSinceStartup;
             thisDockAnimator.SetBool("Open", true);
-            PlaySFX(DockingInteractions.Early);
             SyncStartOpeningRpc();
         }
         [Rpc(SendTo.NotMe, RequireOwnership = false)]
@@ -239,15 +251,6 @@ namespace OpaliteMoonMod
         {
             if (!GetDockAnimators()) return;
             thisDockAnimator.SetBool("Open", true);
-            PlaySFX(DockingInteractions.Early);
-        }
-        
-        private void PlaySFX(DockingInteractions interaction)
-        {
-            if (dockingAudios.Length < 2) return;
-            int num = UnityEngine.Random.Range(0, dockingAudios.Length);
-            dockingPointAudio.clip = interaction == DockingInteractions.Early ? dockingAudios[0] : dockingAudios[1];
-            dockingPointAudio.Play();
         }
 
         private bool GetDockAnimators()
@@ -259,7 +262,10 @@ namespace OpaliteMoonMod
         {
             if (triggerScript == null)
                 return;
-            if (!isPowered) thisDockAnimator.SetBool("Powered", value: false);
+            if (!isPowered)
+            {
+                thisDockAnimator.SetBool("Powered", value: false);
+            }
             
             bool canDock = LocalPlayerHoldingApparatus() && !isPowered;
             triggerScript.interactable = canDock;

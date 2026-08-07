@@ -8,14 +8,13 @@
 
 OpaliteMoonProject/
 ├──  LC Mod Testing/    - unity project root
-│   ├──  ProjectSettings/
-│   ├──  Packages/
 │   ├──  Assets/                       
 │   │   ├──  LethalCompany/          
 │   │   │   ├──  Mods/                 
 │   │   │   │   ├──  plugins/          
-│   │   │   │   │   ├──  OpaliteMod/  -- files here for the project i included here, everything else is removed
-.   .   .   .   .   .    ...
+│   │   │   │   │   └──  OpaliteMod/  -- files here for the project i included here, everything else is removed
+│   ├──  ProjectSettings/
+│   └──  Packages/
 ```
 
 ### How to set up a similar Project

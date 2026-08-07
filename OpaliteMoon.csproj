@@ -11,7 +11,7 @@
 
   
   <PropertyGroup>                 
-                                  <!-- Include your own directories below  -->
+    <!-- Include your own directories below, used for build dependencies and build directory, i need to make it put the dll in a bepinex profile too later  -->
     <GameManaged>C:\Program Files (x86)\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed</GameManaged>
     <BepinEx>C:\Users\noah3\AppData\Roaming\Thunderstore Mod Manager\DataFolder\LethalCompany\profiles\Tulip snake weight assist\BepInEx</BepinEx>
 

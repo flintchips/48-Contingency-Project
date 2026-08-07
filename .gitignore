@@ -5,9 +5,9 @@ obj/
 *.user
 *.suo
 .vs/
-# --- LC Mod Testing: ignore the Unity rip by default ---
+# ignore the Unity rip by default
 LC Mod Testing/**
-# Re-include parents on the path to OpaliteMod (required)
+
 !LC Mod Testing/Assets/
 !LC Mod Testing/Assets/LethalCompany/
 !LC Mod Testing/Assets/LethalCompany/Mods/

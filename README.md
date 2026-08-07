@@ -6,10 +6,10 @@
 OpaliteMoonProject/
 ├──  LC Mod Testing/    - unity project root
 │   ├──  Assets/                       
-│   │   ├──  LethalCompany/           
+│   │   ├──  LethalCompany/          
 │   │   │   ├──  Mods/                 
 │   │   │   │   ├──  plugins/          
-│   │   │   │   │   ├──  OpaliteMod/  -- actual files here for the project i included here
+│   │   │   │   │   ├──  OpaliteMod/  -- files here for the project i included here, everything else is removed
 .   .   .   .   .   .    ...
 ```
 

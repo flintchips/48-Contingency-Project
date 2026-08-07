@@ -8,6 +8,8 @@
 
 OpaliteMoonProject/
 ├──  LC Mod Testing/    - unity project root
+│   ├──  ProjectSettings/
+│   ├──  Packages/
 │   ├──  Assets/                       
 │   │   ├──  LethalCompany/          
 │   │   │   ├──  Mods/                 

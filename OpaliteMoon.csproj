@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>OpaliteMod</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>OpaliteMoonMod</RootNamespace>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <GameManaged>C:\Program Files (x86)\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed</GameManaged>
+    <BepinEx>C:\Users\noah3\AppData\Roaming\Thunderstore Mod Manager\DataFolder\LethalCompany\profiles\Tulip snake weight assist\BepInEx</BepinEx>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" IncludeAssets="compile" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(BepinEx)\core\0Harmony.dll</HintPath>
+      <Publicize>true</Publicize>
+    </Reference>
+    <Reference Include="BepInEx">
+      <HintPath>$(BepinEx)\core\BepInEx.dll</HintPath>
+      <Publicize>true</Publicize>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(GameManaged)\Assembly-CSharp.dll</HintPath>
+      <Publicize>true</Publicize>
+    </Reference>
+
+    <Reference Include="UnityEngine">
+      <HintPath>$(GameManaged)\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(GameManaged)\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Netcode.Runtime">
+      <HintPath>$(GameManaged)\Unity.Netcode.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Target Name="CopyToPlugins" AfterTargets="Build">
+    <Copy SourceFiles="C:\Users\noah3\Documents\OpaliteMoonScripts\bin\Debug\netstandard2.1\OpaliteMod.dll"
+          DestinationFolder="C:\Users\noah3\AppData\Roaming\Thunderstore Mod Manager\DataFolder\LethalCompany\profiles\Tulip snake weight assist\BepInEx\plugins\" />
+  </Target>
+  <Target Name="CopyToPlugins" AfterTargets="Build">
+    <Copy SourceFiles="C:\Users\noah3\Documents\OpaliteMoonScripts\bin\Debug\netstandard2.1\OpaliteMod.dll"
+          DestinationFolder="C:\Users\noah3\LC Mod Testing\Assets\LethalCompany\Mods\plugins\OpaliteMod\" />
+  </Target>
+</Project>

@@ -27,7 +27,8 @@ MonoBehaviour:
     Key:
       _namespace: opalite_moon
       _key: opalite
-    <ShipLandingOverrideAnimation>k__BackingField: {fileID: 0}
+    <ShipLandingOverrideAnimation>k__BackingField: {fileID: 7400000, guid: c15bbc524a878374fb1a6389572a7725,
+      type: 2}
     <ShipTakeoffOverrideAnimation>k__BackingField: {fileID: 0}
     <BaseWeight>k__BackingField: 0
     <WeatherSpawnWeightsConfig>k__BackingField: []

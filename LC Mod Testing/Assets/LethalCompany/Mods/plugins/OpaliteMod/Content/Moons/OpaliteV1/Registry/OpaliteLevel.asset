@@ -485,10 +485,6 @@ MonoBehaviour:
     rarity: 19
   - enemyType: {fileID: 11400000, guid: 4e5273821409ced4fb1f1d0b4b2c29fc, type: 2}
     rarity: 4
-  - enemyType: {fileID: 11400000, guid: def81ed3f0c39c6489628b44cc9d22c7, type: 2}
-    rarity: 56
-  - enemyType: {fileID: 11400000, guid: def81ed3f0c39c6489628b44cc9d22c7, type: 2}
-    rarity: 19
   specialEnemyRarity:
     overrideEnemy: {fileID: 0}
     percentageChance: 0

@@ -67,6 +67,7 @@ TagManager:
   - InsideEntranceDoor
   - IndirectLightSource
   - SpecialStartRoomBounds
+  - InsideControlRoomDoor
   layers:
   - Default
   - TransparentFX

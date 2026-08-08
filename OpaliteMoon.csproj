@@ -53,6 +53,7 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ControlRoomTeleport.cs" />
     <Compile Include="OpaliteMoonPlugin.cs" />
     <!-- include more if needed, this is so the csproj ignores everything in the unity project -->
   </ItemGroup>

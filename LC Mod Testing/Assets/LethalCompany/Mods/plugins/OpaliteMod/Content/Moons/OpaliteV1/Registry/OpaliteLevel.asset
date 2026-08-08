@@ -16,18 +16,18 @@ MonoBehaviour:
     type: 3}
   sceneName: Opalite
   levelID: 0
-  lockedForDemo: 1
+  lockedForDemo: 0
   spawnEnemiesAndScrap: 1
   PlanetName: Opalite-28
-  LevelDescription: 'POPULATION: None
+  LevelDescription: 'POPULATION: Evacuated
 
-    CONDITIONS: Previously mined for its rich
-    industrial resources, Liquidation is now largely an ocean moon.
+    CONDITIONS: Elevated terrain containing
+    various reservoirs along side hydroelectric dams.
 
-    FAUNA: '
+    FAUNA: Persistant'
   videoReel: {fileID: 0}
   riskLevel: C+
-  timeToArrive: 2.5
+  timeToArrive: 2
   OffsetFromGlobalTime: 0
   DaySpeedMultiplier: 1
   planetHasTime: 1
@@ -44,20 +44,19 @@ MonoBehaviour:
     weatherVariable: 0
     weatherVariable2: 0
     weatherVariableColor: {r: 0, g: 0, b: 0, a: 1}
-  - weatherType: 4
-    weatherVariable: -13
-    weatherVariable2: -5
-    weatherVariableColor: {r: 0, g: 0, b: 0, a: 1}
   overrideWeather: 0
   overrideWeatherType: 0
   currentWeather: 5
-  factorySizeMultiplier: 1.6
+  factorySizeMultiplier: 0.9
   dungeonFlowTypes:
   - id: 0
-    rarity: 118
+    rarity: 206
+    overrideLevelAmbience: {fileID: 0}
+  - id: 4
+    rarity: 102
     overrideLevelAmbience: {fileID: 0}
   - id: 1
-    rarity: 300
+    rarity: 10
     overrideLevelAmbience: {fileID: 0}
   spawnableMapObjects:
   - prefabToSpawn: {fileID: 1109960046437451, guid: be6ce5517a7bf2b47b4dc6fc78a105b5,
@@ -457,14 +456,14 @@ MonoBehaviour:
     rarity: 43
   - spawnableItem: {fileID: 11400000, guid: 4bc360bf794cbf449bcd42f87c97c276, type: 2}
     rarity: 43
-  minScrap: 28
-  maxScrap: 45
+  minScrap: 16
+  maxScrap: 19
   minTotalScrapValue: 300
   maxTotalScrapValue: 700
   levelAmbienceClips: {fileID: 11400000, guid: 3fe561b30a74dbd4596289671f6213ef, type: 2}
   maxEnemyPowerCount: 5
   maxOutsideEnemyPowerCount: 9
-  maxDaytimeEnemyPowerCount: 14
+  maxDaytimeEnemyPowerCount: 20
   maxInsideDiversityPowerCount: 100
   maxOutsideDiversityPowerCount: 100
   Enemies:
@@ -601,4 +600,4 @@ MonoBehaviour:
   spawnProbabilityRange: 2
   daytimeEnemiesProbabilityRange: 10
   levelIncludesSnowFootprints: 1
-  levelIconString: maptitan
+  levelIconString: mapvow

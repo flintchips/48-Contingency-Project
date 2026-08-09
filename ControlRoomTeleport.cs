@@ -252,10 +252,10 @@ public class ControlRoomTeleport : NetworkBehaviour
 		thisPlayerBody.eulerAngles = new Vector3(thisPlayerBody.eulerAngles.x, exitScript.entrancePoint.eulerAngles.y, thisPlayerBody.eulerAngles.z);
 		FinishOpeningEntrance(playShutAudio: false);
 		SetAudioPreset((int)GameNetworkManager.Instance.localPlayerController.playerClientId);
-		if (!checkedForFirstTime)
+		if (!checkedForFirstTime && isEntranceToControlRoom)
 		{
 			checkedForFirstTime = true;
-			StartCoroutine(playMusicOnDelay()); // play music for Control Room
+			StartCoroutine(playMusicOnDelay()); // control room music i made
 		}
         if (entranceId == 0 && isEntranceToControlRoom && StartOfRound.Instance.occlusionCuller.enabled)
         {

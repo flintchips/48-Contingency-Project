@@ -57,6 +57,7 @@
     <Compile Include="OpaliteMoonPlugin.cs" />
     <!-- include more if needed, this is so the csproj ignores everything in the unity project -->
   </ItemGroup>
+
   
   <Target Name="CopyToPlugins" AfterTargets="Build">
     <MakeDir Directories="$(BepInExPlugins);$(UnityModPlugins)" />

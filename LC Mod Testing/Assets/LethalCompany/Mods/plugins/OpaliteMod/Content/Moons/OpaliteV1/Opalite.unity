@@ -6655,12 +6655,12 @@ MonoBehaviour:
   reverbPreset: {fileID: 11400000, guid: b61e0bdcdd1de024d9cd11684ddb30a5, type: 2}
   usePreset: -1
   audioChanges:
-  - audio: {fileID: 0}
-    changeToClip: {fileID: 0}
+  - audio: {fileID: 8735487731197940604}
+    changeToClip: {fileID: 8300000, guid: 31a64169113ee6242a3f4a12c8d6013f, type: 3}
     stopAudio: 1
     changeAudioVolume: 0
     audioVolume: 0
-  - audio: {fileID: 0}
+  - audio: {fileID: 4262083903842309423}
     changeToClip: {fileID: 8300000, guid: 9833011930a495447b04ab7281987391, type: 3}
     stopAudio: 0
     changeAudioVolume: 1
@@ -6730,7 +6730,7 @@ MonoBehaviour:
   reverbPreset: {fileID: 11400000, guid: b61e0bdcdd1de024d9cd11684ddb30a5, type: 2}
   usePreset: -1
   audioChanges:
-  - audio: {fileID: 0}
+  - audio: {fileID: 8735487731197940604}
     changeToClip: {fileID: 8300000, guid: 9d58f6997ac30ff48a9c5279b568e8c3, type: 3}
     stopAudio: 0
     changeAudioVolume: 1
@@ -6803,8 +6803,8 @@ MonoBehaviour:
   reverbPreset: {fileID: 11400000, guid: d08ace685f36459458a2ee2103ae8655, type: 2}
   usePreset: -1
   audioChanges:
-  - audio: {fileID: 0}
-    changeToClip: {fileID: 0}
+  - audio: {fileID: 8735487731197940604}
+    changeToClip: {fileID: 8300000, guid: 31a64169113ee6242a3f4a12c8d6013f, type: 3}
     stopAudio: 0
     changeAudioVolume: 1
     audioVolume: 0
@@ -6837,12 +6837,12 @@ MonoBehaviour:
   reverbPreset: {fileID: 11400000, guid: b61e0bdcdd1de024d9cd11684ddb30a5, type: 2}
   usePreset: -1
   audioChanges:
-  - audio: {fileID: 0}
+  - audio: {fileID: 8735487731197940604}
     changeToClip: {fileID: 8300000, guid: 31a64169113ee6242a3f4a12c8d6013f, type: 3}
     stopAudio: 0
     changeAudioVolume: 1
     audioVolume: 0.6
-  - audio: {fileID: 0}
+  - audio: {fileID: 4262083903842309423}
     changeToClip: {fileID: 8300000, guid: 9833011930a495447b04ab7281987391, type: 3}
     stopAudio: 0
     changeAudioVolume: 1
@@ -74795,7 +74795,7 @@ MonoBehaviour:
   playersManager: {fileID: 0}
   customFirstTimeAudio: {fileID: 8300000, guid: fbb84c6f28b7e8641abf9e592a066c1e,
     type: 3}
-  audioReverbPreset: -1
+  audioReverbPreset: 2
   exitScript: {fileID: 1819311573}
   entrancePointAudio: {fileID: 1984759845}
   doorAudios:
@@ -104949,7 +104949,7 @@ Transform:
   m_GameObject: {fileID: 4963053251465248910}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 119.4, y: 12.6, z: -77.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -108817,7 +108817,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3446931677740167406
 Transform:
   m_ObjectHideFlags: 0
@@ -112252,7 +112252,7 @@ Transform:
   m_GameObject: {fileID: 3439122119782915135}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 2.8914223, z: -54}
+  m_LocalPosition: {x: 54.7, y: 2.8914223, z: -98.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -113504,7 +113504,7 @@ MonoBehaviour:
   entranceId: 0
   playersManager: {fileID: 0}
   audioReverbPreset: 2
-  exitScript: {fileID: 4147576983461310917}
+  exitScript: {fileID: 0}
   entrancePointAudio: {fileID: 4622980795272949383}
   doorAudios:
   - {fileID: 8300000, guid: 3be7a8834ad9b1c4c93623f198809bbb, type: 3}
@@ -120627,7 +120627,7 @@ Transform:
   m_GameObject: {fileID: 662627550205515738}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 40.3, y: -31.7, z: -19.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

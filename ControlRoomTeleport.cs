@@ -2,6 +2,7 @@
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace OpaliteMoonMod;
 
@@ -245,33 +246,43 @@ public class ControlRoomTeleport : NetworkBehaviour
 			HUDManager.Instance.DisplayTip("???", "The entrance appears to be blocked.");
 			return;
 		}
-		Transform thisPlayerBody = GameNetworkManager.Instance.localPlayerController.thisPlayerBody;
-		GameNetworkManager.Instance.localPlayerController.TeleportPlayer(exitScript.entrancePoint.position);
-		GameNetworkManager.Instance.localPlayerController.isInElevator = false;
-		GameNetworkManager.Instance.localPlayerController.isInHangarShipRoom = false;
-		thisPlayerBody.eulerAngles = new Vector3(thisPlayerBody.eulerAngles.x, exitScript.entrancePoint.eulerAngles.y, thisPlayerBody.eulerAngles.z);
+        
+        var localPlayer = GameNetworkManager.Instance.localPlayerController;
+        Transform thisPlayerBody = localPlayer.thisPlayerBody;
+        
+        localPlayer.TeleportPlayer(exitScript.entrancePoint.position);
+        localPlayer.isInElevator = false;
+        localPlayer.isInHangarShipRoom = false;
+        thisPlayerBody.eulerAngles = new Vector3(thisPlayerBody.eulerAngles.x, exitScript.entrancePoint.eulerAngles.y, thisPlayerBody.eulerAngles.z);
+        
+        localPlayer.isInsideFactory = isEntranceToControlRoom;
+        
+        if (localPlayer.nightVision != null)
+            localPlayer.nightVision.enabled = isEntranceToControlRoom;
+        
+        for (int i = 0; i < localPlayer.ItemSlots.Length; i++)
+        {
+            if (localPlayer.ItemSlots[i] != null)
+                localPlayer.ItemSlots[i].isInFactory = isEntranceToControlRoom;
+        }
+        if (localPlayer.ItemOnlySlot != null)
+            localPlayer.ItemOnlySlot.isInFactory = isEntranceToControlRoom;
+        
 		FinishOpeningEntrance(playShutAudio: false);
+        
 		SetAudioPreset((int)GameNetworkManager.Instance.localPlayerController.playerClientId);
+        
 		if (!checkedForFirstTime && isEntranceToControlRoom)
 		{
 			checkedForFirstTime = true;
 			StartCoroutine(playMusicOnDelay()); // control room music i made
 		}
-        if (entranceId == 0 && isEntranceToControlRoom && StartOfRound.Instance.occlusionCuller.enabled)
-        {
-            StartOfRound.Instance.occlusionCuller.SetToStartTile();
-        }
-        for (int i = 0; i < GameNetworkManager.Instance.localPlayerController.ItemSlots.Length; i++)
-        {
-            if (GameNetworkManager.Instance.localPlayerController.ItemSlots[i] != null)
-            {
-                GameNetworkManager.Instance.localPlayerController.ItemSlots[i].isInFactory = isEntranceToControlRoom;
-            }
-        }
-        if (GameNetworkManager.Instance.localPlayerController.ItemOnlySlot != null)
-        {
-            GameNetworkManager.Instance.localPlayerController.ItemOnlySlot.isInFactory = isEntranceToControlRoom;
-        }
+        
+        //if (entranceId == 0 && isEntranceToControlRoom && StartOfRound.Instance.occlusionCuller.enabled)
+        //{
+        //    StartOfRound.Instance.occlusionCuller.SetToStartTile();
+        //}
+        
 		timeAtLastUse = Time.realtimeSinceStartup;
 		TeleportPlayerServerRpc((int)GameNetworkManager.Instance.localPlayerController.playerClientId);
         GameNetworkManager.Instance.localPlayerController.isInsideFactory = isEntranceToControlRoom;
@@ -297,30 +308,32 @@ public class ControlRoomTeleport : NetworkBehaviour
 		{
 			return;
 		}
-
-		FindExitPoint();
+        
+        if (!FindExitPoint()) return;
+        
 		playersManager.allPlayerScripts[playerObj].TeleportPlayer(exitScript.entrancePoint.position, withRotation: true, exitScript.entrancePoint.eulerAngles.y);
 		playersManager.allPlayerScripts[playerObj].isInElevator = false;
 		playersManager.allPlayerScripts[playerObj].isInHangarShipRoom = false;
+        
+        var player = playersManager.allPlayerScripts[playerObj];
+        if (player == null || player == GameNetworkManager.Instance.localPlayerController)
+            return;
+        
+        player.isInsideFactory = isEntranceToControlRoom;
+        
+        if (player.nightVision != null)
+            player.nightVision.enabled = isEntranceToControlRoom;
+        
+        for (int i = 0; i < player.ItemSlots.Length; i++)
+        {
+            if (player.ItemSlots[i] != null)
+                player.ItemSlots[i].isInFactory = isEntranceToControlRoom;
+        }
+        if (player.ItemOnlySlot != null)
+            player.ItemOnlySlot.isInFactory = isEntranceToControlRoom;
+        
 		FinishOpeningEntrance(playShutAudio: false);
 		playersManager.allPlayerScripts[playerObj].isInsideFactory = isEntranceToControlRoom;
-		if (entranceId == 0 && isEntranceToControlRoom && GameNetworkManager.Instance.localPlayerController.isPlayerDead && GameNetworkManager.Instance.localPlayerController.spectatedPlayerScript == playersManager.allPlayerScripts[playerObj] && StartOfRound.Instance.occlusionCuller.enabled)
-		{
-            //StartOfRound.Instance.occlusionCuller.SetToStartTile();
-		}
-
-		for (int i = 0; i < playersManager.allPlayerScripts[playerObj].ItemSlots.Length; i++)
-		{
-			if (playersManager.allPlayerScripts[playerObj].ItemSlots[i] != null)
-			{
-				playersManager.allPlayerScripts[playerObj].ItemSlots[i].isInFactory = isEntranceToControlRoom;
-			}
-		}
-
-		if (playersManager.allPlayerScripts[playerObj].ItemOnlySlot != null)
-		{
-			playersManager.allPlayerScripts[playerObj].ItemOnlySlot.isInFactory = isEntranceToControlRoom;
-		}
 
 		if (GameNetworkManager.Instance.localPlayerController.isPlayerDead && playersManager.allPlayerScripts[playerObj] == GameNetworkManager.Instance.localPlayerController.spectatedPlayerScript)
 		{
@@ -336,14 +349,18 @@ public class ControlRoomTeleport : NetworkBehaviour
     
     private void SetAudioPreset(int playerObj)
     {
-        if (audioReverbPreset != -1)
+        if (audioReverbPreset < 0) return;
         {
             UnityEngine.Object.FindObjectOfType<AudioReverbPresets>().audioPresets[audioReverbPreset].ChangeAudioReverbForPlayer(StartOfRound.Instance.allPlayerScripts[playerObj]);
-            if (entrancePointAudio != null)
-            {
-                PlayAudioAtTeleportPositions();
-            }
+            var presets = UnityEngine.Object.FindObjectOfType<AudioReverbPresets>();
+            if (presets == null || presets.audioPresets == null ||
+                audioReverbPreset >= presets.audioPresets.Length) return;
+            var player = StartOfRound.Instance.allPlayerScripts[playerObj];
+            presets.audioPresets[audioReverbPreset].ChangeAudioReverbForPlayer(player);
         }
+        
+        if (entrancePointAudio != null)
+            PlayAudioAtTeleportPositions();
     }
     
     public void PlayAudioAtTeleportPositions()
@@ -424,3 +441,5 @@ public class ControlRoomTeleport : NetworkBehaviour
         }
     }
 }
+
+// cheesy becuase i dont know how to fix this so im just gonna make it do this sue me mark zuckerburg

@@ -1,8 +1,13 @@
 ### Description
-> coming soon!
+This is a moon I'm currently working on for v81. (VERY WIP) 
 
-yo im not renaming opalite in the folders other 
-than the selectble level n certain stuff 
+Danger level B+ and costs 30 credits 
+
+Originally called "Opalite-28", but i renamed it. Becoming a sister moon/orbiting 48-Velit by WaterGun 
+
+
+> yo im not renaming opalite in the folders other 
+> than the selectble level n certain stuff 
 ### Folder Structure
 
 ```

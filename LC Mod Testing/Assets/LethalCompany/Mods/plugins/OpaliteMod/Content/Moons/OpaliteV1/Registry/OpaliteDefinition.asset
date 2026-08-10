@@ -16,7 +16,7 @@ MonoBehaviour:
   _tags: []
   <Key>k__BackingField:
     _namespace: opalite_moon
-    _key: opalitetwoeight
+    _key: contingency
   <Level>k__BackingField: {fileID: 11400000, guid: 27b0c898c88ee5143946e1160080d242,
     type: 2}
   _scenes:
@@ -27,15 +27,14 @@ MonoBehaviour:
     Key:
       _namespace: opalite_moon
       _key: opalite
-    <ShipLandingOverrideAnimation>k__BackingField: {fileID: 7400000, guid: c15bbc524a878374fb1a6389572a7725,
-      type: 2}
+    <ShipLandingOverrideAnimation>k__BackingField: {fileID: 0}
     <ShipTakeoffOverrideAnimation>k__BackingField: {fileID: 0}
     <BaseWeight>k__BackingField: 0
     <WeatherSpawnWeightsConfig>k__BackingField: []
     <GenerateWeightsConfig>k__BackingField: 0
   <TerminalPredicate>k__BackingField: {fileID: 0}
   <PricingStrategy>k__BackingField: {fileID: 0}
-  <Cost>k__BackingField: 31
+  <Cost>k__BackingField: 30
   <OutsideEnemiesSpawnProbabilityRange>k__BackingField: 3
   <GenerateEnemyPowerCountConfigs>k__BackingField: 1
   <GenerateEnemySpawnCurveConfigs>k__BackingField: 1

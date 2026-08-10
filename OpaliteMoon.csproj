@@ -38,6 +38,9 @@
     <Reference Include="UnityEngine">
       <HintPath>$(GameManaged)\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.RenderPipelines.HighDefinition">
+      <HintPath>$(GameManaged)\Unity.RenderPipelines.HighDefinition</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(GameManaged)\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
@@ -53,11 +56,16 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ControlRoomGen.cs" />
     <Compile Include="ControlRoomTeleport.cs" />
+    <Compile Include="KyividikaiHandler.cs" />
     <Compile Include="OpaliteMoonPlugin.cs" />
     <!-- include more if needed, this is so the csproj ignores everything in the unity project -->
   </ItemGroup>
 
+  <Target Name="NetcodePatch" AfterTargets="PostBuildEvent">
+    <Exec Command="netcode-patch -uv 2022.3.62 -nv 1.12.2 -tv 1.0.0 &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')"/>
+  </Target>
   
   <Target Name="CopyToPlugins" AfterTargets="Build">
     <MakeDir Directories="$(BepInExPlugins);$(UnityModPlugins)" />

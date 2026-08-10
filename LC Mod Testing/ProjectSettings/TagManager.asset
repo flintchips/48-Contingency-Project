@@ -68,6 +68,8 @@ TagManager:
   - IndirectLightSource
   - SpecialStartRoomBounds
   - InsideControlRoomDoor
+  - CRPoweredLights
+  - SkyAndFogVolume
   layers:
   - Default
   - TransparentFX

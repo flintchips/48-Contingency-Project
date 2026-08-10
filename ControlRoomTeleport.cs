@@ -13,6 +13,7 @@ public class ControlRoomTeleport : NetworkBehaviour
     // items inside count as being inside the facility
     
     public bool isEntranceToControlRoom;
+    
 
     public Transform entrancePoint;
 
@@ -49,6 +50,8 @@ public class ControlRoomTeleport : NetworkBehaviour
     private bool exitPointDoesntExist;
 
     private bool playingCreakAudio;
+
+    public List<Light> dayLights;
     
     private void Awake()
     {
@@ -256,9 +259,22 @@ public class ControlRoomTeleport : NetworkBehaviour
         thisPlayerBody.eulerAngles = new Vector3(thisPlayerBody.eulerAngles.x, exitScript.entrancePoint.eulerAngles.y, thisPlayerBody.eulerAngles.z);
         
         localPlayer.isInsideFactory = isEntranceToControlRoom;
+        if (isEntranceToControlRoom)
+        {
+            var controlRoomNightVision = localPlayer.gameObject.GetComponent<ControlRoomNightVision>();
+            if (controlRoomNightVision == null)
+                controlRoomNightVision = localPlayer.gameObject.AddComponent<ControlRoomNightVision>();
+            controlRoomNightVision.dayLights = dayLights;       
+            controlRoomNightVision.apparatusDockHandler = FindAnyObjectByType<ApparatusDockHandler>();
+        }
+        else
+        {
+            var controlRoomNightVision = localPlayer.gameObject.GetComponent<ControlRoomNightVision>();
+            if (controlRoomNightVision != null)
+                Destroy(controlRoomNightVision); 
+        }
         
-        if (localPlayer.nightVision != null)
-            localPlayer.nightVision.enabled = isEntranceToControlRoom;
+        localPlayer.isInsideFactory = isEntranceToControlRoom;
         
         for (int i = 0; i < localPlayer.ItemSlots.Length; i++)
         {
@@ -320,9 +336,6 @@ public class ControlRoomTeleport : NetworkBehaviour
             return;
         
         player.isInsideFactory = isEntranceToControlRoom;
-        
-        if (player.nightVision != null)
-            player.nightVision.enabled = isEntranceToControlRoom;
         
         for (int i = 0; i < player.ItemSlots.Length; i++)
         {

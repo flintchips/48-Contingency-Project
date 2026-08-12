@@ -33,7 +33,7 @@ public class ControlRoomTeleport : NetworkBehaviour
 
     public AudioClip[] doorAudios;
 
-    private InteractTrigger triggerScript;
+    public InteractTrigger triggerScript;
 
     private float checkForEnemiesInterval;
 
@@ -259,23 +259,7 @@ public class ControlRoomTeleport : NetworkBehaviour
         thisPlayerBody.eulerAngles = new Vector3(thisPlayerBody.eulerAngles.x, exitScript.entrancePoint.eulerAngles.y, thisPlayerBody.eulerAngles.z);
         
         localPlayer.isInsideFactory = isEntranceToControlRoom;
-        if (isEntranceToControlRoom)
-        {
-            var controlRoomNightVision = localPlayer.gameObject.GetComponent<ControlRoomNightVision>();
-            if (controlRoomNightVision == null)
-                controlRoomNightVision = localPlayer.gameObject.AddComponent<ControlRoomNightVision>();
-            controlRoomNightVision.dayLights = dayLights;       
-            controlRoomNightVision.apparatusDockHandler = FindAnyObjectByType<ApparatusDockHandler>();
-        }
-        else
-        {
-            var controlRoomNightVision = localPlayer.gameObject.GetComponent<ControlRoomNightVision>();
-            if (controlRoomNightVision != null)
-                Destroy(controlRoomNightVision); 
-        }
-        
-        localPlayer.isInsideFactory = isEntranceToControlRoom;
-        
+
         for (int i = 0; i < localPlayer.ItemSlots.Length; i++)
         {
             if (localPlayer.ItemSlots[i] != null)

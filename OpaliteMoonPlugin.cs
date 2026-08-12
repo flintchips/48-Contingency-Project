@@ -7,6 +7,8 @@ using Object = UnityEngine.Object;
 using BepInEx;
 using UnityEngine.Rendering;
 using System.Collections.Generic;
+using UnityEngine.Events;
+using UnityEngine.Yoga;
 
 namespace OpaliteMoonMod
 {
@@ -14,8 +16,8 @@ namespace OpaliteMoonMod
     public sealed class OpaliteMoonPlugin : BaseUnityPlugin
     {
         
-        public const string PluginGuid = "com.flintchips.OpaliteMoonMod";
-        public const string PluginName = "Opalite";
+        public const string PluginGuid = "com.flintchips.48 Contingency";
+        public const string PluginName = "48 Contingency";
         public const string PluginVersion = "0.1.0";
 
         private void Awake()
@@ -33,6 +35,232 @@ namespace OpaliteMoonMod
                     }
                 }
             }
+        }
+    }
+
+    public class ControlRoomManager : NetworkBehaviour
+    {
+        public ApparatusDockHandler dockHandler;
+        public SpawnSyncedObject[] storageShelfSpawns;
+        public List<PlayerControllerB> playersInsideControlRoom = new List<PlayerControllerB>();
+        public ControlRoomTeleport controlRoomTeleport, outdoorControlRoomTeleport;
+        public EntranceTeleport controlRoomFireTeleport, indoorFireTeleport;
+
+        public AnimatedObjectTrigger BigDoor;
+
+        public bool hasBeenPowered;
+        private bool isPoweredOld;
+        
+        private InteractTrigger controlRoomFireTrigger, indoorFireTrigger;
+
+        public void Awake()
+        {
+            if(dockHandler == null) dockHandler = FindObjectOfType<ApparatusDockHandler>(); // dont be stupid and use more than 1
+            // fire exit ref is so i can get add a listener to the indoor fire exit for
+            // telling when the player exits the fire exit into the control room instead of outside
+            SetFireExitReferences();
+            SpawnLockersAndRandomProps();
+        }
+
+        public void LateUpdate()
+        {
+            hasBeenPowered = dockHandler.isPowered;
+            if(!isPoweredOld && hasBeenPowered) OnBeginPowerServerRpc();
+            isPoweredOld = dockHandler.isPowered;
+        }
+        
+        [ServerRpc(RequireOwnership = false)]
+        public void OnBeginPowerServerRpc()
+        {
+            OnBeginPowerClientRpc();
+        }
+        
+        [ClientRpc]
+        public void OnBeginPowerClientRpc()
+        {
+            StartCoroutine(BigDoorOpen());
+        }
+
+        private void SetFireExitReferences()
+        {
+            StartCoroutine(WaitForIndoorFireTeleportToSpawn());
+        }
+
+        private IEnumerator WaitForIndoorFireTeleportToSpawn() // idk when indoor fire exit spawns 
+        {
+            float startTime = Time.timeSinceLevelLoad;
+        
+            while (controlRoomFireTeleport != null && controlRoomFireTeleport.exitScript == null && Time.timeSinceLevelLoad - startTime < 15f)
+            {
+                yield return new WaitForSeconds(1f);
+            }
+            InitFireExitListeners();
+        }
+        
+        private void SpawnLockersAndRandomProps()
+        {
+            StartCoroutine(WaitForLevelSeed());
+        }
+
+        private IEnumerator WaitForLevelSeed()
+        {
+            float startTime = Time.timeSinceLevelLoad;
+            
+            while (!RoundManager.Instance.hasInitializedLevelRandomSeed && Time.timeSinceLevelLoad - startTime < 15f)
+            {
+                yield return new WaitForSeconds(1f);
+            }
+            SetUpLockerSpawnsServerRpc();
+        }
+        
+        private IEnumerator BigDoorOpen() 
+        {
+            yield return new WaitForSeconds(1f);
+            BigDoor.SetBoolOnClientOnly(true);
+        }
+        
+        public void InitFireExitListeners()
+        {
+            if(controlRoomFireTeleport == null || controlRoomFireTeleport.exitScript == null) Debug.LogError("[ControlRoomManager] Indoor fire exit or control or teleport or is null");
+
+            if (indoorFireTeleport == null && controlRoomFireTeleport)
+            {
+                indoorFireTeleport = controlRoomFireTeleport.exitScript;
+            }
+            
+            controlRoomFireTrigger = controlRoomFireTeleport.GetComponent<InteractTrigger>();
+            indoorFireTrigger = indoorFireTeleport.GetComponent<InteractTrigger>();
+            
+            controlRoomFireTrigger.onInteract.AddListener(ControlRoomFireTeleportPlayer);
+            indoorFireTrigger.onInteract.AddListener(IndoorFireTeleportPlayer);
+            Debug.Log($"[ControlRoomManager] added event controlRoomTeleportAction to controlRoomFireTrigger.onInteract");
+            Debug.Log($"[ControlRoomManager] added event indoorTeleportAction to indoorFireTrigger.onInteract");
+        }
+        
+        [ServerRpc (RequireOwnership = false)]
+        private void SetUpLockerSpawnsServerRpc()
+        {
+            int seed = StartOfRound.Instance.randomMapSeed;
+            float spawnChance = 0.5f;
+            System.Random random = new System.Random(seed);
+            bool[] activeLockers = new bool[storageShelfSpawns.Length];
+            for (int i = 0; i < activeLockers.Length; i++)
+            {
+                if (random.NextDouble() <= spawnChance)
+                {
+                    activeLockers[i] = true;
+                }
+            }
+
+            SetUpLockerSpawnsClientRpc(activeLockers);
+        }
+        
+        [ClientRpc]
+        private void SetUpLockerSpawnsClientRpc(bool[] activeLockers)
+        {
+            for (int i = 0; i < activeLockers.Length; i++)
+            {
+                bool spawn = activeLockers[i];
+                if (spawn)
+                {
+                    Instantiate(storageShelfSpawns[i].gameObject, storageShelfSpawns[i].transform);
+                }
+            }
+        }
+
+        private void IndoorFireTeleportPlayer(PlayerControllerB player)
+        {
+            Debug.Log($"[ControlRoomManager] Teleported from Factory -> ControlRoom. Teleport finished from local player {player.actualClientId}");
+            UpdateControlRoomPresenceServerRpc(player.actualClientId, true, true);
+        }
+        
+        private void ControlRoomFireTeleportPlayer(PlayerControllerB player)
+        {
+            Debug.Log($"[ControlRoomManager] Teleported from ControlRoom -> Factory. Teleport finished from local player {player.actualClientId}");
+            UpdateControlRoomPresenceServerRpc(player.actualClientId, false, true);
+        }
+        
+        private void OutdoorControlRoomDoorTeleportPlayer(PlayerControllerB player)
+        {
+            Debug.Log($"[ControlRoomManager] Teleported from Outside -> ControlRoom. Teleport finished from local player {player.actualClientId}");
+            UpdateControlRoomPresenceServerRpc(player.actualClientId, true, true);
+        }
+        
+        private void IndoorControlRoomDoorTeleportPlayer(PlayerControllerB player)
+        {
+            Debug.Log($"[ControlRoomManager] Teleported from ControlRoom -> Outside. Teleport finished from local player {player.actualClientId}");
+            UpdateControlRoomPresenceServerRpc(player.actualClientId, false, false);
+        }
+        
+        [ServerRpc(RequireOwnership = false)]
+        private void UpdateControlRoomPresenceServerRpc(ulong clientId, bool isEntering, bool toFactory)
+        {
+            UpdateControlRoomPresenceClientRpc(clientId, isEntering, toFactory);
+        }
+        
+        [ClientRpc]
+        private void UpdateControlRoomPresenceClientRpc(ulong clientId, bool isEntering, bool inFactory)
+        {
+            // getting the specific player out of the list
+            PlayerControllerB targetPlayer = StartOfRound.Instance.allPlayerScripts.FirstOrDefault(p => p.actualClientId == clientId);
+
+            if (targetPlayer == null) return;
+
+            if (isEntering)
+            {
+                if (!playersInsideControlRoom.Contains(targetPlayer))
+                {
+                    playersInsideControlRoom.Add(targetPlayer);
+                    var addon = targetPlayer.gameObject.AddComponent<ControlRoomPlayerManager>();
+                    addon.EnterControlRoom(inFactory);
+                    Debug.Log($"[ControlRoomManager] Added {targetPlayer.playerUsername} to Control Room Synced");
+                }
+            }
+            else
+            {
+                if (playersInsideControlRoom.Contains(targetPlayer))
+                {
+                    playersInsideControlRoom.Remove(targetPlayer);
+                    var addon = targetPlayer.gameObject.AddComponent<ControlRoomPlayerManager>();
+                    addon.LeaveControlRoom(inFactory);
+                    Destroy(addon);
+                    Debug.Log($"[ControlRoomManager] Removed {targetPlayer.playerUsername} from Control Room Synced");
+                }
+            }
+        }
+    }
+
+    public class ControlRoomPlayerManager : MonoBehaviour
+    {
+        public PlayerControllerB player;
+        public ControlRoomManager controlRoom;
+        public ControlRoomPlayerManager()
+        {
+            player = GetComponent<PlayerControllerB>();
+            if(player == null) Destroy(this.gameObject);
+        }
+
+        public void LateUpdate()
+        {
+            // givet he player inside lighting but without nightvision  unless the room is powered
+            player.nightVision.enabled = controlRoom.hasBeenPowered;
+            
+            RoundManager.Instance.timeScript.insideLighting = true;
+        }
+        
+        public void EnterControlRoom(bool inFactory)
+        {
+            player.nightVision.enabled = controlRoom.hasBeenPowered;
+        }
+        
+        public void LeaveControlRoom(bool inFactory)
+        {
+            RoundManager.Instance.timeScript.insideLighting = inFactory;
+        }
+
+        public void OnDestroy()
+        {
+            Debug.Log("[ControlRoomPlayerManager] I have been destroyed");
         }
     }
 
@@ -87,7 +315,7 @@ namespace OpaliteMoonMod
             roundManager = FindObjectOfType<RoundManager>();
         }
 
-        public void FinishOpening()
+        public void FinishOpening() // interacting with dock stuff
         {
             if (!GetDockAnimators())
                 return;
@@ -104,7 +332,7 @@ namespace OpaliteMoonMod
             PlaceApparatusServerRpc(new NetworkObjectReference(apparatus));
         }
         
-        public void CancelOpening()
+        public void CancelOpening() // interacting with dock stuff
         {
             if (!GetDockAnimators())
             {
@@ -116,7 +344,7 @@ namespace OpaliteMoonMod
         }
         
         [Rpc(SendTo.NotMe, RequireOwnership = false)]
-        public void SyncCancelOpeningRpc()
+        public void SyncCancelOpeningRpc() 
         {
             if (!GetDockAnimators())
             {
@@ -226,14 +454,18 @@ namespace OpaliteMoonMod
         private void DockApparatusLocal(LungProp prop, NetworkObject apparatus, bool stripHolder)
         {
             if (prop == null || apparatus == null) return;
+            
             NetworkObject parentNetObj = GetApparatusParentNetworkObject();
             Transform dockTransform = apparatusPoint != null ? apparatusPoint : parentNetObj != null ? parentNetObj.transform : null;
+            
             if (stripHolder)
             {
                 PlayerControllerB holder = prop.playerHeldBy;
                 PlayerControllerB local = GameNetworkManager.Instance != null ? GameNetworkManager.Instance.localPlayerController : null;
+                
                 if (holder == null && local != null && local.currentlyHeldObjectServer == prop)
                     holder = local;
+                
                 if (holder != null)
                 {
                     if (holder.currentlyHeldObjectServer == prop || holder.isHoldingObject)
@@ -262,25 +494,35 @@ namespace OpaliteMoonMod
             {
                 apparatus.transform.SetParent(dockTransform, worldPositionStays: false);
             }
+            
+            BoxCollider apparatusCollider = prop.GetComponent<BoxCollider>();
+            if (apparatusCollider != null)
+            {
+                apparatusCollider.enabled = false;
+                BoxCollider thisColliderAddition = triggerScript.gameObject.AddComponent<BoxCollider>();
+                thisColliderAddition.center = triggerScript.transform.InverseTransformPoint(
+                    apparatusCollider.transform.TransformPoint(apparatusCollider.center));
+                thisColliderAddition.size = triggerScript.transform.InverseTransformVector(
+                    apparatusCollider.transform.TransformVector(apparatusCollider.size));
+                thisColliderAddition.size = new Vector3(
+                    Mathf.Abs(thisColliderAddition.size.x),
+                    Mathf.Abs(thisColliderAddition.size.y),
+                    Mathf.Abs(thisColliderAddition.size.z));
+                thisColliderAddition.isTrigger = false;
+            }
+            
             if (dockTransform != null)
                 prop.parentObject = dockTransform;
             else if (parentNetObj != null)
                 prop.parentObject = parentNetObj.transform;
+            
             prop.isHeld = false;
-            prop.isHeldByEnemy = false;
             prop.playerHeldBy = null;
             prop.hasHitGround = true;
             prop.grabbable = false;
             prop.grabbableToEnemies = false;
             prop.fallTime = 1f;
-            var rb = prop.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.isKinematic = true;
-                rb.velocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-                
-            }
+            
             apparatus.transform.localPosition = Vector3.zero;
             apparatus.transform.localEulerAngles = new Vector3(0f, 180f, 0f);
         }
@@ -426,250 +668,8 @@ namespace OpaliteMoonMod
         }
     }
     // end class
-    
-    public class ControlRoomNightVision : MonoBehaviour
-    {
-        public ApparatusDockHandler apparatusDockHandler;
-        public PlayerControllerB playerController;
-        public List<Light> dayLights;
-        public GameObject skyAndFogGlobalVolume;
-        
-        [Header("Dark settings")]
-        public bool zeroAmbient = true;
-        public Color ambientInside = Color.black;
-        private bool savedNvEnabled;
-        private float savedNvIntensity;
-        private bool cachedNv;
-        private bool cachedAmbient;
-        private AmbientMode savedAmbientMode;
-        private Color savedAmbientSky, savedAmbientEquator, savedAmbientGround, savedAmbientLight;
-        private float savedAmbientIntensity;
-        private bool cachedVolume;
-        private bool savedVolumeActive;
-        private readonly Dictionary<Light, LightSave> savedLights = new Dictionary<Light, LightSave>();
-        private Coroutine pinRoutine;
-        
-        private struct LightSave
-        {
-            public bool activeSelf;
-            public bool enabled;
-            public float intensity;
-        }
-        
-        private void Awake()
-        {
-            playerController = GetComponent<PlayerControllerB>();
-        }
 
-        
-        // added to player when they enter by control room teleport and removed the same way
-        private void Start()
-        {
-            if (playerController == null)
-                playerController = GetComponent<PlayerControllerB>();
-            if (apparatusDockHandler == null)
-                apparatusDockHandler = FindAnyObjectByType<ApparatusDockHandler>();
-            if (playerController == null || apparatusDockHandler == null)
-            {
-                Debug.LogError("[ControlRoomNightVision] Missing player or ApparatusDockHandler. DESTROYING.");
-                Destroy(this);
-                return;
-            }
-            // dayLights usually assigned by ControlRoomTeleport 
-            if (dayLights == null)
-                dayLights = new List<Light>();
-            TryResolveSkyVolume();
-            CacheAll();
-            pinRoutine = StartCoroutine(PinDarkEndOfFrame());
-            Debug.Log($"[ControlRoomNightVision] Active. lights={dayLights.Count} volume={(skyAndFogGlobalVolume != null ? skyAndFogGlobalVolume.name : "null")}");
-        }
-
-        private void OnDestroy()
-        {
-            if (pinRoutine != null)
-            {
-                StopCoroutine(pinRoutine);
-                pinRoutine = null;
-            }
-            RestoreAll();
-            Debug.Log("[ControlRoomNightVision] DESTROYED - Restored Sun Lights, SkyAndFogGlobalVolume, Ambient and NightVision.");
-        }
-        
-        private IEnumerator PinDarkEndOfFrame()
-        {
-            var wait = new WaitForEndOfFrame();
-            while (enabled)
-            {
-                ApplyDark();
-                ApplyNightVision();
-                yield return wait;
-            }
-        }
-        
-        private void TryResolveSkyVolume()
-        {
-            if (skyAndFogGlobalVolume != null) return;
-        
-            var all = Resources.FindObjectsOfTypeAll<Transform>();
-            // use name to find it
-            for (int i = 0; i < all.Length; i++)
-            {
-                if (all[i] != null && all[i].name == "Sky and Fog Global Volume")
-                {
-                    if (all[i].gameObject.scene.IsValid())
-                    {
-                        skyAndFogGlobalVolume = all[i].gameObject;
-                        return;
-                    }
-                }
-            }
-            // search siblings
-            if (dayLights != null && dayLights.Count > 0 && dayLights[0] != null)
-            {
-                Transform t = dayLights[0].transform;
-                while (t.parent != null) t = t.parent;
-                var found = t.GetComponentsInChildren<Transform>(true);
-                foreach (var c in found)
-                {
-                    if (c.name == "Sky and Fog Global Volume")
-                    {
-                        skyAndFogGlobalVolume = c.gameObject;
-                        return;
-                    }
-                }
-            }
-            Debug.LogWarning("[ControlRoomNightVision] Sky and Fog Global Volume not found.");
-        }
-        
-        private void CacheAll()
-        {
-            foreach (var light in dayLights)
-            {
-                if (light == null || savedLights.ContainsKey(light)) continue;
-                savedLights[light] = new LightSave
-                {
-                    activeSelf = light.gameObject.activeSelf,
-                    enabled = light.enabled,
-                    intensity = light.intensity
-                };
-            }
-            
-            if (skyAndFogGlobalVolume != null && !cachedVolume)
-            {
-                cachedVolume = true;
-                savedVolumeActive = skyAndFogGlobalVolume.activeSelf;
-            }
-            
-            if (zeroAmbient && !cachedAmbient)
-            {
-                cachedAmbient = true;
-                savedAmbientMode = RenderSettings.ambientMode;
-                savedAmbientSky = RenderSettings.ambientSkyColor;
-                savedAmbientEquator = RenderSettings.ambientEquatorColor;
-                savedAmbientGround = RenderSettings.ambientGroundColor;
-                savedAmbientLight = RenderSettings.ambientLight;
-                savedAmbientIntensity = RenderSettings.ambientIntensity;
-            }
-            
-            if (playerController != null && playerController.nightVision != null && !cachedNv)
-            {
-                cachedNv = true;
-                savedNvEnabled = playerController.nightVision.enabled;
-                savedNvIntensity = playerController.nightVision.intensity;
-            }
-        }
-        
-        private void ApplyDark()
-        {
-            if (dayLights != null)
-            {
-                for (int i = 0; i < dayLights.Count; i++)
-                {
-                    Light light = dayLights[i];
-                    if (light == null) continue;
-                    if (light.gameObject.activeSelf)
-                        light.gameObject.SetActive(false);
-                    light.enabled = false;
-                    light.intensity = 0f;
-                }
-            }
-   
-            if (skyAndFogGlobalVolume != null && skyAndFogGlobalVolume.activeSelf)
-                skyAndFogGlobalVolume.SetActive(false);
-  
-            if (zeroAmbient)
-            {
-                RenderSettings.ambientMode = AmbientMode.Flat;
-                RenderSettings.ambientLight = ambientInside;
-                RenderSettings.ambientSkyColor = ambientInside;
-                RenderSettings.ambientEquatorColor = ambientInside;
-                RenderSettings.ambientGroundColor = ambientInside;
-                RenderSettings.ambientIntensity = 0f;
-            }
-        }
-        
-        public void LateUpdate()
-        {
-            ApplyNightVision();
-        }
-        
-        private void ApplyNightVision()
-        {
-            if (playerController == null || playerController.nightVision == null) return;
-            if (apparatusDockHandler == null) return;
-            
-            if (!apparatusDockHandler.isPowered)
-            {
-                playerController.nightVision.enabled = false;
-                return;
-            }
-            
-            if (!playerController.nightVision.enabled)
-            {
-                playerController.nightVision.enabled = true;
-                playerController.nightVision.intensity = 0f;
-            }
-            if (playerController.nightVision.intensity < 220f)
-                playerController.nightVision.intensity += 50f * Time.deltaTime;
-        }
-        
-        private void RestoreAll()
-        {
-            foreach (var kv in savedLights)
-            {
-                Light light = kv.Key;
-                if (light == null) continue;
-                LightSave s = kv.Value;
-                light.intensity = s.intensity;
-                light.enabled = s.enabled;
-                light.gameObject.SetActive(s.activeSelf);
-            }
-            savedLights.Clear();
-            if (cachedVolume && skyAndFogGlobalVolume != null)
-            {
-                skyAndFogGlobalVolume.SetActive(savedVolumeActive);
-                cachedVolume = false;
-            }
-            if (cachedAmbient)
-            {
-                RenderSettings.ambientMode = savedAmbientMode;
-                RenderSettings.ambientSkyColor = savedAmbientSky;
-                RenderSettings.ambientEquatorColor = savedAmbientEquator;
-                RenderSettings.ambientGroundColor = savedAmbientGround;
-                RenderSettings.ambientLight = savedAmbientLight;
-                RenderSettings.ambientIntensity = savedAmbientIntensity;
-                cachedAmbient = false;
-            }
-            if (cachedNv && playerController != null && playerController.nightVision != null)
-            {
-                playerController.nightVision.enabled = savedNvEnabled;
-                playerController.nightVision.intensity = savedNvIntensity;
-                cachedNv = false;
-            }
-        }
-    }
-
-    enum DockingInteractions
+    public enum DockingInteractions
     {
         Early,
         Late,

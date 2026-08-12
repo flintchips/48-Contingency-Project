@@ -56,7 +56,6 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ControlRoomGen.cs" />
     <Compile Include="ControlRoomTeleport.cs" />
     <Compile Include="KyividikaiHandler.cs" />
     <Compile Include="OpaliteMoonPlugin.cs" />

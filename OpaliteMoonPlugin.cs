@@ -52,7 +52,7 @@ namespace OpaliteMoonMod
         public ControlRoomTeleport controlRoomTeleport, outdoorControlRoomTeleport;
         public EntranceTeleport controlRoomFireTeleport, indoorFireTeleport;
 
-        public AnimatedObjectTrigger BigDoor;
+        public Animator garageDoorAnimator;
 
         public bool hasBeenPowered;
         private bool isPoweredOld;
@@ -87,6 +87,12 @@ namespace OpaliteMoonMod
         {
             StartCoroutine(BigDoorOpen());
         }
+        
+        [ClientRpc]
+        public void OnEndPowerClientRpc()
+        {
+            StartCoroutine(BigDoorClose());
+        }
 
         private void SetFireExitReferences()
         {
@@ -97,10 +103,11 @@ namespace OpaliteMoonMod
         {
             float startTime = Time.timeSinceLevelLoad;
         
-            while (controlRoomFireTeleport != null && controlRoomFireTeleport.exitScript == null && Time.timeSinceLevelLoad - startTime < 15f)
-            {
-                yield return new WaitForSeconds(1f);
-            }
+            //while (controlRoomFireTeleport != null && controlRoomFireTeleport.exitScript == null && Time.timeSinceLevelLoad - startTime < 15f)
+            //{
+            //    yield return new WaitForSeconds(1f);
+            //}
+            yield return new WaitForSeconds(1f);
             InitFireExitListeners();
         }
         
@@ -123,32 +130,38 @@ namespace OpaliteMoonMod
         private IEnumerator BigDoorOpen() 
         {
             yield return new WaitForSeconds(3f);
-            BigDoor.SetBoolOnClientOnly(true);
+            garageDoorAnimator.SetBool("Open", true);
+        }
+        
+        private IEnumerator BigDoorClose() 
+        {
+            yield return new WaitForSeconds(1f);
+            garageDoorAnimator.SetBool("Open", false);
         }
         
         public void InitFireExitListeners()
         {
-            if(controlRoomFireTeleport == null || controlRoomFireTeleport.exitScript == null) Debug.LogError("[ControlRoomManager] Indoor fire exit or control or teleport or is null");
+            //if(controlRoomFireTeleport == null || controlRoomFireTeleport.exitScript == null) Debug.LogError("[ControlRoomManager] Indoor fire exit or control or teleport or is null");
 
-            if (indoorFireTeleport == null && controlRoomFireTeleport)
-            {
-                indoorFireTeleport = controlRoomFireTeleport.exitScript;
-            }
+            //if (indoorFireTeleport == null && controlRoomFireTeleport)
+            //{
+            //    indoorFireTeleport = controlRoomFireTeleport.exitScript;
+            //}
             
-            controlRoomFireTrigger = controlRoomFireTeleport.GetComponent<InteractTrigger>();
-            indoorFireTrigger = indoorFireTeleport.GetComponent<InteractTrigger>();
+            //controlRoomFireTrigger = controlRoomFireTeleport.GetComponent<InteractTrigger>();
+            //indoorFireTrigger = indoorFireTeleport.GetComponent<InteractTrigger>();
             indoorDoorTrigger = controlRoomTeleport.GetComponent<InteractTrigger>();
             controlRoomDoorTrigger = outdoorControlRoomTeleport.GetComponent<InteractTrigger>();
             
-            controlRoomFireTrigger.onInteract.AddListener(ControlRoomFireTeleportPlayer);
-            indoorFireTrigger.onInteract.AddListener(IndoorFireTeleportPlayer);
-            indoorFireTeleport.audioReverbPreset = 2;
+            //controlRoomFireTrigger.onInteract.AddListener(ControlRoomFireTeleportPlayer);
+            //indoorFireTrigger.onInteract.AddListener(IndoorFireTeleportPlayer);
+            //indoorFireTeleport.audioReverbPreset = 2;
             
             controlRoomDoorTrigger.onInteract.AddListener(OutdoorControlRoomDoorTeleportPlayer);
             indoorDoorTrigger.onInteract.AddListener(IndoorControlRoomDoorTeleportPlayer);
             
             Debug.Log($"[ControlRoomManager] added event controlRoomTeleportAction to controlRoomFireTrigger.onInteract");
-            Debug.Log($"[ControlRoomManager] added event indoorTeleportAction to indoorFireTrigger.onInteract");
+            //Debug.Log($"[ControlRoomManager] added event indoorTeleportAction to indoorFireTrigger.onInteract");
         }
         
         [ServerRpc (RequireOwnership = false)]
@@ -285,7 +298,7 @@ namespace OpaliteMoonMod
     
         public void LeaveControlRoom(bool inFactory)
         {
-            if (inFactory)
+            if (!inFactory)
             {
                 
             }
@@ -496,14 +509,13 @@ namespace OpaliteMoonMod
                         holder.isHoldingObject = false;
                         holder.twoHanded = false;
                         prop.DiscardItemOnClient();
-                        // --- FIX: Reset player animation so arms don't get stuck ---
                         holder.playerBodyAnimator.SetBool("cancelHolding", true);
                         holder.playerBodyAnimator.SetTrigger("Throw");
                     }
                 }
             }
 
-            // 1. Parent the apparatus to the dock first
+
             if (parentNetObj != null)
             {
                 if (apparatus.transform.parent != parentNetObj.transform)
@@ -513,13 +525,10 @@ namespace OpaliteMoonMod
             {
                 apparatus.transform.SetParent(dockTransform, worldPositionStays: false);
             }
-
-            // --- FIX: Snap position BEFORE calculating collider ---
-            // 2. Snap to position
+            
             apparatus.transform.localPosition = Vector3.zero;
             apparatus.transform.localEulerAngles = new Vector3(0f, 180f, 0f);
 
-            // 3. Now that it's moved, calculate the collider position accurately
             BoxCollider apparatusCollider = prop.GetComponent<BoxCollider>();
             if (apparatusCollider != null && triggerScript != null)
             {

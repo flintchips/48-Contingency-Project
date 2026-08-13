@@ -66,45 +66,36 @@ MonoBehaviour:
     spawnWithBackToWall: 0
     spawnWithBackFlushAgainstWall: 0
     requireDistanceBetweenSpawns: 0
-    disallowSpawningNearEntrances: 1
+    disallowSpawningNearEntrances: 0
     numberToSpawn:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 1.6912956
-        outSlope: 1.6912956
+        inSlope: 15.861725
+        outSlope: 15.861725
         tangentMode: 0
         weightedMode: 2
         inWeight: 0
-        outWeight: 0.27726084
+        outWeight: 0.31658536
       - serializedVersion: 3
-        time: 0.76076746
-        value: 3.7627766
-        inSlope: 23.341127
-        outSlope: 23.341127
+        time: 0.70955664
+        value: 5.1473923
+        inSlope: 7.064207
+        outSlope: 7.064207
         tangentMode: 0
         weightedMode: 3
-        inWeight: 0.16567203
-        outWeight: 0.4704904
+        inWeight: 0.25805572
+        outWeight: 0.43286884
       - serializedVersion: 3
-        time: 0.90526056
-        value: 13.727276
-        inSlope: 24.65465
-        outSlope: 106.32482
+        time: 1.0002186
+        value: 15.951974
+        inSlope: 316.86508
+        outSlope: 316.86508
         tangentMode: 0
         weightedMode: 3
-        inWeight: 0.34066787
-        outWeight: 0.6774299
-      - serializedVersion: 3
-        time: 1.0002282
-        value: 35
-        inSlope: 528.32587
-        outSlope: 14.878238
-        tangentMode: 0
-        weightedMode: 3
-        inWeight: 0.30117312
+        inWeight: 0.09148854
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -112,97 +103,45 @@ MonoBehaviour:
   - prefabToSpawn: {fileID: 1287637057225895, guid: e281abbc729ecc748be6af9000a105e7,
       type: 3}
     spawnFacingAwayFromWall: 0
-    spawnFacingWall: 0
-    spawnWithBackToWall: 0
-    spawnWithBackFlushAgainstWall: 0
-    requireDistanceBetweenSpawns: 0
-    disallowSpawningNearEntrances: 1
+    spawnFacingWall: 1
+    spawnWithBackToWall: 1
+    spawnWithBackFlushAgainstWall: 1
+    requireDistanceBetweenSpawns: 1
+    disallowSpawningNearEntrances: 0
     numberToSpawn:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 1.6912956
-        outSlope: 1.6912956
-        tangentMode: 0
+        inSlope: 0.35461718
+        outSlope: 13.330813
+        tangentMode: 1
         weightedMode: 2
         inWeight: 0
-        outWeight: 0.27726084
+        outWeight: 0.22651364
       - serializedVersion: 3
-        time: 0.3386382
-        value: 1.6243473
-        inSlope: 4.6852107
-        outSlope: 4.6852107
-        tangentMode: 0
+        time: 0.27618122
+        value: 3.992279
+        inSlope: 7.01716
+        outSlope: 0.973296
+        tangentMode: 1
         weightedMode: 3
-        inWeight: 0.21683104
-        outWeight: 0.4537829
+        inWeight: 1
+        outWeight: 1
       - serializedVersion: 3
-        time: 0.79881215
-        value: 1.953932
-        inSlope: 2.5944302
-        outSlope: 2.5944302
-        tangentMode: 0
+        time: 0.99969625
+        value: 5.9687805
+        inSlope: 4.3506613
+        outSlope: 4.3506613
+        tangentMode: 1
         weightedMode: 3
-        inWeight: 0.39981362
-        outWeight: 0.6774299
-      - serializedVersion: 3
-        time: 1.0035622
-        value: 7.837839
-        inSlope: 84.29776
-        outSlope: 84.29776
-        tangentMode: 0
-        weightedMode: 3
-        inWeight: 0.28684336
+        inWeight: 0.1416065
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
   indoorMapHazards:
-  - hazardType: {fileID: 11400000, guid: e8963afab0b912d46a7bcaed8a2e37fa, type: 2}
-    numberToSpawn:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1.6912956
-        outSlope: 1.6912956
-        tangentMode: 0
-        weightedMode: 2
-        inWeight: 0
-        outWeight: 0.27726084
-      - serializedVersion: 3
-        time: 0.3386382
-        value: 1.6243473
-        inSlope: 4.6852107
-        outSlope: 4.6852107
-        tangentMode: 0
-        weightedMode: 3
-        inWeight: 0.21683104
-        outWeight: 0.4537829
-      - serializedVersion: 3
-        time: 0.79881215
-        value: 1.953932
-        inSlope: 2.5944302
-        outSlope: 2.5944302
-        tangentMode: 0
-        weightedMode: 3
-        inWeight: 0.39981362
-        outWeight: 0.6774299
-      - serializedVersion: 3
-        time: 1.0035622
-        value: 7.837839
-        inSlope: 84.29776
-        outSlope: 84.29776
-        tangentMode: 0
-        weightedMode: 3
-        inWeight: 0.28684336
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
   - hazardType: {fileID: 11400000, guid: aba7c9a1ed7efb14289e95e885de1406, type: 2}
     numberToSpawn:
       serializedVersion: 2
@@ -242,6 +181,40 @@ MonoBehaviour:
         tangentMode: 0
         weightedMode: 3
         inWeight: 0.30117312
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  - hazardType: {fileID: 11400000, guid: e8963afab0b912d46a7bcaed8a2e37fa, type: 2}
+    numberToSpawn:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0.35461718
+        outSlope: 13.330813
+        tangentMode: 1
+        weightedMode: 2
+        inWeight: 0
+        outWeight: 0.22651364
+      - serializedVersion: 3
+        time: 0.27618122
+        value: 3.992279
+        inSlope: 7.01716
+        outSlope: 0.973296
+        tangentMode: 1
+        weightedMode: 3
+        inWeight: 1
+        outWeight: 1
+      - serializedVersion: 3
+        time: 0.99969625
+        value: 5.9687805
+        inSlope: 4.3506613
+        outSlope: 4.3506613
+        tangentMode: 1
+        weightedMode: 3
+        inWeight: 0.1416065
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -514,7 +487,7 @@ MonoBehaviour:
   minTotalScrapValue: 300
   maxTotalScrapValue: 700
   levelAmbienceClips: {fileID: 11400000, guid: 3fe561b30a74dbd4596289671f6213ef, type: 2}
-  maxEnemyPowerCount: 5
+  maxEnemyPowerCount: 6
   maxOutsideEnemyPowerCount: 9
   maxDaytimeEnemyPowerCount: 20
   maxInsideDiversityPowerCount: 100
@@ -523,17 +496,23 @@ MonoBehaviour:
   - enemyType: {fileID: 11400000, guid: 0ad4d86b49fbc364cb18831430a2843e, type: 2}
     rarity: 13
   - enemyType: {fileID: 11400000, guid: eb3e40cc5e9aa524b85fa2fc21347266, type: 2}
-    rarity: 23
+    rarity: 31
   - enemyType: {fileID: 11400000, guid: 7e5707547b871054cba6029fba706da0, type: 2}
     rarity: 10
   - enemyType: {fileID: 11400000, guid: 82339260f352a8f45aca8294f83f3d8d, type: 2}
-    rarity: 6
+    rarity: 3
   - enemyType: {fileID: 11400000, guid: 21f7821cbff16b14ba1afb2a9cb9d7b9, type: 2}
     rarity: 18
   - enemyType: {fileID: 11400000, guid: 4e5273821409ced4fb1f1d0b4b2c29fc, type: 2}
     rarity: 1
   - enemyType: {fileID: 11400000, guid: 9054c28314b1b254e9c0ed4324dcc966, type: 2}
     rarity: 2
+  - enemyType: {fileID: 11400000, guid: 9054c28314b1b254e9c0ed4324dcc966, type: 2}
+    rarity: 2
+  - enemyType: {fileID: 11400000, guid: cb79cad392e234c408ee85ecdc58ed76, type: 2}
+    rarity: 2
+  - enemyType: {fileID: 11400000, guid: c1d2667244a815b4abd98619e010b9c6, type: 2}
+    rarity: 12
   specialEnemyRarity:
     overrideEnemy: {fileID: 11400000, guid: a7a21faec32e105409439b3cdb5901c7, type: 2}
     percentageChance: 0.658
@@ -541,13 +520,13 @@ MonoBehaviour:
   - enemyType: {fileID: 11400000, guid: 7f60acdfd8be77247bc196ee7092e169, type: 2}
     rarity: 3
   - enemyType: {fileID: 11400000, guid: 2a1bdd55ab396764d91573c7202480fd, type: 2}
-    rarity: 27
-  - enemyType: {fileID: 11400000, guid: e2006330d295001448cb198d81f21d4d, type: 2}
-    rarity: 13
+    rarity: 28
   - enemyType: {fileID: 11400000, guid: 2c1d447fe908bc04b99636d6a4a87796, type: 2}
-    rarity: 94
+    rarity: 135
   - enemyType: {fileID: 11400000, guid: fca56407d0f66a2459a2a0d90143c45e, type: 2}
-    rarity: 35
+    rarity: 42
+  - enemyType: {fileID: 11400000, guid: 1a03b77db1827104d847ed5313fdff35, type: 2}
+    rarity: 15
   DaytimeEnemies:
   - enemyType: {fileID: 11400000, guid: f70045f3630321943af4d535ef5a9201, type: 2}
     rarity: 100

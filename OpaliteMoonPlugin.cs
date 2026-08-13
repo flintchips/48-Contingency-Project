@@ -5,23 +5,28 @@ using UnityEngine;
 using GameNetcodeStuff;
 using Object = UnityEngine.Object;
 using BepInEx;
-using UnityEngine.Rendering;
-using System.Collections.Generic;
-using UnityEngine.Events;
-using UnityEngine.Yoga;
 
 namespace OpaliteMoonMod
 {
     [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
     public sealed class OpaliteMoonPlugin : BaseUnityPlugin
     {
-        
-        public const string PluginGuid = "com.flintchips.48 Contingency";
-        public const string PluginName = "48 Contingency";
+        public const string PluginGuid = "com.flintchips.48Contingency";
+        public const string PluginName = "48contingency";
         public const string PluginVersion = "0.1.0";
 
         private void Awake()
         {
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+            {
+                if (args.Name.Contains("OpaliteMod"))
+                {
+                    Debug.Log("[48contingency] Redirecting OpaliteMod to 48contingency!");
+                    return Assembly.GetExecutingAssembly(); 
+                }
+                return null;
+            };
+            
             var types = Assembly.GetExecutingAssembly().GetTypes();
             foreach (var type in types)
             {
@@ -35,6 +40,7 @@ namespace OpaliteMoonMod
                     }
                 }
             }
+            Debug.Log("48contingency has loaded!");
         }
     }
 
@@ -51,6 +57,7 @@ namespace OpaliteMoonMod
         public bool hasBeenPowered;
         private bool isPoweredOld;
         
+        private InteractTrigger controlRoomDoorTrigger, indoorDoorTrigger;
         private InteractTrigger controlRoomFireTrigger, indoorFireTrigger;
 
         public void Awake()
@@ -115,7 +122,7 @@ namespace OpaliteMoonMod
         
         private IEnumerator BigDoorOpen() 
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(3f);
             BigDoor.SetBoolOnClientOnly(true);
         }
         
@@ -130,9 +137,16 @@ namespace OpaliteMoonMod
             
             controlRoomFireTrigger = controlRoomFireTeleport.GetComponent<InteractTrigger>();
             indoorFireTrigger = indoorFireTeleport.GetComponent<InteractTrigger>();
+            indoorDoorTrigger = controlRoomTeleport.GetComponent<InteractTrigger>();
+            controlRoomDoorTrigger = outdoorControlRoomTeleport.GetComponent<InteractTrigger>();
             
             controlRoomFireTrigger.onInteract.AddListener(ControlRoomFireTeleportPlayer);
             indoorFireTrigger.onInteract.AddListener(IndoorFireTeleportPlayer);
+            indoorFireTeleport.audioReverbPreset = 2;
+            
+            controlRoomDoorTrigger.onInteract.AddListener(OutdoorControlRoomDoorTeleportPlayer);
+            indoorDoorTrigger.onInteract.AddListener(IndoorControlRoomDoorTeleportPlayer);
+            
             Debug.Log($"[ControlRoomManager] added event controlRoomTeleportAction to controlRoomFireTrigger.onInteract");
             Debug.Log($"[ControlRoomManager] added event indoorTeleportAction to indoorFireTrigger.onInteract");
         }
@@ -168,25 +182,25 @@ namespace OpaliteMoonMod
             }
         }
 
-        private void IndoorFireTeleportPlayer(PlayerControllerB player)
+        public void IndoorFireTeleportPlayer(PlayerControllerB player)
         {
             Debug.Log($"[ControlRoomManager] Teleported from Factory -> ControlRoom. Teleport finished from local player {player.actualClientId}");
             UpdateControlRoomPresenceServerRpc(player.actualClientId, true, true);
         }
         
-        private void ControlRoomFireTeleportPlayer(PlayerControllerB player)
+        public void ControlRoomFireTeleportPlayer(PlayerControllerB player)
         {
             Debug.Log($"[ControlRoomManager] Teleported from ControlRoom -> Factory. Teleport finished from local player {player.actualClientId}");
             UpdateControlRoomPresenceServerRpc(player.actualClientId, false, true);
         }
         
-        private void OutdoorControlRoomDoorTeleportPlayer(PlayerControllerB player)
+        public void OutdoorControlRoomDoorTeleportPlayer(PlayerControllerB player)
         {
             Debug.Log($"[ControlRoomManager] Teleported from Outside -> ControlRoom. Teleport finished from local player {player.actualClientId}");
             UpdateControlRoomPresenceServerRpc(player.actualClientId, true, true);
         }
         
-        private void IndoorControlRoomDoorTeleportPlayer(PlayerControllerB player)
+        public void IndoorControlRoomDoorTeleportPlayer(PlayerControllerB player)
         {
             Debug.Log($"[ControlRoomManager] Teleported from ControlRoom -> Outside. Teleport finished from local player {player.actualClientId}");
             UpdateControlRoomPresenceServerRpc(player.actualClientId, false, false);
@@ -201,17 +215,23 @@ namespace OpaliteMoonMod
         [ClientRpc]
         private void UpdateControlRoomPresenceClientRpc(ulong clientId, bool isEntering, bool inFactory)
         {
-            // getting the specific player out of the list
             PlayerControllerB targetPlayer = StartOfRound.Instance.allPlayerScripts.FirstOrDefault(p => p.actualClientId == clientId);
 
             if (targetPlayer == null) return;
+            
+            ControlRoomPlayerManager addon = targetPlayer.GetComponent<ControlRoomPlayerManager>();
+            if (addon == null)
+            {
+                addon = targetPlayer.gameObject.AddComponent<ControlRoomPlayerManager>();
+            }
+            
+            addon.controlRoom = this;
 
             if (isEntering)
             {
                 if (!playersInsideControlRoom.Contains(targetPlayer))
                 {
                     playersInsideControlRoom.Add(targetPlayer);
-                    var addon = targetPlayer.gameObject.AddComponent<ControlRoomPlayerManager>();
                     addon.EnterControlRoom(inFactory);
                     Debug.Log($"[ControlRoomManager] Added {targetPlayer.playerUsername} to Control Room Synced");
                 }
@@ -221,9 +241,8 @@ namespace OpaliteMoonMod
                 if (playersInsideControlRoom.Contains(targetPlayer))
                 {
                     playersInsideControlRoom.Remove(targetPlayer);
-                    var addon = targetPlayer.gameObject.AddComponent<ControlRoomPlayerManager>();
                     addon.LeaveControlRoom(inFactory);
-                    Destroy(addon);
+     
                     Debug.Log($"[ControlRoomManager] Removed {targetPlayer.playerUsername} from Control Room Synced");
                 }
             }
@@ -234,28 +253,42 @@ namespace OpaliteMoonMod
     {
         public PlayerControllerB player;
         public ControlRoomManager controlRoom;
-        public ControlRoomPlayerManager()
+        public bool inFactory;
+    
+        public void Awake()
         {
             player = GetComponent<PlayerControllerB>();
-            if(player == null) Destroy(this.gameObject);
+            if(player == null) 
+            {
+                Destroy(this); 
+            }
         }
 
         public void LateUpdate()
         {
-            // givet he player inside lighting but without nightvision  unless the room is powered
-            player.nightVision.enabled = controlRoom.hasBeenPowered;
             
-            RoundManager.Instance.timeScript.insideLighting = true;
         }
-        
+    
         public void EnterControlRoom(bool inFactory)
         {
-            player.nightVision.enabled = controlRoom.hasBeenPowered;
+            if(player == null) 
+                player = GetComponent<PlayerControllerB>();
+            
+            if(player == null) 
+            {
+                Destroy(this);
+                return;
+            }
+
+            player.isInsideFactory = true;
         }
-        
+    
         public void LeaveControlRoom(bool inFactory)
         {
-            RoundManager.Instance.timeScript.insideLighting = inFactory;
+            if (inFactory)
+            {
+                
+            }
         }
 
         public void OnDestroy()
@@ -274,7 +307,7 @@ namespace OpaliteMoonMod
         public Animator thisDockAnimator;
 
         public AudioSource dockingPointAudio;
-        
+
         private Coroutine connectAnimation;
         private Coroutine roomPowerAnimation;
         private Coroutine roomFlickerAnimation;
@@ -319,9 +352,9 @@ namespace OpaliteMoonMod
         {
             if (!GetDockAnimators())
                 return;
-            
+
             thisDockAnimator.SetBool("Open", false);
-            
+
             NetworkObject apparatus = GetApparatusFromInteractingPlayer();
             if (apparatus == null)
             {
@@ -331,7 +364,7 @@ namespace OpaliteMoonMod
 
             PlaceApparatusServerRpc(new NetworkObjectReference(apparatus));
         }
-        
+
         public void CancelOpening() // interacting with dock stuff
         {
             if (!GetDockAnimators())
@@ -342,9 +375,9 @@ namespace OpaliteMoonMod
             thisDockAnimator.SetBool("Open", value: false);
             SyncCancelOpeningRpc();
         }
-        
+
         [Rpc(SendTo.NotMe, RequireOwnership = false)]
-        public void SyncCancelOpeningRpc() 
+        public void SyncCancelOpeningRpc()
         {
             if (!GetDockAnimators())
             {
@@ -359,13 +392,13 @@ namespace OpaliteMoonMod
             PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
             if (player == null || !player.isHoldingObject || player.currentlyHeldObjectServer == null)
                 return null;
-            
+
             GrabbableObject held = player.currentlyHeldObjectServer;
             if (held is not LungProp) return null;
-            
+
             return held.NetworkObject;
         }
-        
+
         private bool LocalPlayerHoldingApparatus()
         {
             PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
@@ -425,21 +458,6 @@ namespace OpaliteMoonMod
 
             if (triggerScript != null)
             {
-                BoxCollider apparatusCollider = prop.GetComponent<BoxCollider>();
-                if (apparatusCollider != null)
-                {
-                    apparatusCollider.enabled = false;
-                    BoxCollider thisColliderAddition = triggerScript.gameObject.AddComponent<BoxCollider>();
-                    thisColliderAddition.center = triggerScript.transform.InverseTransformPoint(
-                        apparatusCollider.transform.TransformPoint(apparatusCollider.center));
-                    thisColliderAddition.size = triggerScript.transform.InverseTransformVector(
-                        apparatusCollider.transform.TransformVector(apparatusCollider.size));
-                    thisColliderAddition.size = new Vector3(
-                        Mathf.Abs(thisColliderAddition.size.x),
-                        Mathf.Abs(thisColliderAddition.size.y),
-                        Mathf.Abs(thisColliderAddition.size.z));
-                    thisColliderAddition.isTrigger = false;
-                }
                 triggerScript.interactable = false;
                 triggerScript.hoverTip = "[Locked]";
                 triggerScript.disabledHoverTip = "[Locked]";
@@ -450,41 +468,42 @@ namespace OpaliteMoonMod
 
             TurnOnRoomLights();
         }
-        
+
+
         private void DockApparatusLocal(LungProp prop, NetworkObject apparatus, bool stripHolder)
         {
             if (prop == null || apparatus == null) return;
-            
+
             NetworkObject parentNetObj = GetApparatusParentNetworkObject();
-            Transform dockTransform = apparatusPoint != null ? apparatusPoint : parentNetObj != null ? parentNetObj.transform : null;
-            
+            Transform dockTransform = apparatusPoint != null ? apparatusPoint :
+                parentNetObj != null ? parentNetObj.transform : null;
+
             if (stripHolder)
             {
                 PlayerControllerB holder = prop.playerHeldBy;
-                PlayerControllerB local = GameNetworkManager.Instance != null ? GameNetworkManager.Instance.localPlayerController : null;
-                
+                PlayerControllerB local = GameNetworkManager.Instance != null
+                    ? GameNetworkManager.Instance.localPlayerController
+                    : null;
+
                 if (holder == null && local != null && local.currentlyHeldObjectServer == prop)
                     holder = local;
-                
+
                 if (holder != null)
                 {
                     if (holder.currentlyHeldObjectServer == prop || holder.isHoldingObject)
                     {
-                        if (holder.ItemSlots != null)
-                        {
-                            for (int i = 0; i < holder.ItemSlots.Length; i++)
-                            {
-                                if (holder.ItemSlots[i] == prop)
-                                    holder.ItemSlots[i] = null;
-                            }
-                        }
                         holder.currentlyHeldObjectServer = null;
                         holder.isHoldingObject = false;
                         holder.twoHanded = false;
+                        prop.DiscardItemOnClient();
+                        // --- FIX: Reset player animation so arms don't get stuck ---
+                        holder.playerBodyAnimator.SetBool("cancelHolding", true);
+                        holder.playerBodyAnimator.SetTrigger("Throw");
                     }
                 }
             }
-            
+
+            // 1. Parent the apparatus to the dock first
             if (parentNetObj != null)
             {
                 if (apparatus.transform.parent != parentNetObj.transform)
@@ -494,9 +513,15 @@ namespace OpaliteMoonMod
             {
                 apparatus.transform.SetParent(dockTransform, worldPositionStays: false);
             }
-            
+
+            // --- FIX: Snap position BEFORE calculating collider ---
+            // 2. Snap to position
+            apparatus.transform.localPosition = Vector3.zero;
+            apparatus.transform.localEulerAngles = new Vector3(0f, 180f, 0f);
+
+            // 3. Now that it's moved, calculate the collider position accurately
             BoxCollider apparatusCollider = prop.GetComponent<BoxCollider>();
-            if (apparatusCollider != null)
+            if (apparatusCollider != null && triggerScript != null)
             {
                 apparatusCollider.enabled = false;
                 BoxCollider thisColliderAddition = triggerScript.gameObject.AddComponent<BoxCollider>();
@@ -510,23 +535,20 @@ namespace OpaliteMoonMod
                     Mathf.Abs(thisColliderAddition.size.z));
                 thisColliderAddition.isTrigger = false;
             }
-            
+
             if (dockTransform != null)
                 prop.parentObject = dockTransform;
             else if (parentNetObj != null)
                 prop.parentObject = parentNetObj.transform;
-            
+
             prop.isHeld = false;
             prop.playerHeldBy = null;
             prop.hasHitGround = true;
             prop.grabbable = false;
             prop.grabbableToEnemies = false;
             prop.fallTime = 1f;
-            
-            apparatus.transform.localPosition = Vector3.zero;
-            apparatus.transform.localEulerAngles = new Vector3(0f, 180f, 0f);
         }
-
+        
         private NetworkObject GetApparatusParentNetworkObject()
         {
             if (apparatusPoint == null) return null;
@@ -550,7 +572,7 @@ namespace OpaliteMoonMod
         private IEnumerator RoomPowerAnimation()
         {
             float[] individualDelays = new float[poweredRoomObjects.Length];
-            float propogationSpeed = 10f;
+            float propogationSpeed = 7f;
  
             List<GameObject> sortedObjects = poweredRoomObjects.OrderBy(obj => Vector3.Distance(obj.transform.position, apparatusPoint.position)).ToList();
             
@@ -605,7 +627,7 @@ namespace OpaliteMoonMod
                     dockedApparatus.sparkParticle,
                     dockedApparatus.transform.position,
                     Quaternion.identity,
-                    null);
+                    dockedApparatus.transform);
             }
             
             dockingPointAudio.PlayOneShot(dockingAudios[0], 0.7f);

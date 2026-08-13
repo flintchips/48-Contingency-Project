@@ -4,16 +4,16 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyName>OpaliteMod</AssemblyName>
+    <AssemblyName>48contingency</AssemblyName>
     <RootNamespace>OpaliteMoonMod</RootNamespace>
   </PropertyGroup>
   
   <PropertyGroup>
     <!-- Build dependency paths -->
     <GameManaged>C:\Program Files (x86)\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed</GameManaged>
-    <BepinEx>C:\Users\noah3\AppData\Roaming\Thunderstore Mod Manager\DataFolder\LethalCompany\profiles\Tulip snake weight assist\BepInEx</BepinEx>
+    <BepinEx>C:\Program Files (x86)\Steam\steamapps\content\app_1966720\v81 hotfix 5\BepInEx</BepinEx>
     <!-- (dont change) -->
-    <BepInExPlugins>$(BepinEx)\plugins</BepInExPlugins>
+    <BepInExPlugins>$(BepinEx)\\plugins\FlintChips-48contingency</BepInExPlugins>
     <UnityModPlugins>$(MSBuildProjectDirectory)\LC Mod Testing\Assets\LethalCompany\Mods\plugins\OpaliteMod</UnityModPlugins>
   </PropertyGroup>
   
@@ -38,9 +38,6 @@
     <Reference Include="UnityEngine">
       <HintPath>$(GameManaged)\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.RenderPipelines.HighDefinition">
-      <HintPath>$(GameManaged)\Unity.RenderPipelines.HighDefinition</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(GameManaged)\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
@@ -57,7 +54,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ControlRoomTeleport.cs" />
-    <Compile Include="KyividikaiHandler.cs" />
     <Compile Include="OpaliteMoonPlugin.cs" />
     <!-- include more if needed, this is so the csproj ignores everything in the unity project -->
   </ItemGroup>
@@ -73,4 +69,23 @@
     <Message Importance="high" Text="Copied $(TargetPath) -> $(BepInExPlugins)" />
     <Message Importance="high" Text="Copied $(TargetPath) -> $(UnityModPlugins)" />
   </Target>
+
+  <Target Name="CopyAssetFiles" AfterTargets="Build">
+    <ItemGroup>
+      <BundleFiles Include="$(UnityModPlugins)\AssetBundles\AssetBundles" />
+      <BundleFiles Include="$(UnityModPlugins)\AssetBundles\opaliteScene" />
+      <BundleFiles Include="$(UnityModPlugins)\AssetBundles\opilate_moon_definition" />
+      <DuskMod Include="$(UnityModPlugins)\AssetBundles\opalitemainassets.duskmod" />
+    </ItemGroup>
+    <Copy
+            SourceFiles="@(DuskMod)"
+            DestinationFolder="$(BepInExPlugins)\plugins"
+            SkipUnchangedFiles="true" />
+    <Copy
+          SourceFiles="@(BundleFiles)"
+          DestinationFolder="$(BepInExPlugins)\plugins\Assets"
+          SkipUnchangedFiles="true" />
+    <Message Importance="high" Text="Copied @(BundleFiles) -> $(BepInExPlugins)\plugins\Assets" />
+    <Message Importance="high" Text="Copied @(DuskMod) -> $(BepInExPlugins)\plugins" />
+    </Target>
 </Project>

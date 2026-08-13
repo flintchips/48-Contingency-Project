@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OpaliteModInformation
   m_EditorClassIdentifier: 
   <AuthorName>k__BackingField: FlintChips
-  <ModName>k__BackingField: 48-Contingency
+  <ModName>k__BackingField: 48 Contingency
   <Version>k__BackingField: 0.1.0
   <READMEFile>k__BackingField: {fileID: 4900000, guid: f4bbd236caac16a4ba3f369afae4876f,
     type: 3}

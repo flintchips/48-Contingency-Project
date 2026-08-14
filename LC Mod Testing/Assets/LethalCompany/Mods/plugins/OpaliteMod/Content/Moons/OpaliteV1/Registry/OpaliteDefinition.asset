@@ -34,7 +34,7 @@ MonoBehaviour:
     <GenerateWeightsConfig>k__BackingField: 0
   <TerminalPredicate>k__BackingField: {fileID: 0}
   <PricingStrategy>k__BackingField: {fileID: 0}
-  <Cost>k__BackingField: 30
+  <Cost>k__BackingField: 45
   <OutsideEnemiesSpawnProbabilityRange>k__BackingField: 3
   <GenerateEnemyPowerCountConfigs>k__BackingField: 1
   <GenerateEnemySpawnCurveConfigs>k__BackingField: 1

@@ -375,6 +375,27 @@ namespace OpaliteMoonMod
                 return;
             }
 
+            PlayerControllerB localPlayer = GameNetworkManager.Instance.localPlayerController;
+            if (localPlayer != null && localPlayer.currentlyHeldObjectServer != null)
+            {
+                NetworkObject parentNetObj = GetApparatusParentNetworkObject();
+                if (parentNetObj == null)
+                    parentNetObj = this.NetworkObject;
+                if (parentNetObj != null)
+                {
+                    localPlayer.DiscardHeldObject(
+                        placeObject: true,
+                        parentObjectTo: parentNetObj,
+                        placePosition: Vector3.zero,
+                        matchRotationOfParent: true
+                    );
+                }
+                else
+                {
+                    localPlayer.DiscardHeldObject();
+                }
+            }
+
             PlaceApparatusServerRpc(new NetworkObjectReference(apparatus));
         }
 
@@ -425,30 +446,21 @@ namespace OpaliteMoonMod
         {
             if (isPowered) return;
             if (!apparatusRef.TryGet(out NetworkObject apparatus)) return;
-
             LungProp prop = apparatus.GetComponent<LungProp>();
             if (prop == null) return;
-
-            if (prop.playerHeldBy == null || prop.playerHeldBy.currentlyHeldObjectServer != prop)
-                return;
-
+            
             NetworkObject parentNetObj = GetApparatusParentNetworkObject();
             if (parentNetObj == null)
             {
-                Debug.LogError("[ApparatusDock] apparatusPoint has no NetworkObject!");
+                Debug.LogError("[ApparatusDock] apparatusPoint has no NetworkObject");
                 return;
             }
-
             isPowered = true;
-
             if (apparatus.IsSpawned && apparatus.OwnerClientId != NetworkManager.ServerClientId)
                 apparatus.ChangeOwnership(NetworkManager.ServerClientId);
-
             DockApparatusLocal(prop, apparatus, stripHolder: true);
-
             PlaceApparatusClientRpc(apparatusRef);
         }
-
 
         [Rpc(SendTo.ClientsAndHost)]
         private void PlaceApparatusClientRpc(NetworkObjectReference apparatusRef)
@@ -501,20 +513,21 @@ namespace OpaliteMoonMod
                 if (holder == null && local != null && local.currentlyHeldObjectServer == prop)
                     holder = local;
 
+                if (holder != null && holder == local)
+                {
+                    NetworkObject parentNet = GetApparatusParentNetworkObject();
+                    holder.DiscardHeldObject(true, parentNet, Vector3.zero, matchRotationOfParent: true);
+                }
+                
                 if (holder != null)
                 {
-                    if (holder.currentlyHeldObjectServer == prop || holder.isHoldingObject)
-                    {
-                        holder.currentlyHeldObjectServer = null;
-                        holder.isHoldingObject = false;
-                        holder.twoHanded = false;
-                        prop.DiscardItemOnClient();
-                        holder.playerBodyAnimator.SetBool("cancelHolding", true);
-                        holder.playerBodyAnimator.SetTrigger("Throw");
-                    }
+                    holder.currentlyHeldObjectServer = null;
+                    holder.isHoldingObject = false;
+                    holder.twoHanded = false;
                 }
             }
-
+            
+            
 
             if (parentNetObj != null)
             {
@@ -560,10 +573,14 @@ namespace OpaliteMoonMod
         
         private NetworkObject GetApparatusParentNetworkObject()
         {
-            if (apparatusPoint == null) return null;
-            var net = apparatusPoint.GetComponent<NetworkObject>();
-            if (net != null) return net;
-            return apparatusPoint.GetComponentInParent<NetworkObject>();
+            if (apparatusPoint != null)
+            {
+                var net = apparatusPoint.GetComponent<NetworkObject>();
+                if (net != null) return net;
+                net = apparatusPoint.GetComponentInParent<NetworkObject>();
+                if (net != null) return net;
+            }
+            return this.NetworkObject;
         }
         
         public void FlickerRoomLights()

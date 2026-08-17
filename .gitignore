@@ -16,12 +16,19 @@ LC Mod Testing/**
 !LC Mod Testing/ProjectSettings/
 !LC Mod Testing/ProjectSettings/**
 
+LC Mod Testing/Assets/LethalCompany/Tools/Plugins/BepInEx/
+LC Mod Testing/Assets/LethalCompany/Tools/Plugins/BepInEx/**
+
 !LC Mod Testing/Assets/
 !LC Mod Testing/Assets/LethalCompany/
 !LC Mod Testing/Assets/LethalCompany/Mods/
 !LC Mod Testing/Assets/LethalCompany/Mods/plugins/
 !LC Mod Testing/Assets/LethalCompany/Mods/plugins/OpaliteMod/
 !LC Mod Testing/Assets/LethalCompany/Mods/plugins/OpaliteMod/**
+!LC Mod Testing/Assets/LethalCompany/Tools/
+!LC Mod Testing/Assets/LethalCompany/Tools/Plugins/
+!LC Mod Testing/Assets/LethalCompany/Tools/Plugins/BepInEx/
+!LC Mod Testing/Assets/LethalCompany/Tools/Plugins/BepInEx/**
 
 LC Mod Testing/Library/
 LC Mod Testing/Temp/

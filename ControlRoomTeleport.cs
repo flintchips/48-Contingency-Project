@@ -8,26 +8,21 @@ namespace OpaliteMoonMod;
 
 public class ControlRoomTeleport : NetworkBehaviour
 {
-    // copy and edit of EnteranceTeleport circa v81 to work as what i want yay
-    // being inside the control room is like being inside the facility
-    // items inside count as being inside the facility
+    // basically a copy of ControlRoomTeleport but it does its own thing
     
     public bool isEntranceToControlRoom;
-    
 
     public Transform entrancePoint;
 
     public int entranceId;
 
     public StartOfRound playersManager;
+
     public AudioClip customFirstTimeAudio;
 
     public int audioReverbPreset = -1;
 
-    public ControlRoomTeleport exitScript; // room down under dont forget to set this flintchips
-                                           //                              - flintchips
-                                           // flintchipss: im gonna use a tag instead and get it on awakee.
-    
+    public ControlRoomTeleport exitScript;
 
     public AudioSource entrancePointAudio;
 
@@ -107,20 +102,17 @@ public class ControlRoomTeleport : NetworkBehaviour
         {
             return;
         }
-
         if (exitScript == null && (exitPointDoesntExist || !FindExitPoint()))
         {
             exitPointDoesntExist = true;
             return;
         }
-
         thisEntranceAnimator.SetBool("Open", value: true);
-        Debug.Log($"'{base.gameObject.name}' entrancePointAudio isPlaying: {entrancePointAudio.isPlaying}");
+        OpaliteMoonPlugin.Log.LogDebug($"'{base.gameObject.name}' entrancePointAudio isPlaying: {entrancePointAudio.isPlaying}");
         if (!playingCreakAudio)
         {
             PlayCreakSFX();
         }
-
         if (exitScript.thisEntranceAnimator != null)
         {
             exitScript.thisEntranceAnimator.SetBool("Open", value: true);
@@ -129,15 +121,15 @@ public class ControlRoomTeleport : NetworkBehaviour
     
     public void FinishOpeningEntrance(bool playShutAudio = true)
     {
-        Debug.Log($"Called finishopeningentrance ({playShutAudio})");
+        OpaliteMoonPlugin.Log.LogDebug($"Called finishopeningentrance ({playShutAudio})");
         if (entranceId != 0)
         {
-            Debug.Log("Id is not 0");
+            OpaliteMoonPlugin.Log.LogDebug("Id is not 0");
             return;
         }
         if (!GetDoorAnimators())
         {
-            Debug.Log("finishopeningentrance animator null");
+            OpaliteMoonPlugin.Log.LogDebug("finishopeningentrance animator null");
             return;
         }
         if (!thisEntranceAnimator.GetBool("Open"))
@@ -150,18 +142,18 @@ public class ControlRoomTeleport : NetworkBehaviour
                     exitScript.entrancePointAudio.Stop();
                 }
             }
-            Debug.Log("Entrance teleport was not open; returning");
+            OpaliteMoonPlugin.Log.LogDebug("Entrance teleport was not open; returning");
             return;
         }
         if (exitScript == null && (exitPointDoesntExist || !FindExitPoint()))
         {
-            Debug.Log("Couldn't find exit script");
+            OpaliteMoonPlugin.Log.LogDebug("Couldn't find exit script");
             exitPointDoesntExist = true;
-            Debug.Log("End A");
+            OpaliteMoonPlugin.Log.LogDebug("End A");
             return;
         }
         thisEntranceAnimator.SetBool("Open", value: false);
-        Debug.Log("'" + base.gameObject.name + "' STOPPING entrancePointAudio");
+        OpaliteMoonPlugin.Log.LogDebug("'" + base.gameObject.name + "' STOPPING entrancePointAudio");
         entrancePointAudio.Stop();
         playingCreakAudio = false;
         if (exitScript.thisEntranceAnimator != null)
@@ -277,11 +269,6 @@ public class ControlRoomTeleport : NetworkBehaviour
 			checkedForFirstTime = true;
 			StartCoroutine(playMusicOnDelay()); // control room music i made
 		}
-        
-        //if (entranceId == 0 && isEntranceToControlRoom && StartOfRound.Instance.occlusionCuller.enabled)
-        //{
-        //    StartOfRound.Instance.occlusionCuller.SetToStartTile();
-        //}
         
 		timeAtLastUse = Time.realtimeSinceStartup;
 		TeleportPlayerServerRpc((int)GameNetworkManager.Instance.localPlayerController.playerClientId);
@@ -438,5 +425,3 @@ public class ControlRoomTeleport : NetworkBehaviour
         }
     }
 }
-
-// cheesy becuase i dont know how to fix this so im just gonna make it do this sue me mark zuckerburg

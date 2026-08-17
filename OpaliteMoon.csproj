@@ -13,7 +13,7 @@
     <GameManaged>C:\Program Files (x86)\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed</GameManaged>
     <BepinEx>C:\Program Files (x86)\Steam\steamapps\content\app_1966720\v81 hotfix 5\BepInEx</BepinEx>
     <!-- (dont change) -->
-    <BepInExPlugins>$(BepinEx)\\plugins\FlintChips-48contingency</BepInExPlugins>
+    <BepInExPlugins>$(BepinEx)\plugins\FlintChips-48contingency</BepInExPlugins>
     <UnityModPlugins>$(MSBuildProjectDirectory)\LC Mod Testing\Assets\LethalCompany\Mods\plugins\OpaliteMod</UnityModPlugins>
   </PropertyGroup>
   
@@ -24,6 +24,10 @@
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>$(BepinEx)\core\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="JLL">
+      <HintPath>$(BepinEx)\plugins\JacobG5-JLL\JLL\JLL.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="BepInEx">
@@ -53,8 +57,12 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ApparatusDockHandler.cs" />
+    <Compile Include="ControlRoomManager.cs" />
+    <Compile Include="ControlRoomPlayerManager.cs" />
     <Compile Include="ControlRoomTeleport.cs" />
     <Compile Include="OpaliteMoonPlugin.cs" />
+    <Compile Include="StartDelugeLever.cs" />
     <!-- include more if needed, this is so the csproj ignores everything in the unity project -->
   </ItemGroup>
 

@@ -61,6 +61,8 @@
     <Compile Include="ControlRoomManager.cs" />
     <Compile Include="ControlRoomPlayerManager.cs" />
     <Compile Include="ControlRoomTeleport.cs" />
+    <Compile Include="FloodWaterZone.cs" />
+    <Compile Include="KyividManager.cs" />
     <Compile Include="OpaliteMoonPlugin.cs" />
     <Compile Include="StartDelugeLever.cs" />
     <!-- include more if needed, this is so the csproj ignores everything in the unity project -->
@@ -83,6 +85,7 @@
       <BundleFiles Include="$(UnityModPlugins)\AssetBundles\AssetBundles" />
       <BundleFiles Include="$(UnityModPlugins)\AssetBundles\opaliteScene" />
       <BundleFiles Include="$(UnityModPlugins)\AssetBundles\opilate_moon_definition" />
+      <BundleFiles Include="$(UnityModPlugins)\AssetBundles\drownedbodydefinition" />
       <DuskMod Include="$(UnityModPlugins)\AssetBundles\opalitemainassets.duskmod" />
     </ItemGroup>
     <Copy

@@ -19,17 +19,17 @@ MonoBehaviour:
   lockedForDemo: 0
   spawnEnemiesAndScrap: 1
   PlanetName: 48 Contingency
-  LevelDescription: 'CONDITIONS: Sister to 84-Velit, Contingency is home to large
+  LevelDescription: 'CONDITIONS: Sister to 84 Velit, Contingency is home to large
     mammals and machines.
 
     FAUNA: Persists in amethyst rich soil.
 
 '
   videoReel: {fileID: 0}
-  riskLevel: A+
+  riskLevel: C+
   timeToArrive: 3
   OffsetFromGlobalTime: 0
-  DaySpeedMultiplier: 1
+  DaySpeedMultiplier: 0.8
   planetHasTime: 1
   randomWeathers:
   - weatherType: 2
@@ -50,14 +50,14 @@ MonoBehaviour:
     weatherVariableColor: {r: 0.18079881, g: 0.18039216, b: 0.29411766, a: 1}
   overrideWeather: 0
   overrideWeatherType: 0
-  currentWeather: 5
-  factorySizeMultiplier: 1.2
+  currentWeather: -1
+  factorySizeMultiplier: 1
   dungeonFlowTypes:
   - id: 0
     rarity: 48
     overrideLevelAmbience: {fileID: 0}
   - id: 4
-    rarity: 133
+    rarity: 198
     overrideLevelAmbience: {fileID: 0}
   - id: 1
     rarity: 4
@@ -258,40 +258,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  - spawnableObject: {fileID: 11400000, guid: 16c6180376fbb554d91b15537a454af8, type: 2}
-    randomAmount:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1.6912956
-        outSlope: 1.6912956
-        tangentMode: 0
-        weightedMode: 2
-        inWeight: 0
-        outWeight: 0.27726084
-      - serializedVersion: 3
-        time: 0.78117067
-        value: 1.5528679
-        inSlope: 16.601978
-        outSlope: 16.601978
-        tangentMode: 0
-        weightedMode: 3
-        inWeight: 0.15920748
-        outWeight: 0.59897554
-      - serializedVersion: 3
-        time: 1.0002282
-        value: 12.400801
-        inSlope: 194.9584
-        outSlope: 194.9584
-        tangentMode: 0
-        weightedMode: 3
-        inWeight: 0.17016542
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
   - spawnableObject: {fileID: 11400000, guid: 5da523bb753373240a48d63b53754874, type: 2}
     randomAmount:
       serializedVersion: 2
@@ -392,8 +358,51 @@ MonoBehaviour:
         inWeight: 0.19772816
         outWeight: 0.6458738
       - serializedVersion: 3
-        time: 0.99687123
-        value: 16.030888
+        time: 1.0001942
+        value: 11.450635
+        inSlope: 92.72307
+        outSlope: 92.72307
+        tangentMode: 0
+        weightedMode: 3
+        inWeight: 0.7107992
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  - spawnableObject: {fileID: 11400000, guid: 638a2683a89fc2a4fa01f473069ff19c, type: 2}
+    randomAmount:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 5.5439878
+        outSlope: 5.5439878
+        tangentMode: 0
+        weightedMode: 2
+        inWeight: 0
+        outWeight: 0.27539682
+      - serializedVersion: 3
+        time: 0.76876324
+        value: 0.66049033
+        inSlope: 2.1631565
+        outSlope: 2.1631565
+        tangentMode: 0
+        weightedMode: 3
+        inWeight: 0.25822017
+        outWeight: 0.4704904
+      - serializedVersion: 3
+        time: 0.8305393
+        value: 1.4820926
+        inSlope: 21.553282
+        outSlope: 21.553282
+        tangentMode: 0
+        weightedMode: 3
+        inWeight: 0.19772816
+        outWeight: 0.6458738
+      - serializedVersion: 3
+        time: 1.0001942
+        value: 11.450635
         inSlope: 92.72307
         outSlope: 92.72307
         tangentMode: 0
@@ -484,13 +493,13 @@ MonoBehaviour:
     rarity: 18
   - spawnableItem: {fileID: 11400000, guid: 93142872d0ef796439617a7a3a49da20, type: 2}
     rarity: 2
-  minScrap: 17
-  maxScrap: 19
+  minScrap: 14
+  maxScrap: 16
   minTotalScrapValue: 300
   maxTotalScrapValue: 700
   levelAmbienceClips: {fileID: 11400000, guid: 9603e6bd92615bc45bbb4a5e3a1b9e89, type: 2}
   maxEnemyPowerCount: 6
-  maxOutsideEnemyPowerCount: 9
+  maxOutsideEnemyPowerCount: 8
   maxDaytimeEnemyPowerCount: 20
   maxInsideDiversityPowerCount: 100
   maxOutsideDiversityPowerCount: 100
@@ -498,46 +507,46 @@ MonoBehaviour:
   - enemyType: {fileID: 11400000, guid: d5af7b19ae961be4f979cc3d301d7c7d, type: 2}
     rarity: 13
   - enemyType: {fileID: 11400000, guid: c24e5fbca2a20e048bfefd869a6e08d6, type: 2}
-    rarity: 27
+    rarity: 22
   - enemyType: {fileID: 11400000, guid: 9d2b24c9a79b7134ea2a996a79dcd9b7, type: 2}
     rarity: 10
   - enemyType: {fileID: 11400000, guid: bdcc02868def21549b7048ce0766bdd1, type: 2}
     rarity: 3
   - enemyType: {fileID: 11400000, guid: 7f43485b867a2e94eb9e5aa842ae72ea, type: 2}
-    rarity: 12
+    rarity: 7
   - enemyType: {fileID: 11400000, guid: 2c079667eb11dba44bd18b4692802692, type: 2}
     rarity: 1
   - enemyType: {fileID: 11400000, guid: e85fce01d0dcdf444912e0d888e8b9f4, type: 2}
-    rarity: 2
-  - enemyType: {fileID: 11400000, guid: e85fce01d0dcdf444912e0d888e8b9f4, type: 2}
-    rarity: 2
+    rarity: 3
   - enemyType: {fileID: 11400000, guid: f6c06d9c831d0d442be052176d6ef5e9, type: 2}
     rarity: 2
   - enemyType: {fileID: 11400000, guid: a4339ecaa85e118439016069c334598e, type: 2}
     rarity: 12
+  - enemyType: {fileID: 11400000, guid: b04d33d4d1db54745be91e9b61f844bd, type: 2}
+    rarity: 23
   specialEnemyRarity:
     overrideEnemy: {fileID: 11400000, guid: 5891fa91ed44b7c45a9c941a56d7848e, type: 2}
-    percentageChance: 0.658
+    percentageChance: 1
   OutsideEnemies:
   - enemyType: {fileID: 11400000, guid: a9fa8f4c9d9242849a21bd1111da78ea, type: 2}
     rarity: 3
   - enemyType: {fileID: 11400000, guid: 901aee70e41d38e43b44a5c03598249e, type: 2}
-    rarity: 28
+    rarity: 24
   - enemyType: {fileID: 11400000, guid: 8a302e2ee600a17449582ec58f0d7509, type: 2}
-    rarity: 135
+    rarity: 96
   - enemyType: {fileID: 11400000, guid: 5891fa91ed44b7c45a9c941a56d7848e, type: 2}
-    rarity: 42
+    rarity: 36
   - enemyType: {fileID: 11400000, guid: b0e0521c7d1bf004e9dbf0b9d43f9913, type: 2}
-    rarity: 12
+    rarity: 3
   DaytimeEnemies:
   - enemyType: {fileID: 11400000, guid: 9c528253be6415e4b9865b9c6a326de6, type: 2}
     rarity: 100
   - enemyType: {fileID: 11400000, guid: d9935b917f1a2e54b9ae3951b5375d8e, type: 2}
-    rarity: 44
+    rarity: 51
   - enemyType: {fileID: 11400000, guid: ad92cb2adec3c844db6b53997a9538d7, type: 2}
     rarity: 40
   - enemyType: {fileID: 11400000, guid: 68f9f59da11b36045a998eb18e91717d, type: 2}
-    rarity: 22
+    rarity: 17
   enemySpawnChanceThroughoutDay:
     serializedVersion: 2
     m_Curve:
@@ -585,39 +594,39 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: -0.00000077369623
-      value: -2.8875
+      value: -3.2861166
       inSlope: Infinity
-      outSlope: 4.958474
-      tangentMode: 65
+      outSlope: 0.56738
+      tangentMode: 0
       weightedMode: 3
       inWeight: 0
-      outWeight: 0.14093608
+      outWeight: 0.38596338
     - serializedVersion: 3
-      time: 0.49460435
-      value: -0.4350133
-      inSlope: 7.34162
-      outSlope: 7.34162
+      time: 0.38255486
+      value: -2.4290593
+      inSlope: 4.434645
+      outSlope: 4.434645
       tangentMode: 0
       weightedMode: 3
-      inWeight: 0.33333334
-      outWeight: 0.446517
+      inWeight: 0.37723753
+      outWeight: 0.36153802
     - serializedVersion: 3
-      time: 0.5589545
-      value: 1.4203374
-      inSlope: 10.841807
-      outSlope: 10.841807
+      time: 0.5904878
+      value: -0.1902782
+      inSlope: 10.570118
+      outSlope: 10.570118
       tangentMode: 0
       weightedMode: 3
-      inWeight: 0.23764046
-      outWeight: 0.5162163
+      inWeight: 0.28510833
+      outWeight: 0.7143612
     - serializedVersion: 3
-      time: 1.0052626
-      value: 5.3594007
-      inSlope: 16.105722
-      outSlope: 16.105722
+      time: 1
+      value: 3.7875605
+      inSlope: 4.6584883
+      outSlope: 11.374388
       tangentMode: 0
       weightedMode: 3
-      inWeight: 0.27443284
+      inWeight: 0.40757266
       outWeight: 0.48315445
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -627,35 +636,35 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: -8.727501
-      inSlope: -12.1865635
-      outSlope: -12.1865635
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.11902876
-    - serializedVersion: 3
-      time: 0.47643262
-      value: -7.9448786
-      inSlope: -27.286888
-      outSlope: -27.286888
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.10391547
-      outWeight: 0.12503523
-    - serializedVersion: 3
-      time: 0.9998173
-      value: -14.818101
+      value: 5.4051704
       inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    - serializedVersion: 3
+      time: 0.8833144
+      value: -0.0077105463
+      inSlope: -0.50262165
+      outSlope: -0.50262165
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.099794775
+      outWeight: 0.20025739
+    - serializedVersion: 3
+      time: 0.99490076
+      value: 0.03682685
+      inSlope: 11.739434
+      outSlope: 11.739434
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.10882898
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  spawnProbabilityRange: 4
-  daytimeEnemiesProbabilityRange: 10
+  spawnProbabilityRange: 3
+  daytimeEnemiesProbabilityRange: 8
   levelIncludesSnowFootprints: 0
-  levelIconString: mapoffense
+  levelIconString: maptitan

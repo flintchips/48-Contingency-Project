@@ -18,6 +18,7 @@ public class ControlRoomPlayerManager : MonoBehaviour
         if (!PlayerExists()) return;
 
         player.isInsideFactory = true;
+        KyividManager.Instance.kyividDirectionalLighting.enabled = false;
     }
     
     public void LeaveControlRoom()
@@ -26,6 +27,7 @@ public class ControlRoomPlayerManager : MonoBehaviour
         
         player.isInsideFactory = false;
         TimeOfDay.Instance.effects[(int)TimeOfDay.Instance.currentLevelWeather].effectEnabled = true;
+        KyividManager.Instance.kyividDirectionalLighting.enabled = true;
     }
 
     private bool PlayerExists()

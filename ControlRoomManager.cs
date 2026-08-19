@@ -180,13 +180,17 @@ public class ControlRoomManager : NetworkBehaviour
     
     private IEnumerator DelugeFloodEvent() 
     {
-        reservoirWaterAnimator.SetBool("Drain", true);
-        reservoirWaterAnimator.SetBool("Filled", false);
         DelugePumpAudio.PlayOneShot(delugePumpWhir);
         DelugePumpAudio.clip = delugeFlow;
         DelugePumpAudio.Play();
         DelugePumpAudio.loop = true;
+        
+        yield return new WaitForSeconds(2f);
         drainTimer = 0f;
+        reservoirWaterAnimator.SetBool("Drain", true);
+        reservoirWaterAnimator.SetBool("Filled", false);
+        HUDManager.Instance.DisplayTip("???", "The dam's flood gate has opened.");
+        
         yield return null;
     }
     
@@ -240,7 +244,7 @@ public class ControlRoomManager : NetworkBehaviour
         {
             if (drainTimer < 1)
             {
-                drainTimer += Time.deltaTime / 30f; // 30 seconds
+                drainTimer += Time.deltaTime / 50f; // 50 seconds
                 if (drainTimer > 1)
                 {
                     drainTimer = 1;

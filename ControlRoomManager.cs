@@ -413,16 +413,14 @@ public class PlayerDetector : NetworkBehaviour
     public UnityEvent OnEnterTriggerEventsAllClients;
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        
+        PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
+        Debug.Log("[PlayerDetector] something has collided at least...");
+        if (other.gameObject == player.gameObject)
         {
-            OpaliteMoonPlugin.Log.LogDebug("[PlayerDetector] Some kind of player objectt has collided here..");
-            PlayerControllerB player = other.gameObject.GetComponent<PlayerControllerB>();
-            if (player != null && player.IsLocalPlayer)
-            {
-                if (triggerOnce && triggeredOnce) return;
-                TriggerEnteredServerRpc(player.actualClientId);
-                OpaliteMoonPlugin.Log.LogDebug($"Player {player.gameObject.name} has entered the trigger of {gameObject.name} [ON CLIENT]");
-            }
+            if (triggerOnce && triggeredOnce) return;
+            TriggerEnteredServerRpc(player.actualClientId);
+            Debug.Log($"[PlayerDetector] Player {player.gameObject.name} has entered the trigger of {gameObject.name} [ON CLIENT]");
         }
     }
 
@@ -452,6 +450,7 @@ public class PlayerDetector : NetworkBehaviour
         }
 
         triggeredOnce = true;
+        Debug.Log($"Player {enteredPlayer.gameObject.name} has entered the trigger of {gameObject.name} [ALL CLIENTS]");
         OpaliteMoonPlugin.Log.LogDebug($"Player {enteredPlayer.gameObject.name} has entered the trigger of {gameObject.name} [ALL CLIENTS]");
         OnEnterTriggerEventsAllClients.Invoke();
     }

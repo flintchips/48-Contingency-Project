@@ -9,8 +9,8 @@ namespace OpaliteMoonMod
     [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
     public sealed class OpaliteMoonPlugin : BaseUnityPlugin
     {
-        public const string PluginGuid = "com.flintchips.48Contingency";
-        public const string PluginName = "48contingency";
+        public const string PluginGuid = "FlintChips.Contingency";
+        public const string PluginName = "48_Contingency";
         public const string PluginVersion = "0.0.5";
         
         internal static ManualLogSource Log = null!;
@@ -44,7 +44,7 @@ namespace OpaliteMoonMod
             }
             
             new Harmony(PluginGuid).PatchAll();
-            Logger.LogInfo($"Loaded [Contingency Scripts {PluginVersion}]");
+            Logger.LogInfo($"Loaded [{PluginGuid} v{PluginVersion}]");
         }
         
         [HarmonyPatch(typeof(RoundManager))]

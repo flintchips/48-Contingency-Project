@@ -15,5 +15,5 @@ MonoBehaviour:
   assetBundles:
   - assetBundleName: opilate_moon_definition
     configName: ContingencyConfig
-  - assetBundleName: drownedbodydefinition
-    configName: ContingencyConfig
+  - assetBundleName: soppingzeddogdefinition
+    configName: SoppingZedDogConfig

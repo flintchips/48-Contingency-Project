@@ -63,6 +63,8 @@ public class ControlRoomManager : NetworkBehaviour
 
     public bool isDraining;
     private float drainTimer;
+
+    private List<ItemSpawner> basinSpawners;
     
     private List<Renderer> renderers;
 
@@ -74,6 +76,8 @@ public class ControlRoomManager : NetworkBehaviour
     public ControlRoomSteamValve valve;
 
     public Animator PCAnimator;
+
+    public ItemSpawner.WeightedItemRefrence[] customBasinScrapList;
 
     public void Awake()
     {
@@ -141,35 +145,57 @@ public class ControlRoomManager : NetworkBehaviour
         KyvidRandom = new System.Random(StartOfRound.Instance.randomMapSeed + 2352);
         kyividAnimator.SetInteger("state", kyividState);
         SetupLockersServerRpc();
-        SetupBasinScrapServerRpc();
+        SetupBasinScrap();
     }
     
-    [ServerRpc(RequireOwnership = false)]
-    private void SetupBasinScrapServerRpc()
+    private void SetupBasinScrap()
     {
-        GameObject[] foundNodes = GameObject.FindGameObjectsWithTag("BasinScrapNode");
-        BasinRandom = new System.Random(StartOfRound.Instance.randomMapSeed + 393);
-        int scrapSpawnCount = 10 + BasinRandom.Next(2);
+        GameObject parent = GameObject.Find("BasinScrapSpawns");
+        if (parent == null)
+        {
+            Debug.LogError("[ControlRoomManager] Could not find BasinScrapSpawns parent");
+            return;
+        }
+        GameObject[] foundNodes = parent.GetComponentsInChildren<Transform>(true)
+            .Where(t => t.name.StartsWith("ScrapNode"))
+            .Select(t => t.gameObject)
+            .ToArray();
         
-        SetupBasinScrapClientRpc();
-    }
+        int scrapSeed = StartOfRound.Instance.randomMapSeed + 393;
+        BasinRandom = new System.Random(scrapSeed);
+        int scrapSpawnCount = 6 + BasinRandom.Next(2);
+        
+        Debug.Log($"[ControlRoomManager] setting up {scrapSpawnCount} basins scrap item spawners");
 
-    private ItemSpawner SpawnScrapAt(Vector3 postion)
-    {
-        GameObject spawnerGameObject = new GameObject("scrapSpawner");
-        ItemSpawner spawner = spawnerGameObject.AddComponent<ItemSpawner>();
-        spawner.enabled = false;
-        spawner.spawnOnEnabled = true;
-        spawner.SourcePool = SpawnPoolSource.LevelItems;
-        spawner.spawnRotation = RotationType.RandomRotation;
-        spawnerGameObject.transform.position = postion;
-        return spawner;
+        for (int i = 0; i < scrapSpawnCount; i++)
+        {
+            int selectedNode = BasinRandom.Next(0, foundNodes.Length);
+            ItemSpawner spawner = new GameObject().AddComponent<ItemSpawner>();
+            Vector2 randomOffset = GetRandomPointInCircleForBasin(5f);
+            spawner.transform.position = foundNodes[selectedNode].transform.position + new Vector3(randomOffset.x, 0, randomOffset.y);
+            spawner.enabled = false;
+            spawner.spawnOnEnabled = true;
+            spawner.SourcePool = SpawnPoolSource.CustomList;
+            spawner.CustomList = customBasinScrapList;
+            spawner.spawnRotation = RotationType.RandomRotation;
+            spawner.transform.localEulerAngles = new Vector3(0, BasinRandom.Next(0, 360), 0);
+            basinScrapSpawners.Add(spawner);
+            spawner.gameObject.SetActive(false);
+        }
+        
+        Debug.Log($"[ControlRoomManager] added {basinScrapSpawners.Count} item spawners to list");
     }
     
-    [ClientRpc]
-    private void SetupBasinScrapClientRpc()
+    public Vector2 GetRandomPointInCircleForBasin(float radius)
     {
-
+        float randomAngle = (float)(BasinRandom.NextDouble() * 2 * Mathf.PI);
+        
+        float randomRadius = (float)Math.Sqrt(BasinRandom.NextDouble()) * radius;
+        
+        float x = randomRadius * Mathf.Cos(randomAngle);
+        float y = randomRadius * Mathf.Sin(randomAngle);
+        
+        return new Vector2(x, y);
     }
     
     [ServerRpc(RequireOwnership = false)]
@@ -221,7 +247,13 @@ public class ControlRoomManager : NetworkBehaviour
         BurstValve();
         
         yield return new WaitForSeconds(1f);
-        
+
+        foreach (ItemSpawner spawner in basinScrapSpawners)
+        {
+            Debug.Log("[ControlRoomManager] enabling scrap spawner.");
+            spawner.enabled = true;
+            spawner.gameObject.SetActive(true);
+        }
         drainTimer = 0f;
         reservoirWaterAnimator.SetBool("Drain", true);
         reservoirWaterAnimator.SetBool("Filled", false);

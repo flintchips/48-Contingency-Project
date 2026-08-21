@@ -490,9 +490,11 @@ MonoBehaviour:
   - spawnableItem: {fileID: 11400000, guid: 454d062e6994b0549aa711d704fcd884, type: 2}
     rarity: 22
   - spawnableItem: {fileID: 11400000, guid: 33bbabd2078154d43b9f45e4d82b6f14, type: 2}
-    rarity: 18
+    rarity: 12
   - spawnableItem: {fileID: 11400000, guid: 93142872d0ef796439617a7a3a49da20, type: 2}
     rarity: 2
+  - spawnableItem: {fileID: 11400000, guid: 42c85b235c6462b4b8b97720cfbb2879, type: 2}
+    rarity: 5
   minScrap: 14
   maxScrap: 16
   minTotalScrapValue: 300

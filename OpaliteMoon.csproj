@@ -18,6 +18,7 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <PackageReference Include="TeamXiaolan.DawnLib" Version="0.9.25" />
     <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" IncludeAssets="compile" />
   </ItemGroup>
   
@@ -58,6 +59,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ApparatusDockHandler.cs" />
+    <Compile Include="ContingencyWaterTrigger.cs" />
     <Compile Include="ControlRoomManager.cs" />
     <Compile Include="ControlRoomPlayerManager.cs" />
     <Compile Include="ControlRoomSteamValve.cs" />
@@ -86,7 +88,7 @@
       <BundleFiles Include="$(UnityModPlugins)\AssetBundles\AssetBundles" />
       <BundleFiles Include="$(UnityModPlugins)\AssetBundles\opaliteScene" />
       <BundleFiles Include="$(UnityModPlugins)\AssetBundles\opilate_moon_definition" />
-      <BundleFiles Include="$(UnityModPlugins)\AssetBundles\drownedbodydefinition" />
+      <BundleFiles Include="$(UnityModPlugins)\AssetBundles\soppingzeddogdefinition" />
       <DuskMod Include="$(UnityModPlugins)\AssetBundles\opalitemainassets.duskmod" />
     </ItemGroup>
     <Copy

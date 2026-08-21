@@ -404,7 +404,7 @@ public class ApparatusDockHandler : NetworkBehaviour
         }
         bool canDock = LocalPlayerHoldingApparatus() && !isPowered;
         triggerScript.interactable = canDock;
-        triggerScript.hoverTip = canDock ? "[Insert Apparatus]" : "";
+        triggerScript.hoverTip = canDock ? "Insert Apparatus : [LMB]" : "";
         triggerScript.disabledHoverTip = isPowered ? "[Locked]" : "[Requires Apparatus]";
     }
 }

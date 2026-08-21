@@ -187,15 +187,6 @@ public class StartDelugeLever : NetworkBehaviour
         }*/
     }
     
-    private void Start()
-    {
-        /*if (!base.IsServer)
-        {
-            triggerScript.hoverTip = "[ Must be server host. ]";
-            triggerScript.interactable = false;
-        }*/
-    }
-    
     private void Update()
     {
         if (updateInterval <= 0f)
@@ -209,11 +200,11 @@ public class StartDelugeLever : NetworkBehaviour
                 }
                 if (controlRoomManager.hasBeenPowered)
                 {
-                    triggerScript.hoverTip = "Activate Deluge Pumps : [LMB]";
+                    triggerScript.hoverTip = "Open Flood Gate : [LMB]";
                 }
                 else
                 {
-                    triggerScript.hoverTip = "[ Controls must be powered. ]";
+                    triggerScript.hoverTip = "[Controls must be powered.]";
                 }
             }
             else

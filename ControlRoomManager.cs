@@ -3,16 +3,27 @@ using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
 using JLL.Components;
+using UnityEngine.Events;
 
 namespace OpaliteMoonMod;
 
 public class ControlRoomManager : NetworkBehaviour
 {
+    public static ControlRoomManager Instance;
     public ApparatusDockHandler dockHandler;
-
+    public bool isRainingInside;
+    
     public System.Random LockersRandom;
     public System.Random BasinRandom;
     public System.Random KyvidRandom;
+
+    public GameObject[] controlRoomLights;
+    public GameObject[] controlRoomLights2;
+    public AudioSource MonitorAudio;
+    public AudioClip monitorAlarmBeep;
+    
+    public AudioSource DoorAudio;
+    public AudioClip doorOpeningSfx;
     
     public NetworkObject[] lockers;
 
@@ -52,31 +63,36 @@ public class ControlRoomManager : NetworkBehaviour
 
     public bool isDraining;
     private float drainTimer;
+    
+    private List<Renderer> renderers;
 
     private List<ItemSpawner> basinScrapSpawners = new List<ItemSpawner>();
-
-
+    
     public Animator kyividAnimator;
     public int kyividState = 1;
 
+    public ControlRoomSteamValve valve;
+
+    public Animator PCAnimator;
+
     public void Awake()
     {
+        renderers = GetActiveRenderers();
+        //CullControlRoom(true);
+        if (Instance == null) Instance = this;
         if (dockHandler == null) dockHandler = FindObjectOfType<ApparatusDockHandler>();
         SetExitReferences();
-        
-        /*
-        // for culling when ur not in the room
-        roomRenderers = roomRenderers = GetComponentsInChildren<Renderer>(true);
-        if (!playersInsideControlRoom.Contains(GameNetworkManager.Instance.localPlayerController))
-        {
-            CullControlRoom(true);
-        }*/
         
         AmbienceAudio.clip = ambienceClip;
         AmbienceAudio.Play();
         AmbienceAudio.loop = true;
 
         AmbienceAudio.volume = 0f;
+    }
+
+    public void StartUpPC()
+    {
+        PCAnimator.SetBool("On", true);
     }
     
     [ServerRpc(RequireOwnership = false)]
@@ -86,11 +102,10 @@ public class ControlRoomManager : NetworkBehaviour
         StartDelugeClientRpc();
     }
     
-    [ClientRpc()]
+    [ClientRpc]
     public void StartDelugeClientRpc()
     {
         OpaliteMoonPlugin.Log.LogDebug("Starting Deluge On Client");
-        Debug.Log("starting deluge");
         StartCoroutine(DelugeFloodEvent());
         isDraining = true;
     }
@@ -185,7 +200,28 @@ public class ControlRoomManager : NetworkBehaviour
         DelugePumpAudio.Play();
         DelugePumpAudio.loop = true;
         
-        yield return new WaitForSeconds(2f);
+        foreach (GameObject obj in controlRoomLights)
+        {
+            obj.SetActive(false);
+        }
+        
+        yield return new WaitForSeconds(1f);
+        
+        PCAnimator.SetBool("DamActive", true);
+        
+        isRainingInside = true;
+        
+        MonitorAudio.PlayOneShot(monitorAlarmBeep);
+        
+        foreach (GameObject obj in controlRoomLights2)
+        {
+            obj.SetActive(true);
+        }
+
+        BurstValve();
+        
+        yield return new WaitForSeconds(1f);
+        
         drainTimer = 0f;
         reservoirWaterAnimator.SetBool("Drain", true);
         reservoirWaterAnimator.SetBool("Filled", false);
@@ -193,11 +229,18 @@ public class ControlRoomManager : NetworkBehaviour
         
         yield return null;
     }
+
+    public void BurstValve()
+    {
+        valve.valveHasBurst = true;
+        valve.BurstValve();
+    }
     
     private IEnumerator BigDoorOpen() 
     {
         yield return new WaitForSeconds(3f);
         garageDoorAnimator.SetBool("Open", true);
+        DoorAudio.PlayOneShot(doorOpeningSfx);
     }
     
     private IEnumerator BigDoorClose() 
@@ -248,17 +291,32 @@ public class ControlRoomManager : NetworkBehaviour
                 if (drainTimer > 1)
                 {
                     drainTimer = 1;
+                    isRainingInside = false;
                 }
                 
                 reservoirWaterAnimator.SetFloat("Time", drainTimer);
-                //Debug.Log($"[ControlRoomManager] Draining: {drainTimer}");
             }
         }
 
         if (kyividAnimator != null)
         {
-            //Debug.Log(TimeOfDay.Instance.normalizedTimeOfDay);
             kyividAnimator.SetFloat("timeOfDay", TimeOfDay.Instance.normalizedTimeOfDay);
+        }
+
+        if (StartOfRound.Instance.localPlayerController.isInsideFactory && isRainingInside)
+        {
+            TimeOfDay.Instance.effects[(int)LevelWeatherType.Rainy].effectEnabled = true;
+        }
+        else
+        {
+            if (StartOfRound.Instance.localPlayerController.isInsideFactory)
+            {
+                TimeOfDay.Instance.effects[(int)LevelWeatherType.Rainy].effectEnabled = false;
+            }
+            else
+            {
+                TimeOfDay.Instance.effects[(int)LevelWeatherType.Rainy].effectEnabled = (TimeOfDay.Instance.currentLevelWeather ==  LevelWeatherType.Rainy);
+            }
         }
     }
     
@@ -305,6 +363,7 @@ public class ControlRoomManager : NetworkBehaviour
         playersInsideControlRoom.Add(player);
         if (player.IsClient)
         {
+            //CullControlRoom(false);
             AmbienceAudio.volume = 1f;
         }
         OpaliteMoonPlugin.Log.LogDebug($"[ControlRoomManager] Added {player.playerUsername} to Control Room");
@@ -315,25 +374,85 @@ public class ControlRoomManager : NetworkBehaviour
         playersInsideControlRoom.Remove(player);
         if (player.IsClient)
         {
+            //CullControlRoom(true);
             AmbienceAudio.volume = 0f;
         }
         OpaliteMoonPlugin.Log.LogDebug($"[ControlRoomManager] Removed {player.playerUsername} from Control Room");
     }
 
-    /*private void CullControlRoom(bool cull)
+    public List<Renderer> GetActiveRenderers()
     {
-        foreach (Renderer renderer in roomRenderers)
+        // this doesnt work right
+        List<Renderer> allRenderers = gameObject.GetComponentsInChildren<Renderer>().ToList();
+        List<Renderer> activeRenderers = new List<Renderer>();
+        foreach (Renderer renderer in allRenderers)
         {
-            if (renderer != null)
+            if(renderer.enabled)
             {
-                int layerIndex = renderer.gameObject.layer;
-                if(LayerMask.LayerToName(layerIndex) != "Scan Node")
-                    renderer.enabled = !cull;
-                else
-                {
-                    renderer.enabled = false;
-                }
+                activeRenderers.Add(renderer);
             }
         }
-    }*/
+        
+        return activeRenderers;
+    }
+
+    public void CullControlRoom(bool cull)
+    {
+        // this doesnt work right
+        foreach (Renderer renderer in renderers)
+        {
+            renderer.enabled = !cull;
+        }
+    }
+}
+
+public class PlayerDetector : NetworkBehaviour
+{
+    public bool triggerOnce = true;
+    private bool triggeredOnce;
+    public UnityEvent OnEnterTriggerEventsAllClients;
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            OpaliteMoonPlugin.Log.LogDebug("[PlayerDetector] Some kind of player objectt has collided here..");
+            PlayerControllerB player = other.gameObject.GetComponent<PlayerControllerB>();
+            if (player != null && player.IsLocalPlayer)
+            {
+                if (triggerOnce && triggeredOnce) return;
+                TriggerEnteredServerRpc(player.actualClientId);
+                OpaliteMoonPlugin.Log.LogDebug($"Player {player.gameObject.name} has entered the trigger of {gameObject.name} [ON CLIENT]");
+            }
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void TriggerEnteredServerRpc(ulong playerID)
+    {
+        TriggerEnteredClientRpc(playerID);
+    }
+    
+    [ClientRpc]
+    public void TriggerEnteredClientRpc(ulong playerID)
+    {
+        PlayerControllerB enteredPlayer = null;
+        foreach (PlayerControllerB player in StartOfRound.Instance.allPlayerScripts)
+        {
+            if(player.actualClientId == playerID) 
+            {
+                enteredPlayer = player;
+                break;
+            }
+        }
+
+        if (enteredPlayer == null) 
+        {
+            OpaliteMoonPlugin.Log.LogWarning($"Could not find player with ID {playerID}");
+            return; 
+        }
+
+        triggeredOnce = true;
+        OpaliteMoonPlugin.Log.LogDebug($"Player {enteredPlayer.gameObject.name} has entered the trigger of {gameObject.name} [ALL CLIENTS]");
+        OnEnterTriggerEventsAllClients.Invoke();
+    }
 }

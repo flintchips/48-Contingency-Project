@@ -60,6 +60,7 @@
     <Compile Include="ApparatusDockHandler.cs" />
     <Compile Include="ControlRoomManager.cs" />
     <Compile Include="ControlRoomPlayerManager.cs" />
+    <Compile Include="ControlRoomSteamValve.cs" />
     <Compile Include="ControlRoomTeleport.cs" />
     <Compile Include="FloodWaterZone.cs" />
     <Compile Include="KyividManager.cs" />

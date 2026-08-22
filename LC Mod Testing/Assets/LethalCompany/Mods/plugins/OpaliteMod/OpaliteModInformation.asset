@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <AuthorName>k__BackingField: FlintChips
   <ModName>k__BackingField: 48 Contingency
-  <Version>k__BackingField: 0.0.1
-  <READMEFile>k__BackingField: {fileID: 4900000, guid: f4bbd236caac16a4ba3f369afae4876f,
+  <Version>k__BackingField: 1.0.0
+  <READMEFile>k__BackingField: {fileID: 4900000, guid: 99969d5ce226e2e41ab671a5994949fb,
     type: 3}
   <ChangelogFile>k__BackingField: {fileID: 4900000, guid: bff108493c8184942a7991211e445042,
     type: 3}
-  <ModDescription>k__BackingField: A template mod for DawnLib
+  <ModDescription>k__BackingField: '[V80] A green amethyst oasis type. Level B+.
+    Contains a unique use for an apparatus, which may in semi-rare cases, lead to
+    treasure of unimaginable soppy...'
   <ExtraDependencies>k__BackingField: []
   <WebsiteUrl>k__BackingField: https://github.com/XuuXiaolan/TemplateNotRealMod
   <ModIcon>k__BackingField: {fileID: 21300000, guid: a8f931c3dbe6c3a4a908478421fd8403,

@@ -6,12 +6,12 @@
 
 ## **[ 48 CONTINGENCY ]**
 [V81] A green amethyst oasis type. Level B+. Contains a unique use for an apparatus, which may in semi-rare cases, lead to treasure of unimaginable soppy...
-This is a moon I've made for fun!
+> This is a moon I've made to vent creative frustration.
 
 ---
 Originally, I named this moon **"Opalite-28"**, but I renamed it, suddenly becoming a sister moon to **48-Velit** in accordance with WaterGun.
 
-> [![48-Velit](https://thunderstore.io/c/lethal-company/p/WaterGun/48_Velit/)](https://thunderstore.io/c/lethal-company/p/WaterGun/48_Velit/)
+> [![48-Velit, by WaterGun](https://thunderstore.io/c/lethal-company/p/WaterGun/48_Velit/)](https://thunderstore.io/c/lethal-company/p/WaterGun/48_Velit/)
 ...or is it 84-Velit? idk.
 
 > [![WaterGun Moons: Overhaul Trailer](https://www.youtube.com/watch?v=vT95lgysx8E)](https://www.youtube.com/watch?v=vT95lgysx8E)

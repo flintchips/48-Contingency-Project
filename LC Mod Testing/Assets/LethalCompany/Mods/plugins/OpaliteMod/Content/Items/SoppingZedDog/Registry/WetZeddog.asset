@@ -20,7 +20,7 @@ MonoBehaviour:
   disableHandsOnWall: 0
   canBeGrabbedBeforeGameStart: 1
   disallowUtilitySlot: 0
-  weight: 1
+  weight: 1.7
   itemIsTrigger: 0
   holdButtonUse: 0
   itemSpawnsOnGround: 1

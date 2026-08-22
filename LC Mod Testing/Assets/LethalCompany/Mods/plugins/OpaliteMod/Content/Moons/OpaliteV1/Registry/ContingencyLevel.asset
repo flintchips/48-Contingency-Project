@@ -54,10 +54,10 @@ MonoBehaviour:
   factorySizeMultiplier: 1
   dungeonFlowTypes:
   - id: 0
-    rarity: 48
+    rarity: 152
     overrideLevelAmbience: {fileID: 0}
   - id: 4
-    rarity: 198
+    rarity: 33
     overrideLevelAmbience: {fileID: 0}
   - id: 1
     rarity: 4

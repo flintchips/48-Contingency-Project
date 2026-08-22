@@ -5,7 +5,7 @@
 
 
 ## **[ 48 CONTINGENCY ]**
-[V81] A green amethyst oasis type. Level B+. Contains a unique use for an apparatus, which may in semi-rare cases, lead to treasure of unimaginable soppy...
+[V81] A green amethyst oasis type. Level B+. Contains a unique use for an apparatus, which may in semi-rare cases, lead to treasure of unimaginable unimaginableness...
 > This is a moon I've made to vent creative frustration.
 
 ---

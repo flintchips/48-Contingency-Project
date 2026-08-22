@@ -8,6 +8,8 @@ This is a moon I'm currently working on for V81!
 
 Originally called this moon "Opalite-28", but I renamed it. Becoming a sister moon/orbiting 48-Velit by WaterGun, or is it 84-Velit? idk.  
 
+---
+
 <details>
     <summary>Click to expand SPOILERS</summary>
 
@@ -22,7 +24,7 @@ This moon contains:
 The idea of the dam control room requiring an entire apparatus just for the activation of the floodgate is excessive in hindsight given the scope of the dam.
 </details>
 
-//////////////////////////////
+---
 
 ### Folder Structure
 > There is a specific way that I've decided to include the project files inside of the repository for keeping the project version controlled and safe on the web, and I guess public.

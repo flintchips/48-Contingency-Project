@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6459444256557377164}
   - component: {fileID: 8519394191528653367}
   - component: {fileID: 6502272626867913997}
-  - component: {fileID: 5517229180632954842}
+  - component: {fileID: 5589836338842715316}
   - component: {fileID: 8015496862312623658}
   - component: {fileID: 7901553562761394768}
   m_Layer: 6
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4128439516
+  GlobalObjectIdHash: 3915990593
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -131,7 +131,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 1
   AutoObjectParentSync: 0
---- !u!114 &5517229180632954842
+--- !u!114 &5589836338842715316
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6802450985024034697}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d0cf24d2ccc3b7eab72048d0f57c437, type: 3}
+  m_Script: {fileID: -1966734763, guid: 004815ef18f163442968299437e2e015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   grabbable: 1
@@ -180,6 +180,9 @@ MonoBehaviour:
   grabbableToEnemies: 1
   hasBeenHeld: 0
   rotateObject: 0
+  playAfterTimesDropped: 3
+  rareDropSound: {fileID: 8300000, guid: 572eb210682e1f34eb36c8b13b826f19, type: 3}
+  dropSoundChance: 0.14
 --- !u!82 &8015496862312623658
 AudioSource:
   m_ObjectHideFlags: 0

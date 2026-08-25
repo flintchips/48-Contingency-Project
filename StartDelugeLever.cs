@@ -45,13 +45,15 @@ public class StartDelugeLever : NetworkBehaviour
         triggerScript.interactable = false;
     }
     
-    [ServerRpc(RequireOwnership = false)]
+    //[ServerRpc(RequireOwnership = false)]
+    [Rpc(SendTo.Server, RequireOwnership = false)]
     public void PlayLeverPullEffectsServerRpc(bool leverPulled)
     {
         PlayLeverPullEffectsClientRpc(leverPulled);
     }
 
-    [ClientRpc]
+    //[ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     private void PlayLeverPullEffectsClientRpc(bool leverPulled)
     {
         PullLeverAnim(leverPulled);
@@ -161,7 +163,8 @@ public class StartDelugeLever : NetworkBehaviour
         CancelStartDeluge();
     }
     
-    [ClientRpc]
+    //[ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     public void CancelStartDelugeClientRpc()
     {
         CancelStartDeluge();

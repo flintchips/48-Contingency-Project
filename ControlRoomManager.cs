@@ -99,14 +99,16 @@ public class ControlRoomManager : NetworkBehaviour
         PCAnimator.SetBool("On", true);
     }
     
-    [ServerRpc(RequireOwnership = false)]
+    //[ServerRpc(RequireOwnership = false)]
+    [Rpc(SendTo.Server, RequireOwnership = false)]
     public void StartDelugeServerRpc()
     {
         OpaliteMoonPlugin.Log.LogDebug("Starting Deluge On Server");
         StartDelugeClientRpc();
     }
     
-    [ClientRpc]
+    //[ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     public void StartDelugeClientRpc()
     {
         OpaliteMoonPlugin.Log.LogDebug("Starting Deluge On Client");
@@ -114,19 +116,20 @@ public class ControlRoomManager : NetworkBehaviour
         isDraining = true;
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    //[ServerRpc(RequireOwnership = false)]
+    [Rpc(SendTo.Server, RequireOwnership = false)]
     public void OnBeginPowerServerRpc()
     {
         OnBeginPowerClientRpc();
     }
 
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     public void OnBeginPowerClientRpc()
     {
         StartCoroutine(BigDoorOpen());
     }
-
-    [ClientRpc]
+    
+    [Rpc(SendTo.ClientsAndHost)]
     public void OnEndPowerClientRpc()
     {
         StartCoroutine(BigDoorClose());
@@ -170,9 +173,15 @@ public class ControlRoomManager : NetworkBehaviour
         for (int i = 0; i < scrapSpawnCount; i++)
         {
             int selectedNode = BasinRandom.Next(0, foundNodes.Length);
+            
             ItemSpawner spawner = new GameObject().AddComponent<ItemSpawner>();
             Vector2 randomOffset = GetRandomPointInCircleForBasin(5f);
-            spawner.transform.position = foundNodes[selectedNode].transform.position + new Vector3(randomOffset.x, 0, randomOffset.y);
+            spawner.transform.position = foundNodes[selectedNode].transform.position + new Vector3(randomOffset.x, 5, randomOffset.y);
+            while (!Physics.Raycast(spawner.transform.position, -Vector3.up, out var hitInfo, 80f, 268437761, QueryTriggerInteraction.Ignore))
+            {
+                randomOffset = GetRandomPointInCircleForBasin(5f);
+                spawner.transform.position = foundNodes[selectedNode].transform.position + new Vector3(randomOffset.x, 5, randomOffset.y);
+            }
             spawner.enabled = false;
             spawner.spawnOnEnabled = true;
             spawner.SourcePool = SpawnPoolSource.CustomList;
@@ -198,7 +207,8 @@ public class ControlRoomManager : NetworkBehaviour
         return new Vector2(x, y);
     }
     
-    [ServerRpc(RequireOwnership = false)]
+    //[ServerRpc(RequireOwnership = false)]
+    [Rpc(SendTo.Server, RequireOwnership = false)]
     private void SetupLockersServerRpc()
     {
         LockersRandom = new System.Random(StartOfRound.Instance.randomMapSeed + 214);
@@ -210,7 +220,8 @@ public class ControlRoomManager : NetworkBehaviour
         SetupLockersClientRpc(lockerStates);
     }
     
-    [ClientRpc]
+    //[ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     private void SetupLockersClientRpc(bool[] lockerStates)
     {
         for (int i = 0; i < lockers.Length; i++)
@@ -303,7 +314,8 @@ public class ControlRoomManager : NetworkBehaviour
         UpdateControlRoomPresenceServerRpc(player.actualClientId, false);
     }
     
-    [ServerRpc(RequireOwnership = false)]
+    //[ServerRpc(RequireOwnership = false)]
+    [Rpc(SendTo.Server, RequireOwnership = false)]
     private void UpdateControlRoomPresenceServerRpc(ulong clientId, bool isEntering)
     {
         UpdateControlRoomPresenceClientRpc(clientId, isEntering);
@@ -352,7 +364,8 @@ public class ControlRoomManager : NetworkBehaviour
         }
     }
     
-    [ClientRpc]
+    //[ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     private void UpdateControlRoomPresenceClientRpc(ulong clientId, bool isEntering)
     {
         PlayerControllerB targetPlayer = StartOfRound.Instance.allPlayerScripts.FirstOrDefault(p => p.actualClientId == clientId);
@@ -389,11 +402,11 @@ public class ControlRoomManager : NetworkBehaviour
     {
         
     }
-
+    
     private void PlayerEnterControlRoom(PlayerControllerB player)
     {
         playersInsideControlRoom.Add(player);
-        if (player.IsClient)
+        if (player == StartOfRound.Instance.localPlayerController)
         {
             //CullControlRoom(false);
             AmbienceAudio.volume = 1f;
@@ -404,7 +417,7 @@ public class ControlRoomManager : NetworkBehaviour
     private void PlayerExitControlRoom(PlayerControllerB player)
     {
         playersInsideControlRoom.Remove(player);
-        if (player.IsClient)
+        if (player == StartOfRound.Instance.localPlayerController)
         {
             //CullControlRoom(true);
             AmbienceAudio.volume = 0f;
@@ -456,13 +469,13 @@ public class PlayerDetector : NetworkBehaviour
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [Rpc(SendTo.Server,  RequireOwnership = false)]
     public void TriggerEnteredServerRpc(ulong playerID)
     {
         TriggerEnteredClientRpc(playerID);
     }
     
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     public void TriggerEnteredClientRpc(ulong playerID)
     {
         PlayerControllerB enteredPlayer = null;

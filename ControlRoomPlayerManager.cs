@@ -16,18 +16,23 @@ public class ControlRoomPlayerManager : MonoBehaviour
     public void EnterControlRoom()
     {
         if (!PlayerExists()) return;
-
+        if (player != StartOfRound.Instance.localPlayerController) return;
+        
         player.isInsideFactory = true;
-        KyividManager.Instance.kyividDirectionalLighting.enabled = false;
+        if (KyividManager.Instance != null && KyividManager.Instance.kyividDirectionalLighting != null)
+            KyividManager.Instance.kyividDirectionalLighting.enabled = false;
     }
     
     public void LeaveControlRoom()
     {
         if (!PlayerExists()) return;
+        if (player != StartOfRound.Instance.localPlayerController) return;
         
         player.isInsideFactory = false;
-        TimeOfDay.Instance.effects[(int)TimeOfDay.Instance.currentLevelWeather].effectEnabled = true;
-        KyividManager.Instance.kyividDirectionalLighting.enabled = true;
+        if((int)TimeOfDay.Instance.currentLevelWeather >= 0)
+            TimeOfDay.Instance.effects[(int)TimeOfDay.Instance.currentLevelWeather].effectEnabled = true;
+        if (KyividManager.Instance != null && KyividManager.Instance.kyividDirectionalLighting != null)
+            KyividManager.Instance.kyividDirectionalLighting.enabled = true;
     }
 
     private bool PlayerExists()

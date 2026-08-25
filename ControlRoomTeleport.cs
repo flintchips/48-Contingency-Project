@@ -282,13 +282,14 @@ public class ControlRoomTeleport : NetworkBehaviour
 		HUDManager.Instance.UIAudio.PlayOneShot(customFirstTimeAudio);
 	}
 
-	[ServerRpc(RequireOwnership = false)]
+	//[ServerRpc(RequireOwnership = false)]
+    [Rpc(SendTo.Server, RequireOwnership = false)]
 	public void TeleportPlayerServerRpc(int playerObj)
 	{
 		TeleportPlayerClientRpc(playerObj);
 	}
-
-	[ClientRpc]
+    
+    [Rpc(SendTo.ClientsAndHost)]
 	public void TeleportPlayerClientRpc(int playerObj)
 	{
 		if (playersManager.allPlayerScripts[playerObj] == GameNetworkManager.Instance.localPlayerController)

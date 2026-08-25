@@ -67,6 +67,7 @@
     <Compile Include="FloodWaterZone.cs" />
     <Compile Include="KyividManager.cs" />
     <Compile Include="OpaliteMoonPlugin.cs" />
+    <Compile Include="RandomizedDropSoundObject.cs" />
     <Compile Include="StartDelugeLever.cs" />
     <!-- include more if needed, this is so the csproj ignores everything in the unity project -->
   </ItemGroup>

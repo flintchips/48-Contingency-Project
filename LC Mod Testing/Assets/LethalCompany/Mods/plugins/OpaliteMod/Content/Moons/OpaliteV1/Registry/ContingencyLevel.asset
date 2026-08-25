@@ -26,7 +26,7 @@ MonoBehaviour:
 
 '
   videoReel: {fileID: 0}
-  riskLevel: C+
+  riskLevel: B+
   timeToArrive: 3
   OffsetFromGlobalTime: 0
   DaySpeedMultiplier: 0.8
@@ -51,13 +51,13 @@ MonoBehaviour:
   overrideWeather: 0
   overrideWeatherType: 0
   currentWeather: -1
-  factorySizeMultiplier: 1
+  factorySizeMultiplier: 1.1
   dungeonFlowTypes:
   - id: 0
-    rarity: 152
+    rarity: 249
     overrideLevelAmbience: {fileID: 0}
   - id: 4
-    rarity: 33
+    rarity: 37
     overrideLevelAmbience: {fileID: 0}
   - id: 1
     rarity: 4
@@ -125,17 +125,17 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0.22651364
       - serializedVersion: 3
-        time: 0.27618122
-        value: 3.992279
+        time: 0.19679442
+        value: 4.04375
         inSlope: 7.01716
-        outSlope: 0.973296
+        outSlope: 3.213302
         tangentMode: 1
         weightedMode: 3
         inWeight: 1
-        outWeight: 1
+        outWeight: 0.5827981
       - serializedVersion: 3
-        time: 0.99969625
-        value: 5.9687805
+        time: 1.0120864
+        value: 10.017792
         inSlope: 4.3506613
         outSlope: 4.3506613
         tangentMode: 1
@@ -203,17 +203,17 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0.22651364
       - serializedVersion: 3
-        time: 0.27618122
-        value: 3.992279
+        time: 0.19679442
+        value: 4.04375
         inSlope: 7.01716
-        outSlope: 0.973296
+        outSlope: 3.213302
         tangentMode: 1
         weightedMode: 3
         inWeight: 1
-        outWeight: 1
+        outWeight: 0.5827981
       - serializedVersion: 3
-        time: 0.99969625
-        value: 5.9687805
+        time: 1.0120864
+        value: 10.017792
         inSlope: 4.3506613
         outSlope: 4.3506613
         tangentMode: 1
@@ -539,12 +539,12 @@ MonoBehaviour:
   - enemyType: {fileID: 11400000, guid: 5891fa91ed44b7c45a9c941a56d7848e, type: 2}
     rarity: 36
   - enemyType: {fileID: 11400000, guid: b0e0521c7d1bf004e9dbf0b9d43f9913, type: 2}
-    rarity: 3
+    rarity: 2
   DaytimeEnemies:
   - enemyType: {fileID: 11400000, guid: 9c528253be6415e4b9865b9c6a326de6, type: 2}
     rarity: 100
   - enemyType: {fileID: 11400000, guid: d9935b917f1a2e54b9ae3951b5375d8e, type: 2}
-    rarity: 51
+    rarity: 21
   - enemyType: {fileID: 11400000, guid: ad92cb2adec3c844db6b53997a9538d7, type: 2}
     rarity: 40
   - enemyType: {fileID: 11400000, guid: 68f9f59da11b36045a998eb18e91717d, type: 2}

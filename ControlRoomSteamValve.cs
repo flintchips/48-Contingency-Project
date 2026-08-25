@@ -159,13 +159,15 @@ public class ControlRoomSteamValveFixInteraction : NetworkBehaviour
 		}
 	}
 
-	[ServerRpc(RequireOwnership = false)]
+	//[ServerRpc(RequireOwnership = false)]
+	[Rpc(SendTo.Server, RequireOwnership = false)]
 	public void FixValveServerRpc()
 	{
 		FixValveClientRpc();
 	}
 
-	[ClientRpc]
+	//[ClientRpc]
+	[Rpc(SendTo.ClientsAndHost)]
 	public void FixValveClientRpc()
 	{
 		steamValveMain.FixValveLocalClient();

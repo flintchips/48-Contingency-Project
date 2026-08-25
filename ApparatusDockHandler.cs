@@ -359,8 +359,8 @@ public class ApparatusDockHandler : NetworkBehaviour
         
         yield return new WaitForSeconds(0.3f); 
         
-        if (DockLightAnimator != null)
-            DockLightAnimator.SetBool("Light Begin", true);
+        //if (DockLightAnimator != null)
+            //DockLightAnimator.SetBool("Light Begin", true);
         if (roundManager != null)
             roundManager.FlickerLights();
         

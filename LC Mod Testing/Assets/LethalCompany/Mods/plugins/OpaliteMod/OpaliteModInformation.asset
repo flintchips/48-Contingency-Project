@@ -22,7 +22,8 @@ MonoBehaviour:
   <ModDescription>k__BackingField: '[V80] A green amethyst oasis type. Level B+.
     Contains a unique use for an apparatus, which may in semi-rare cases, lead to
     treasure of unimaginable soppy...'
-  <ExtraDependencies>k__BackingField: []
-  <WebsiteUrl>k__BackingField: https://github.com/XuuXiaolan/TemplateNotRealMod
+  <ExtraDependencies>k__BackingField:
+  - JacobG5-JLL-1.10.1
+  <WebsiteUrl>k__BackingField: https://github.com/flintchips/48-Contingency-Project
   <ModIcon>k__BackingField: {fileID: 21300000, guid: a8f931c3dbe6c3a4a908478421fd8403,
     type: 3}

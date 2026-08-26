@@ -6,9 +6,42 @@
 
 ## **[ 48 CONTINGENCY ]**
 [V81] A green amethyst oasis type. Level B+. Contains a unique use for an apparatus, which may in semi-rare cases, lead to treasure of unimaginable unimaginableness...
-> This is a moon I've made to vent creative frustration.
+
+> ***CONDITIONS***: Sister to 84 Velit, Contingency \
+> is home to large mammals and machines.\
+> \
+> ***FAUNA***: Has adapted to amethyst rich soil.
 
 ---
+
+<details>
+<summary><b>[ Screenshots & Lore (SPOILERS) ]</b></summary>
+  
+<p align="center">
+<center>
+  <img width="32%" alt="john4" src="https://github.com/user-attachments/assets/daf44d77-afda-46ea-9927-3ee6c3b2ba4a" />
+  <img width="32%" alt="john2" src="https://github.com/user-attachments/assets/9d59efca-73ab-45d5-b21c-c6b744d61de8" />
+  <img width="32%" alt="john7" src="https://github.com/user-attachments/assets/9a0340eb-a0c7-4637-bd7f-90014df61901" />
+  
+  <img width="32%" alt="john8" src="https://github.com/user-attachments/assets/362c2255-1215-4da8-9e74-82f3ceb6916e" />
+  <img width="32%" alt="john9" src="https://github.com/user-attachments/assets/74c17ca7-842d-48d4-a2cf-d6d6b7a6295c" />
+  <img width="32%" alt="john10" src="https://github.com/user-attachments/assets/7e91b28a-5044-4b81-9086-839abf5ebe2d" />
+</center>
+</p>
+
+> Lore:\
+> \
+> &nbsp;&nbsp;&nbsp;&nbsp;**Contingency** orbits it's planet closer than any of it's siblings. Sister to moon **48-Velit** (by WaterGun), notable large mammals such as the **feiopar** and **eyeless dog** have been sighted inhabiting the lush oasis dotted around its otherwise baren and mountainous terrain. Seasonal weather leads large volumes of water originating from it's oceans to be stored within pocketed valleys which are commonly controlled by it's inhabitants using water storage and control infrastructure. As a ***contingency*** for if, or when, the season becomes dry, on Contingency, or elsewhere.\
+> \
+> &nbsp;&nbsp;&nbsp;&nbsp;As water flows through the amethyst rich soil, a noticable amount of impurities are naturally filtered through, giving Contingency the cleanest natural bodies of freshwater of any celestial body within its local star system.\
+> \
+> &nbsp;&nbsp;&nbsp;&nbsp;There is a dormant ***control room*** which, inside, can be powered with any apparatus, allowing the player to open the floodgate of the dam leading to access of the reservoir basin where specific scrap can be found.
+
+</details>
+
+---
+
+
 Originally, I named this moon **"Opalite-28"**, but I renamed it, suddenly becoming a sister moon to **48-Velit** in accordance with WaterGun.
 
 > [![48-Velit, by WaterGun](https://thunderstore.io/c/lethal-company/p/WaterGun/48_Velit/)](https://thunderstore.io/c/lethal-company/p/WaterGun/48_Velit/)
@@ -16,21 +49,7 @@ Originally, I named this moon **"Opalite-28"**, but I renamed it, suddenly becom
 
 > [![WaterGun Moons: Overhaul Trailer](https://www.youtube.com/watch?v=vT95lgysx8E)](https://www.youtube.com/watch?v=vT95lgysx8E)
 -very well done and polished, w music.
----
-
-<p align="center">
-[ Images ]
-
-<center>
-  <img width="32%" alt="john2" src="https://github.com/user-attachments/assets/9d59efca-73ab-45d5-b21c-c6b744d61de8" />
-  <img width="32%" alt="john6" src="https://github.com/user-attachments/assets/cf4221ed-a255-4208-8097-a50ed2d74b7d" />
-  <img width="32%" alt="john4" src="https://github.com/user-attachments/assets/daf44d77-afda-46ea-9927-3ee6c3b2ba4a" />
-  
-  <img width="32%" alt="soppa" src="https://github.com/user-attachments/assets/04071a0d-157c-41b1-9969-0edcf346f2ed" />
-  
-</center>
-
-</p>
+>
 
 ---
 

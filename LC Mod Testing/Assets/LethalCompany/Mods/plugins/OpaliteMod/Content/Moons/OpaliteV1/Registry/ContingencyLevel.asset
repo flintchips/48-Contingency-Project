@@ -22,14 +22,14 @@ MonoBehaviour:
   LevelDescription: 'CONDITIONS: Sister to 84 Velit, Contingency is home to large
     mammals and machines.
 
-    FAUNA: Persists in amethyst rich soil.
+    FAUNA: Has adapted to amethyst rich soil.
 
 '
   videoReel: {fileID: 0}
   riskLevel: B+
   timeToArrive: 3
   OffsetFromGlobalTime: 0
-  DaySpeedMultiplier: 0.8
+  DaySpeedMultiplier: 1
   planetHasTime: 1
   randomWeathers:
   - weatherType: 2
@@ -495,8 +495,8 @@ MonoBehaviour:
     rarity: 2
   - spawnableItem: {fileID: 11400000, guid: 42c85b235c6462b4b8b97720cfbb2879, type: 2}
     rarity: 5
-  minScrap: 14
-  maxScrap: 16
+  minScrap: 16
+  maxScrap: 19
   minTotalScrapValue: 300
   maxTotalScrapValue: 700
   levelAmbienceClips: {fileID: 11400000, guid: 9603e6bd92615bc45bbb4a5e3a1b9e89, type: 2}

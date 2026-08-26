@@ -6,9 +6,9 @@ namespace OpaliteMoonMod;
 // copy of QuicksandTrigger for water but it still causes movement hindrance if not only touching terrain
 public class ContingencyWaterTrigger : MonoBehaviour
 {
-	public bool isWater = true;
+	public bool isWater;
 
-	public bool isInsideWater = false;
+	public bool isInsideWater;
 
 	public int audioClipIndex;
 
@@ -87,31 +87,6 @@ public class ContingencyWaterTrigger : MonoBehaviour
 				component2.sinkingSpeedMultiplier = sinkingSpeedMultiplier;
 			}
 		}
-	}
-	
-	private bool CheckConditionsForSinkingInWater(PlayerControllerB player)
-	{
-		if (!player.thisController.isGrounded)
-		{
-			return false;
-		}
-		if (player.inSpecialInteractAnimation || (bool)player.inAnimationWithEnemy || player.isClimbingLadder)
-		{
-			return false;
-		}
-		if (player.physicsParent != null)
-		{
-			return false;
-		}
-		if (player.isInHangarShipRoom)
-		{
-			return false;
-		}
-		if (player.isInElevator)
-		{
-			return false;
-		}
-		return true;
 	}
 
 	private void OnTriggerExit(Collider other)

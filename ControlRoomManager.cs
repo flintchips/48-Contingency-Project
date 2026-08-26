@@ -4,6 +4,8 @@ using Unity.Netcode;
 using UnityEngine;
 using JLL.Components;
 using UnityEngine.Events;
+using Dawn;
+using BepInEx.Logging;
 
 namespace OpaliteMoonMod;
 
@@ -16,6 +18,9 @@ public class ControlRoomManager : NetworkBehaviour
     public System.Random LockersRandom;
     public System.Random BasinRandom;
     public System.Random KyvidRandom;
+
+    public AudioSource[] MiscAudios;
+    public AudioClip[] miscClips;
 
     public GameObject[] controlRoomLights;
     public GameObject[] controlRoomLights2;
@@ -97,6 +102,63 @@ public class ControlRoomManager : NetworkBehaviour
     public void StartUpPC()
     {
         PCAnimator.SetBool("On", true);
+        if (MiscAudios.Length > 0 && MiscAudios[0] != null)
+        {
+            MiscAudios[0].volume = 0.8f;
+            MiscAudios[0].pitch = 0.5f;
+            StartCoroutine(StopAudioAfterFade(MiscAudios[0], 0.5f));
+        }
+        StartCoroutine(PCAudiosCoroutine());
+    }
+
+    public IEnumerator PCAudiosCoroutine()
+    {
+        MonitorAudio.volume = 1f;
+            
+        if (miscClips[1] != null)
+        {
+            MonitorAudio.PlayOneShot(miscClips[1]);
+        }
+
+        yield return new WaitForSeconds(1f);
+        
+        yield return null;
+    }
+
+    public IEnumerator StopAudioAfterFade(AudioSource audioSource, float fadeSeconds)
+    {
+        float startingVolume = audioSource.volume;
+        float currentTime = 0;
+        
+        while (currentTime < fadeSeconds)
+        {
+            currentTime += Time.deltaTime;
+            audioSource.volume = Mathf.Lerp(startingVolume, 0f, currentTime / fadeSeconds);
+            yield return null; 
+        }
+        
+        audioSource.volume = 0f;
+        audioSource.Stop();
+        audioSource.volume = startingVolume; 
+    }
+    
+    public IEnumerator StartAudioWithFade(AudioSource audioSource, float fadeSeconds)
+    {
+        float targetVolume = audioSource.volume;
+        float currentTime = 0;
+    
+        audioSource.volume = 0f;
+        audioSource.Play();
+    
+        while (currentTime < fadeSeconds)
+        {
+            currentTime += Time.deltaTime;
+            audioSource.volume = Mathf.Lerp(0f, targetVolume, currentTime / fadeSeconds);
+            yield return null; 
+        }
+    
+        // Ensure it ends exactly at the target volume
+        audioSource.volume = targetVolume;
     }
     
     //[ServerRpc(RequireOwnership = false)]
@@ -126,6 +188,7 @@ public class ControlRoomManager : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     public void OnBeginPowerClientRpc()
     {
+        AmbienceAudio.Stop();
         StartCoroutine(BigDoorOpen());
     }
     
@@ -160,16 +223,26 @@ public class ControlRoomManager : NetworkBehaviour
             return;
         }
         GameObject[] foundNodes = parent.GetComponentsInChildren<Transform>(true)
-            .Where(t => t.name.StartsWith("ScrapNode"))
-            .Select(t => t.gameObject)
-            .ToArray();
+            .Where(t => t.name.StartsWith("ScrapNode")).Select(t => t.gameObject).ToArray();
         
         int scrapSeed = StartOfRound.Instance.randomMapSeed + 393;
         BasinRandom = new System.Random(scrapSeed);
         int scrapSpawnCount = 6 + BasinRandom.Next(2);
         
         Debug.Log($"[ControlRoomManager] setting up {scrapSpawnCount} basins scrap item spawners");
-
+        
+        var dawnItem = LethalContent.Items[NamespacedKey<DawnItemInfo>.From("opalite_moon", "sopping_zed_dog")].Item;
+        var list = new ItemSpawner.WeightedItemRefrence[]
+        {
+            new ItemSpawner.WeightedItemRefrence
+            {
+                Weight = 100,
+                Item = dawnItem,
+                ItemName = "",
+                FindRegisteredItem = false,
+            }
+        };
+        
         for (int i = 0; i < scrapSpawnCount; i++)
         {
             int selectedNode = BasinRandom.Next(0, foundNodes.Length);
@@ -185,7 +258,7 @@ public class ControlRoomManager : NetworkBehaviour
             spawner.enabled = false;
             spawner.spawnOnEnabled = true;
             spawner.SourcePool = SpawnPoolSource.CustomList;
-            spawner.CustomList = customBasinScrapList;
+            spawner.CustomList = list;
             spawner.spawnRotation = RotationType.RandomRotation;
             spawner.transform.localEulerAngles = new Vector3(0, BasinRandom.Next(0, 360), 0);
             basinScrapSpawners.Add(spawner);
@@ -242,9 +315,22 @@ public class ControlRoomManager : NetworkBehaviour
             obj.SetActive(false);
         }
         
-        yield return new WaitForSeconds(1f);
+        if (miscClips.Length > 0 && miscClips[0] != null)
+        {
+            AmbienceAudio.clip = miscClips[0];
+            AmbienceAudio.Play();
+
+            if (MiscAudios.Length > 1 && MiscAudios[1] != null)
+            {
+                MiscAudios[1].clip = miscClips[0];
+                MiscAudios[1].volume = 1f;
+                StartCoroutine(StartAudioWithFade(MiscAudios[1], 0.5f));
+            }
+        }
         
         PCAnimator.SetBool("DamActive", true);
+        
+        yield return new WaitForSeconds(1f);
         
         isRainingInside = true;
         
@@ -265,6 +351,19 @@ public class ControlRoomManager : NetworkBehaviour
             spawner.enabled = true;
             spawner.gameObject.SetActive(true);
         }
+        
+        yield return new WaitForSeconds(0.25f);
+
+        var soppyzedProperties = LethalContent.Items[NamespacedKey<DawnItemInfo>.From("opalite_moon", "sopping_zed_dog")].Item;
+
+        foreach (var grabbableObject in FindObjectsByType<GrabbableObject>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (grabbableObject == null || !grabbableObject.name.Contains("SoppingZed")) continue;
+            grabbableObject.floorYRot = BasinRandom.Next(360);
+            if (grabbableObject.itemProperties != soppyzedProperties)
+                grabbableObject.itemProperties = soppyzedProperties;
+        }
+        
         drainTimer = 0f;
         reservoirWaterAnimator.SetBool("Drain", true);
         reservoirWaterAnimator.SetBool("Filled", false);
@@ -282,8 +381,12 @@ public class ControlRoomManager : NetworkBehaviour
     private IEnumerator BigDoorOpen() 
     {
         yield return new WaitForSeconds(3f);
+        
         garageDoorAnimator.SetBool("Open", true);
-        DoorAudio.PlayOneShot(doorOpeningSfx);
+        DoorAudio.clip = doorOpeningSfx;
+        DoorAudio.Play();
+        yield return new WaitForSeconds(2f);
+        StartCoroutine(StopAudioAfterFade(DoorAudio, 0.5f));
     }
     
     private IEnumerator BigDoorClose() 
@@ -336,6 +439,8 @@ public class ControlRoomManager : NetworkBehaviour
                 {
                     drainTimer = 1;
                     isRainingInside = false;
+                    StartCoroutine(StopAudioAfterFade(AmbienceAudio, 0.5f));
+                    StartCoroutine(StopAudioAfterFade(MiscAudios[1], 0.5f));
                 }
                 
                 reservoirWaterAnimator.SetFloat("Time", drainTimer);
@@ -396,11 +501,6 @@ public class ControlRoomManager : NetworkBehaviour
                 addon.LeaveControlRoom();
             }
         }
-    }
-
-    private void SpawnScrapInBasin()
-    {
-        
     }
     
     private void PlayerEnterControlRoom(PlayerControllerB player)

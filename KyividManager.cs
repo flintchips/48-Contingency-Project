@@ -21,6 +21,10 @@ public class KyividManager : MonoBehaviour
         if (lightTarget.transform != null)
         {
             kyividDirectionalLighting.transform.LookAt(lightTarget.transform);
+            if (StartOfRound.Instance.localPlayerController.isInsideFactory)
+            {
+                kyividDirectionalLighting.enabled = false;
+            }
         }
     }
 }

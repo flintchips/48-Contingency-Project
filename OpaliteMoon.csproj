@@ -13,7 +13,7 @@
     <GameManaged>C:\Program Files (x86)\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed</GameManaged>
     <BepinEx>C:\Program Files (x86)\Steam\steamapps\content\app_1966720\v81 hotfix 5\BepInEx</BepinEx>
     <!-- (dont change) -->
-    <BepInExPlugins>$(BepinEx)\plugins\FlintChips-48contingency</BepInExPlugins>
+    <BepInExPlugins>$(BepinEx)\plugins\FlintChips-48_Contingency</BepInExPlugins>
     <UnityModPlugins>$(MSBuildProjectDirectory)\LC Mod Testing\Assets\LethalCompany\Mods\plugins\OpaliteMod</UnityModPlugins>
   </PropertyGroup>
   
@@ -94,11 +94,11 @@
     </ItemGroup>
     <Copy
             SourceFiles="@(DuskMod)"
-            DestinationFolder="$(BepInExPlugins)\plugins"
+            DestinationFolder="$(BepInExPlugins)"
             SkipUnchangedFiles="true" />
     <Copy
           SourceFiles="@(BundleFiles)"
-          DestinationFolder="$(BepInExPlugins)\plugins\Assets"
+          DestinationFolder="$(BepInExPlugins)\Assets"
           SkipUnchangedFiles="true" />
     <Message Importance="high" Text="Copied @(BundleFiles) -> $(BepInExPlugins)\plugins\Assets" />
     <Message Importance="high" Text="Copied @(DuskMod) -> $(BepInExPlugins)\plugins" />

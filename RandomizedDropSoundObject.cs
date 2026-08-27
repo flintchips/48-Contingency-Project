@@ -18,7 +18,13 @@ public class RandomizedDropSoundObject : PhysicsProp
         if (itemProperties.dropSFX != null)
         {
             timesAudioDropped++;
-            AudioClip sound = ((Random.value <= dropSoundChance) && rareDropSound != null && (timesAudioDropped > playAfterTimesDropped))? rareDropSound : itemProperties.dropSFX;
+
+            int seed = StartOfRound.Instance.randomMapSeed + (int)NetworkObjectId + timesAudioDropped;
+            System.Random random = new System.Random(seed);
+            
+            bool successful = random.NextDouble() <= dropSoundChance;
+            
+            AudioClip sound = (successful && rareDropSound != null && (timesAudioDropped > playAfterTimesDropped))? rareDropSound : itemProperties.dropSFX;
             AudioSource component = base.gameObject.GetComponent<AudioSource>();
             component.PlayOneShot(sound);
             WalkieTalkie.TransmitOneShotAudio(component, sound);

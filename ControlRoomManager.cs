@@ -304,73 +304,110 @@ public class ControlRoomManager : NetworkBehaviour
     }
     
     private IEnumerator DelugeFloodEvent() 
+{
+    if (DelugePumpAudio != null)
     {
-        DelugePumpAudio.PlayOneShot(delugePumpWhir);
+        if (delugePumpWhir != null) DelugePumpAudio.PlayOneShot(delugePumpWhir);
         DelugePumpAudio.clip = delugeFlow;
         DelugePumpAudio.Play();
         DelugePumpAudio.loop = true;
-        
+    }
+    
+    if (controlRoomLights != null)
+    {
         foreach (GameObject obj in controlRoomLights)
         {
-            obj.SetActive(false);
+            if (obj != null) obj.SetActive(false);
         }
-        
-        if (miscClips.Length > 0 && miscClips[0] != null)
-        {
-            AmbienceAudio.clip = miscClips[0];
-            AmbienceAudio.Play();
+    }
+    
+    if (miscClips != null && miscClips.Length > 0 && miscClips[0] != null && AmbienceAudio != null)
+    {
+        AmbienceAudio.clip = miscClips[0];
+        AmbienceAudio.Play();
 
-            if (MiscAudios.Length > 1 && MiscAudios[1] != null)
-            {
-                MiscAudios[1].clip = miscClips[0];
-                MiscAudios[1].volume = 1f;
-                StartCoroutine(StartAudioWithFade(MiscAudios[1], 0.5f));
-            }
+        if (MiscAudios != null && MiscAudios.Length > 1 && MiscAudios[1] != null)
+        {
+            MiscAudios[1].clip = miscClips[0];
+            MiscAudios[1].volume = 1f;
+            StartCoroutine(StartAudioWithFade(MiscAudios[1], 0.5f));
         }
-        
-        PCAnimator.SetBool("DamActive", true);
-        
-        yield return new WaitForSeconds(1f);
-        
-        isRainingInside = true;
-        
+    }
+    
+    if (PCAnimator != null) PCAnimator.SetBool("DamActive", true);
+    
+    yield return new WaitForSeconds(1f);
+    
+    isRainingInside = true;
+    
+    if (MonitorAudio != null && monitorAlarmBeep != null)
         MonitorAudio.PlayOneShot(monitorAlarmBeep);
-        
+    
+    if (controlRoomLights2 != null)
+    {
         foreach (GameObject obj in controlRoomLights2)
         {
-            obj.SetActive(true);
+            if (obj != null) obj.SetActive(true);
         }
+    }
 
-        BurstValve();
-        
-        yield return new WaitForSeconds(1f);
+    BurstValve(); 
+    
+    yield return new WaitForSeconds(1f);
 
+    if (basinScrapSpawners != null)
+    {
         foreach (ItemSpawner spawner in basinScrapSpawners)
         {
+            if (spawner == null) continue;
             Debug.Log("[ControlRoomManager] enabling scrap spawner.");
             spawner.enabled = true;
-            spawner.gameObject.SetActive(true);
+            if (spawner.gameObject != null) spawner.gameObject.SetActive(true);
         }
-        
-        yield return new WaitForSeconds(0.25f);
+    }
+    else
+    {
+        Debug.LogWarning("[ControlRoomManager] basinScrapSpawners is null on this client!");
+    }
+    
+    yield return new WaitForSeconds(0.25f);
 
-        var soppyzedProperties = LethalContent.Items[NamespacedKey<DawnItemInfo>.From("opalite_moon", "sopping_zed_dog")].Item;
+    var itemKey = NamespacedKey<DawnItemInfo>.From("opalite_moon", "sopping_zed_dog");
+    Item soppyzedProperties = null;
+    
+    if (LethalContent.Items != null && LethalContent.Items.ContainsKey(itemKey))
+    {
+        var lookupResult = LethalContent.Items[itemKey];
+        if (lookupResult != null) soppyzedProperties = lookupResult.Item;
+    }
 
+    if (soppyzedProperties != null)
+    {
         foreach (var grabbableObject in FindObjectsByType<GrabbableObject>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
-            if (grabbableObject == null || !grabbableObject.name.Contains("SoppingZed")) continue;
-            grabbableObject.floorYRot = BasinRandom.Next(360);
+            if (grabbableObject == null || string.IsNullOrEmpty(grabbableObject.name) || !grabbableObject.name.Contains("SoppingZed")) continue;
+            
+            // Check random instance
+            if (BasinRandom != null) grabbableObject.floorYRot = BasinRandom.Next(360);
+            
             if (grabbableObject.itemProperties != soppyzedProperties)
                 grabbableObject.itemProperties = soppyzedProperties;
         }
-        
-        drainTimer = 0f;
+    }
+    
+    drainTimer = 0f;
+    
+    if (reservoirWaterAnimator != null)
+    {
         reservoirWaterAnimator.SetBool("Drain", true);
         reservoirWaterAnimator.SetBool("Filled", false);
-        HUDManager.Instance.DisplayTip("???", "The dam's flood gate has opened.");
-        
-        yield return null;
     }
+    
+    if (HUDManager.Instance != null)
+        HUDManager.Instance.DisplayTip("???", "The dam's flood gate has opened.");
+    
+    yield return null;
+}
 
     public void BurstValve()
     {
@@ -434,7 +471,7 @@ public class ControlRoomManager : NetworkBehaviour
         {
             if (drainTimer < 1)
             {
-                drainTimer += Time.deltaTime / 50f; // 50 seconds
+                drainTimer += Time.deltaTime / 42f; // 50 seconds
                 if (drainTimer > 1)
                 {
                     drainTimer = 1;
@@ -556,6 +593,7 @@ public class PlayerDetector : NetworkBehaviour
     public bool triggerOnce = true;
     private bool triggeredOnce;
     public UnityEvent OnEnterTriggerEventsAllClients;
+    public UnityEvent OnEnterTriggerEventsThisClient;
     public void OnTriggerEnter(Collider other)
     {
         
@@ -576,7 +614,7 @@ public class PlayerDetector : NetworkBehaviour
     }
     
     [Rpc(SendTo.ClientsAndHost)]
-    public void TriggerEnteredClientRpc(ulong playerID)
+    protected virtual void TriggerEnteredClientRpc(ulong playerID)
     {
         PlayerControllerB enteredPlayer = null;
         foreach (PlayerControllerB player in StartOfRound.Instance.allPlayerScripts)
@@ -598,5 +636,9 @@ public class PlayerDetector : NetworkBehaviour
         Debug.Log($"Player {enteredPlayer.gameObject.name} has entered the trigger of {gameObject.name} [ALL CLIENTS]");
         OpaliteMoonPlugin.Log.LogDebug($"Player {enteredPlayer.gameObject.name} has entered the trigger of {gameObject.name} [ALL CLIENTS]");
         OnEnterTriggerEventsAllClients.Invoke();
+        if (StartOfRound.Instance.localPlayerController == enteredPlayer)
+        {
+            OnEnterTriggerEventsThisClient.Invoke();
+        }
     }
 }

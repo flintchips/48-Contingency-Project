@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using Random = System.Random;
 
 namespace OpaliteMoonMod;
 
@@ -12,6 +13,8 @@ public class ControlRoomTeleport : NetworkBehaviour
     
     public bool isEntranceToControlRoom;
 
+    private bool jinglePlayed;
+    
     public Transform entrancePoint;
 
     public int entranceId;
@@ -279,7 +282,11 @@ public class ControlRoomTeleport : NetworkBehaviour
 	{
 		yield return new WaitForSeconds(0.6f);
 
-		HUDManager.Instance.UIAudio.PlayOneShot(customFirstTimeAudio);
+        if (UnityEngine.Random.value < 0.33f)
+        {
+            HUDManager.Instance.UIAudio.PlayOneShot(customFirstTimeAudio);
+        }
+		
 	}
 
 	//[ServerRpc(RequireOwnership = false)]

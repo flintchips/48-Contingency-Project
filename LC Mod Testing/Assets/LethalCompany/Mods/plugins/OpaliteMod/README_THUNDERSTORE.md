@@ -5,7 +5,10 @@
 
 
 ## **[ 48 CONTINGENCY ]**
-[V81] A green amethyst oasis type. Level B+. Contains a unique use for an apparatus, which may in semi-rare cases, lead to treasure of unimaginable unimaginableness...
+
+spoilers down below!
+
+[V81] A green amethyst oasis type. Level B+. Costs 30 credits. Contains a unique use for an apparatus, which may in semi-rare cases, lead to treasure of unimaginable unimaginableness...
 
 > ***CONDITIONS***: Sister to 84 Velit, Contingency \
 > is home to large mammals and machines.\

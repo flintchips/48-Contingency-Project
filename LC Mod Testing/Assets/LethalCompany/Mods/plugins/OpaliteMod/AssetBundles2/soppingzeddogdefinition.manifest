@@ -1,0 +1,29 @@
+ManifestFileVersion: 0
+CRC: 1764276279
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 01037c3113c9a88507ccf8dbad3c0831
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: cafc67c1772366ec84469ae8fc045b45
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 01037c3113c9a88507ccf8dbad3c0831
+HashAppended: 0
+ClassTypes:
+- Class: 114
+  Script: {fileID: 11500000, guid: c30496d6ae6d6f907456e10a94e01ec6, type: 3}
+- Class: 114
+  Script: {fileID: 466683445, guid: 9708d15d6a8ee4845ace9be3a2bd936a, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: com.github.teamxiaolan.dawnlib.dusk
+  ClassName: Dusk.ShopItemPreset
+- AssemblyName: com.github.teamxiaolan.dawnlib
+  ClassName: Dawn.NamespacedKey
+Assets:
+- Assets/LethalCompany/Mods/plugins/OpaliteMod/Content/Items/SoppingZedDog/Registry/WetZeddogDefinition.asset
+Dependencies:
+- C:/Users/noah3/OpaliteMoonScripts/LC Mod Testing/Assets/LethalCompany/Mods/plugins/OpaliteMod/AssetBundles2/templateitemassets

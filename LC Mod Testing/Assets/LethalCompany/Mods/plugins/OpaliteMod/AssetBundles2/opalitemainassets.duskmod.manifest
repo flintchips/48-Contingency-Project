@@ -1,0 +1,33 @@
+ManifestFileVersion: 0
+CRC: 1915846643
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: ee48b8ca255fe7e7090ab5650e448cf9
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 4c89992ae841a0843ba3793bae89666e
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: ee48b8ca255fe7e7090ab5650e448cf9
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: -1097792660, guid: 9708d15d6a8ee4845ace9be3a2bd936a, type: 3}
+- Class: 114
+  Script: {fileID: -303672662, guid: 9708d15d6a8ee4845ace9be3a2bd936a, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: com.github.teamxiaolan.dawnlib.dusk
+  ClassName: Dusk.AssetBundleData
+Assets:
+- Assets/LethalCompany/Mods/plugins/OpaliteMod/OpaliteModInformation.asset
+- Assets/LethalCompany/Mods/plugins/OpaliteMod/OpaliteContentContainer.asset
+Dependencies: []

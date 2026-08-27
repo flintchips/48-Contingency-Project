@@ -57,7 +57,7 @@ MonoBehaviour:
     rarity: 249
     overrideLevelAmbience: {fileID: 0}
   - id: 4
-    rarity: 93
+    rarity: 89
     overrideLevelAmbience: {fileID: 0}
   - id: 1
     rarity: 4
@@ -548,7 +548,7 @@ MonoBehaviour:
   - enemyType: {fileID: 11400000, guid: ad92cb2adec3c844db6b53997a9538d7, type: 2}
     rarity: 40
   - enemyType: {fileID: 11400000, guid: 68f9f59da11b36045a998eb18e91717d, type: 2}
-    rarity: 17
+    rarity: 9
   enemySpawnChanceThroughoutDay:
     serializedVersion: 2
     m_Curve:

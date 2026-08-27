@@ -20,7 +20,7 @@ Material:
   - _NORMALMAP
   - _NORMALMAP_TANGENT_SPACE
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 1
   m_CustomRenderQueue: 2475
   stringTagMap:
@@ -224,7 +224,7 @@ Material:
     - _DiffusionProfileHash1: 0
     - _DiffusionProfileHash2: 0
     - _DiffusionProfileHash3: 0
-    - _Diffusion_Profile: 0
+    - _Diffusion_Profile: 3.1157112
     - _DisplacementLockObjectScale: 1
     - _DisplacementLockTilingScale: 1
     - _DisplacementMode: 0
@@ -474,7 +474,8 @@ Material:
     - _DiffusionProfileAsset1: {r: 0, g: 0, b: 0, a: 0}
     - _DiffusionProfileAsset2: {r: 0, g: 0, b: 0, a: 0}
     - _DiffusionProfileAsset3: {r: 0, g: 0, b: 0, a: 0}
-    - _Diffusion_Profile_Asset: {r: 0, g: 0, b: 0, a: 0}
+    - _Diffusion_Profile_Asset: {r: -0.000048171085, g: 1060.779, b: 4.5820205e-36,
+        a: 0.000000016582398}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
@@ -505,6 +506,21 @@ Material:
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
     - _WindSpeed: {r: 6, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
+--- !u!114 &1676660953601260492
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa486462e6be1764e89c788ba30e61f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_DiffusionProfileReferences:
+  - {fileID: 11400000, guid: 4f0b4ab8ee988444c9e5c20414718e32, type: 2}
+  m_MaterialReferences: []
 --- !u!114 &5358538881611927090
 MonoBehaviour:
   m_ObjectHideFlags: 11

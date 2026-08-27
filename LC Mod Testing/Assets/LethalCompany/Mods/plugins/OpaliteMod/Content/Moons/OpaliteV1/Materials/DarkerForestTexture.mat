@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_DiffusionProfileReferences:
-  - {fileID: 11400000, guid: abebfdc006c8cbe4e9cb46eba1a19091, type: 2}
+  - {fileID: 11400000, guid: 4f0b4ab8ee988444c9e5c20414718e32, type: 2}
   m_MaterialReferences: []
 --- !u!21 &2100000
 Material:
@@ -36,7 +36,7 @@ Material:
   - _TRANSMISSION_MASK_MAP
   m_InvalidKeywords: []
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2475
   stringTagMap:
@@ -47,7 +47,7 @@ Material:
   - TransparentBackface
   - RayTracingPrepass
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties: _CoatMask _CoatMaskMap
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -178,7 +178,7 @@ Material:
     - _DetailNormalScale: 1
     - _DetailSmoothnessScale: 1
     - _DiffusionProfile: 0
-    - _DiffusionProfileHash: 2.011347
+    - _DiffusionProfileHash: 3.1157112
     - _DisplacementLockObjectScale: 1
     - _DisplacementLockTilingScale: 1
     - _DisplacementMode: 0
@@ -278,8 +278,8 @@ Material:
     - _BaseColor: {r: 0.4056604, g: 0.31572625, b: 0.31572625, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.40566036, g: 0.31572622, b: 0.31572622, a: 1}
-    - _DiffusionProfileAsset: {r: -7.935018, g: -3.0072818e+22, b: -2.4033025e+26,
-        a: -2.2818806e-28}
+    - _DiffusionProfileAsset: {r: -0.000048171085, g: 1060.779, b: 4.5820205e-36,
+        a: 0.000000016582398}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}

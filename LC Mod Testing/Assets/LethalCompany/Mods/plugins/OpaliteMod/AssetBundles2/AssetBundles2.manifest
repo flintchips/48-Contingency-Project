@@ -1,0 +1,46 @@
+ManifestFileVersion: 0
+CRC: 575826865
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: templateunlockableassets
+      Dependencies: {}
+    Info_1:
+      Name: templateitemassets
+      Dependencies: {}
+    Info_2:
+      Name: templatevehicleassets
+      Dependencies: {}
+    Info_3:
+      Name: templatetilesetassets
+      Dependencies: {}
+    Info_4:
+      Name: templateachievementassets
+      Dependencies: {}
+    Info_5:
+      Name: templatemapobjectassets
+      Dependencies: {}
+    Info_6:
+      Name: templatefootstepassets
+      Dependencies: {}
+    Info_7:
+      Name: templateweatherassets
+      Dependencies: {}
+    Info_8:
+      Name: templateenemyassets
+      Dependencies: {}
+    Info_9:
+      Name: opilate_moon_definition
+      Dependencies:
+        Dependency_0: templateitemassets
+    Info_10:
+      Name: opalitescene
+      Dependencies:
+        Dependency_0: templateitemassets
+    Info_11:
+      Name: opalitemainassets.duskmod
+      Dependencies: {}
+    Info_12:
+      Name: soppingzeddogdefinition
+      Dependencies:
+        Dependency_0: templateitemassets

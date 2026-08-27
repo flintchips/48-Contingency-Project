@@ -1,0 +1,147 @@
+ManifestFileVersion: 0
+CRC: 215719217
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d18d8137f1ff2655f20161fbba3440b5
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f22bd8069421de5664e0a701221c7cf3
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: d18d8137f1ff2655f20161fbba3440b5
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 54
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 82
+  Script: {instanceID: 0}
+- Class: 83
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5863c135c13a608a689df5227baa7104, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 65d3fcb39dd67306e9bb17a603308070, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 04f75356a7e9c978bddc7d568e58a50b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c30496d6ae6d6f907456e10a94e01ec6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4c1fe37c48e8c202e912cc77bbc9a993, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c5a15fd86cfe211173eb68d9b08fcff2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3c36d0a92cbb1f26a39169ef0eae393a, type: 3}
+- Class: 114
+  Script: {fileID: -1419872764, guid: 9708d15d6a8ee4845ace9be3a2bd936a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1daf25ecaaa9200539e0b6ddc16c98a8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 89cc72f2cd6e5da392d2eb839dbf2eba, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4128def65e82d58b0be476ddc923330a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f19d9143a39eb3b46bc4563e9889cfbd, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: cc736a09eae56a91a4d22fe0c4ed26ae, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f2c662b0f92d7236699123213e2fb9f4, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 135
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+- Class: 241
+  Script: {instanceID: 0}
+- Class: 243
+  Script: {instanceID: 0}
+- Class: 245
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: EnemySize
+- AssemblyName: Assembly-CSharp
+  ClassName: EnemyWaterType
+- AssemblyName: Assembly-CSharp
+  ClassName: IndoorMapHazard
+- AssemblyName: Assembly-CSharp
+  ClassName: IntWithRarity
+- AssemblyName: Assembly-CSharp
+  ClassName: InteractEvent
+- AssemblyName: Assembly-CSharp
+  ClassName: MiscAnimation
+- AssemblyName: Assembly-CSharp
+  ClassName: NavSizeLimit
+- AssemblyName: Assembly-CSharp
+  ClassName: OverrideEnemyRarity
+- AssemblyName: Assembly-CSharp
+  ClassName: RandomWeatherWithVariables
+- AssemblyName: Assembly-CSharp
+  ClassName: SpawnableEnemyWithRarity
+- AssemblyName: Assembly-CSharp
+  ClassName: SpawnableItemWithRarity
+- AssemblyName: Assembly-CSharp
+  ClassName: SpawnableMapObject
+- AssemblyName: Assembly-CSharp
+  ClassName: SpawnableOutsideObjectWithRarity
+- AssemblyName: Unity.RenderPipelines.HighDefinition.Runtime
+  ClassName: UnityEngine.Rendering.HighDefinition.BoolScalableSettingValue
+- AssemblyName: Unity.RenderPipelines.HighDefinition.Runtime
+  ClassName: UnityEngine.Rendering.HighDefinition.IntScalableSettingValue
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.ArgumentCache
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentListenerMode
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.UnityEvent
+- AssemblyName: com.github.teamxiaolan.dawnlib.dusk
+  ClassName: Dusk.DuskMoonSceneData
+- AssemblyName: com.github.teamxiaolan.dawnlib.dusk
+  ClassName: Dusk.Utils.SceneReference
+- AssemblyName: com.github.teamxiaolan.dawnlib
+  ClassName: Dawn.NamespacedKey
+- AssemblyName: com.github.teamxiaolan.dawnlib
+  ClassName: Dawn.NamespacedKey`1[Dawn.IMoonSceneInfo]
+Assets:
+- Assets/LethalCompany/Mods/plugins/OpaliteMod/Content/Moons/OpaliteV1/Registry/OpaliteDefinition.asset
+Dependencies:
+- C:/Users/noah3/OpaliteMoonScripts/LC Mod Testing/Assets/LethalCompany/Mods/plugins/OpaliteMod/AssetBundles2/templateitemassets

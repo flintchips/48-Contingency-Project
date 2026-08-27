@@ -37,7 +37,7 @@ A few mods I recommend are, [![Generic_Scraps](https://thunderstore.io/c/lethal-
 
 > Lore:\
 > \
-> &nbsp;&nbsp;&nbsp;&nbsp;**Contingency** orbits it's planet closer than any of it's siblings. Sister to moon **48-Velit** (by WaterGun), notable large mammals such as the **feiopar** and **eyeless dog** have been sighted inhabiting the lush oasis dotted around its otherwise baren and mountainous terrain. Seasonal weather leads large volumes of water originating from it's oceans to be stored within pocketed valleys which are commonly controlled by it's inhabitants using water storage and control infrastructure. As a ***contingency*** for if, or when, the season becomes dry, on Contingency, or elsewhere.\
+> &nbsp;&nbsp;&nbsp;&nbsp;**Contingency** orbits it's planet closer than any of it's siblings. Sister to moon **48-Velit** (by WaterGun), notable large mammals such as the **feiopar** and **eyeless dog** have been sighted inhabiting the lush oasis dotted around its otherwise baren and mountainous terrain. Seasonal weather leads large volumes of water originating from it's oceans to be stored within pocketed valleys which are commonly controlled by it's inhabitants using water storage and control infrastructure. As a ***contingency*** for if, or when, the season becomes too dry, on Contingency, or elsewhere.\
 > \
 > &nbsp;&nbsp;&nbsp;&nbsp;As water flows through the amethyst rich soil, a noticable amount of impurities are naturally filtered through, giving Contingency the cleanest natural bodies of freshwater of any celestial body within its local star system.\
 > \
@@ -90,6 +90,10 @@ Feel free to visit this project on [![its Github](https://github.com/flintchips/
 
 ***Twwakie*** - Moral Support and Graffiti, also Playtesting
 
+---
+
 Special thanks to everyone from the [![Lethal Company Modding Discord](https://discord.gg/Cv7fVNZk6V)](https://discord.gg/Cv7fVNZk6V)
+
+Any comments you wish to share about this mod can be had under the post for 48 Contingency within the mod-releases forum within the discord
 
 

@@ -19,9 +19,7 @@ MonoBehaviour:
     type: 3}
   <ChangelogFile>k__BackingField: {fileID: 4900000, guid: bff108493c8184942a7991211e445042,
     type: 3}
-  <ModDescription>k__BackingField: '[V80] A green amethyst oasis type. Level B+.
-    Contains a unique use for an apparatus, which may in semi-rare cases, lead to
-    treasure of unimaginable soppy...'
+  <ModDescription>k__BackingField: The flood gate is now open.
   <ExtraDependencies>k__BackingField:
   - JacobG5-JLL-1.10.1
   <WebsiteUrl>k__BackingField: https://github.com/flintchips/48-Contingency-Project

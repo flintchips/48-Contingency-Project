@@ -57,7 +57,7 @@ MonoBehaviour:
     rarity: 249
     overrideLevelAmbience: {fileID: 0}
   - id: 4
-    rarity: 37
+    rarity: 93
     overrideLevelAmbience: {fileID: 0}
   - id: 1
     rarity: 4

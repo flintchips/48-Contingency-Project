@@ -10,7 +10,7 @@
 
 spoilers!
 
-> ***CONDITIONS***: Sister to 84 Velit, Contingency \
+> ***CONDITIONS***: Sister to 48 Velit, Contingency \
 > is home to large mammals and machines.\
 > \
 > ***FAUNA***: Has adapted to amethyst rich soil.
@@ -34,7 +34,7 @@ A few mods I recommend are, [![Generic_Scraps](https://thunderstore.io/c/lethal-
   <img width="32%" alt="john8" src="https://github.com/user-attachments/assets/362c2255-1215-4da8-9e74-82f3ceb6916e" />
   <img width="32%" alt="john9" src="https://github.com/user-attachments/assets/74c17ca7-842d-48d4-a2cf-d6d6b7a6295c" />
   <img width="32%" alt="john10" src="https://github.com/user-attachments/assets/7e91b28a-5044-4b81-9086-839abf5ebe2d" />
-There are a lot of spike traps inside.
+
 </p>
 
 
@@ -46,6 +46,11 @@ There are a lot of spike traps inside.
 > &nbsp;&nbsp;&nbsp;&nbsp;As water flows through the amethyst rich soil, a noticable amount of impurities are naturally filtered through, giving Contingency the cleanest natural bodies of freshwater of any celestial body within its local star system.\
 > \
 > &nbsp;&nbsp;&nbsp;&nbsp;There is a dormant ***control room*** which, inside, can be powered with any apparatus, allowing the player to open the floodgate of the dam leading to access of the reservoir basin where specific scrap can be found.
+
+<p align="center">
+There are a lot of spike traps inside.
+
+</p>
 
 </details>
 

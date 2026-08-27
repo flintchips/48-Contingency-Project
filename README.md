@@ -2,6 +2,8 @@
 > I did not follow any common practice and I happened to basically wing it with minimal knowledge of DawnLib and how I should organize it. 
 > I had just enough knowledge paired with trial and error to get something running, and to give myself some slack, I just wanted to get right into making it because the idea probably wouldn't have stuck in my brain otherwise.
 > I will probably actually make an attempt to do this properly from the beginning when I begin work on my next moon/interior.
+>
+> no i did not use ai this time
 
 ### Description
 This is a moon I'm currently working on for V81!

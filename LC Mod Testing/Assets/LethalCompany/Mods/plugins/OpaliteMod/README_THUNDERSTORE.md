@@ -34,9 +34,11 @@ A few mods I recommend are, [![Generic_Scraps](https://thunderstore.io/c/lethal-
   <img width="32%" alt="john8" src="https://github.com/user-attachments/assets/362c2255-1215-4da8-9e74-82f3ceb6916e" />
   <img width="32%" alt="john9" src="https://github.com/user-attachments/assets/74c17ca7-842d-48d4-a2cf-d6d6b7a6295c" />
   <img width="32%" alt="john10" src="https://github.com/user-attachments/assets/7e91b28a-5044-4b81-9086-839abf5ebe2d" />
-
+There are a lot of spike traps inside.
 </p>
 
+
+>\
 > Lore:\
 > \
 > &nbsp;&nbsp;&nbsp;&nbsp;**Contingency** orbits it's planet closer than any of it's siblings. Sister to moon **48-Velit** (by WaterGun), notable large mammals such as the **feiopar** and **eyeless dog** have been sighted inhabiting the lush oasis dotted around its otherwise baren and mountainous terrain. Seasonal weather leads large volumes of water originating from it's oceans to be stored within pocketed valleys which are commonly controlled by it's inhabitants using water storage and control infrastructure. As a ***contingency*** for if, or when, the season becomes too dry, on Contingency, or elsewhere.\

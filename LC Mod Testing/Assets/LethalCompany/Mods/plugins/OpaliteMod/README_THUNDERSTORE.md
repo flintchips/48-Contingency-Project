@@ -1,14 +1,14 @@
 <p align="center">
-  <img width="50%" alt="contingency header2" src="https://github.com/user-attachments/assets/23c7267d-f15f-40cc-b95b-7af5aa324c52" />
-
+  <img width="70%" height="574" alt="Screenshot 2026-08-26 234033" src="https://github.com/user-attachments/assets/be0bfbe6-8a8d-4db7-9e91-0d6bff6cb577" />
 </p>
+
 
 
 ## **[ 48 CONTINGENCY ]**
 
-spoilers down below!
+[V81] A green amethyst oasis moon with dams and reservoirs. Level B+. Costs 30 credits. Contains a unique use for an apparatus through an enterance found on its exterior, which in semi-rare cases, may lead to a treasure of unimaginable proportions...
 
-[V81] A green amethyst oasis type. Level B+. Costs 30 credits. Contains a unique use for an apparatus, which may in semi-rare cases, lead to treasure of unimaginable unimaginableness...
+spoilers!
 
 > ***CONDITIONS***: Sister to 84 Velit, Contingency \
 > is home to large mammals and machines.\

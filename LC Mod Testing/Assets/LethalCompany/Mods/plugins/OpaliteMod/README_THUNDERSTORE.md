@@ -6,9 +6,6 @@
   <img width="49%" alt="Screenshot 2026-08-26 234033yytr" src="https://github.com/user-attachments/assets/befe9d81-ca0c-4dbd-a60e-442ea995bd94" />
 </p>
 
-
-
-
 [V81] A green amethyst oasis moon with dams and reservoirs. Level B+. Costs 30 credits. Contains a unique use for an apparatus through an enterance found on its exterior, which in semi-rare cases, may lead to a treasure of unimaginable proportions...
 
 spoilers!

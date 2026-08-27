@@ -12,6 +12,12 @@
 > \
 > ***FAUNA***: Has adapted to amethyst rich soil.
 
+This moon features a custom contour map for the radar but using [![Universal Radar](https://thunderstore.io/c/lethal-company/p/WaterGun/48_Velit/](https://thunderstore.io/c/lethal-company/p/ScienceBird/Universal_Radar/))]([https://thunderstore.io/c/lethal-company/p/WaterGun/48_Velit/](https://thunderstore.io/c/lethal-company/p/ScienceBird/Universal_Radar/)) will overwrite it.
+
+There is one custom scrap item, 1 fire exit, & more!
+
+A few mods I recommend are, [![Generic_Scraps](https://thunderstore.io/c/lethal-company/p/Generic_GMD/Generic_Scraps/)](https://thunderstore.io/c/lethal-company/p/Generic_GMD/Generic_Scraps/), and [![SkelaahsInteriorsPlus](https://thunderstore.io/c/lethal-company/p/TheWildSkelaah/SkelaahsInteriorsPlus/)](https://thunderstore.io/c/lethal-company/p/TheWildSkelaah/SkelaahsInteriorsPlus/). These mods aren't required, but I enjoy them for my own experience.
+
 ---
 
 <details>
@@ -60,4 +66,30 @@ Feel free to visit this project on [![its Github](https://github.com/flintchips/
 </p>
 
 ---
-### CREDITS
+## CREDITS
+---
+
+
+***FlintChips*** - Creator of 48 Contingency
+
+***JacobG55*** - For JLL scripts, some of which I used as reference within my own
+
+***WaterGun*** - For making 48 Velit, and reminding me to use the newer networking flags
+
+***Zeekerss*** - For making Lethal Company
+> And for a few sound effects I used, originating from [![The Upturned!](https://store.steampowered.com/app/1717770/The_Upturned/)](https://store.steampowered.com/app/1717770/The_Upturned/)!
+> * ShinyOrb.ogg
+> * SkinCrawlingAmbienceAction.ogg
+> * ErrorBeep.ogg
+
+***GooseJuiceGhost*** - Playtesting
+
+***BatmanPink*** - Playtesting
+
+***King226*** - Playtesting
+
+***Twwakie*** - Moral Support and Graffiti, also Playtesting
+
+Special thanks to everyone from the [![Lethal Company Modding Discord](https://discord.gg/Cv7fVNZk6V)](https://discord.gg/Cv7fVNZk6V)
+
+

@@ -1,14 +1,14 @@
 <p align="center">
-  <img width="50%" alt="contingency header2" src="https://github.com/user-attachments/assets/23c7267d-f15f-40cc-b95b-7af5aa324c52" />
-
-</p>
-
-
+  
 ## **[ 48 CONTINGENCY ]**
 
-spoilers down below!
+  <img width="49%" alt="Screenshot 2026-08-26 234033" src="https://github.com/user-attachments/assets/be0bfbe6-8a8d-4db7-9e91-0d6bff6cb577" />
+  <img width="49%" alt="Screenshot 2026-08-26 234033yytr" src="https://github.com/user-attachments/assets/befe9d81-ca0c-4dbd-a60e-442ea995bd94" />
+</p>
 
-[V81] A green amethyst oasis type. Level B+. Costs 30 credits. Contains a unique use for an apparatus, which may in semi-rare cases, lead to treasure of unimaginable unimaginableness...
+[V81] A green amethyst oasis moon with dams and reservoirs. Level B+. Costs 30 credits. Contains a unique use for an apparatus through an enterance found on its exterior, which in semi-rare cases, may lead to a treasure of unimaginable proportions...
+
+spoilers!
 
 > ***CONDITIONS***: Sister to 84 Velit, Contingency \
 > is home to large mammals and machines.\
@@ -27,7 +27,6 @@ A few mods I recommend are, [![Generic_Scraps](https://thunderstore.io/c/lethal-
 <summary><b>[ Screenshots & Lore (SPOILERS) ]</b></summary>
   
 <p align="center">
-<center>
   <img width="32%" alt="john4" src="https://github.com/user-attachments/assets/daf44d77-afda-46ea-9927-3ee6c3b2ba4a" />
   <img width="32%" alt="john2" src="https://github.com/user-attachments/assets/9d59efca-73ab-45d5-b21c-c6b744d61de8" />
   <img width="32%" alt="john7" src="https://github.com/user-attachments/assets/9a0340eb-a0c7-4637-bd7f-90014df61901" />
@@ -35,7 +34,7 @@ A few mods I recommend are, [![Generic_Scraps](https://thunderstore.io/c/lethal-
   <img width="32%" alt="john8" src="https://github.com/user-attachments/assets/362c2255-1215-4da8-9e74-82f3ceb6916e" />
   <img width="32%" alt="john9" src="https://github.com/user-attachments/assets/74c17ca7-842d-48d4-a2cf-d6d6b7a6295c" />
   <img width="32%" alt="john10" src="https://github.com/user-attachments/assets/7e91b28a-5044-4b81-9086-839abf5ebe2d" />
-</center>
+
 </p>
 
 > Lore:\

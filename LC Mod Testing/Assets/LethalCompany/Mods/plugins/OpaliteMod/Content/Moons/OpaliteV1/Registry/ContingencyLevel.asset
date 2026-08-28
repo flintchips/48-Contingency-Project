@@ -19,7 +19,7 @@ MonoBehaviour:
   lockedForDemo: 0
   spawnEnemiesAndScrap: 1
   PlanetName: 48 Contingency
-  LevelDescription: 'CONDITIONS: Sister to 84 Velit, Contingency is home to large
+  LevelDescription: 'CONDITIONS: Sister to 48 Velit, Contingency is home to large
     mammals and machines.
 
     FAUNA: Has adapted to amethyst rich soil.
@@ -51,7 +51,7 @@ MonoBehaviour:
   overrideWeather: 0
   overrideWeatherType: 0
   currentWeather: -1
-  factorySizeMultiplier: 1.1
+  factorySizeMultiplier: 1
   dungeonFlowTypes:
   - id: 0
     rarity: 249
@@ -495,6 +495,14 @@ MonoBehaviour:
     rarity: 2
   - spawnableItem: {fileID: 11400000, guid: 42c85b235c6462b4b8b97720cfbb2879, type: 2}
     rarity: 5
+  - spawnableItem: {fileID: 11400000, guid: 05b684aae64e5054298b0b21cecbff98, type: 2}
+    rarity: 25
+  - spawnableItem: {fileID: 11400000, guid: 90e36ac924c964544b761de4aba48b96, type: 2}
+    rarity: 20
+  - spawnableItem: {fileID: 11400000, guid: 2ae1a2d74ec68da42a8126e64ba5bb12, type: 2}
+    rarity: 27
+  - spawnableItem: {fileID: 11400000, guid: 940e335e77855854280c0dd6c6c11662, type: 2}
+    rarity: 16
   minScrap: 16
   maxScrap: 19
   minTotalScrapValue: 300
@@ -525,7 +533,9 @@ MonoBehaviour:
   - enemyType: {fileID: 11400000, guid: a4339ecaa85e118439016069c334598e, type: 2}
     rarity: 12
   - enemyType: {fileID: 11400000, guid: b04d33d4d1db54745be91e9b61f844bd, type: 2}
-    rarity: 23
+    rarity: 27
+  - enemyType: {fileID: 11400000, guid: 7c802d226ef745c4489eeb468e22eb75, type: 2}
+    rarity: 1
   specialEnemyRarity:
     overrideEnemy: {fileID: 11400000, guid: 5891fa91ed44b7c45a9c941a56d7848e, type: 2}
     percentageChance: 1

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <AuthorName>k__BackingField: FlintChips
   <ModName>k__BackingField: 48 Contingency
-  <Version>k__BackingField: 1.0.0
+  <Version>k__BackingField: 1.2.1
   <READMEFile>k__BackingField: {fileID: 4900000, guid: 99969d5ce226e2e41ab671a5994949fb,
     type: 3}
   <ChangelogFile>k__BackingField: {fileID: 4900000, guid: bff108493c8184942a7991211e445042,

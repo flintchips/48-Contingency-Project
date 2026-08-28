@@ -8,6 +8,9 @@ namespace OpaliteMoonMod;
 public class ApparatusDockHandler : NetworkBehaviour
 {
     // hi
+    
+    // btw this script was based off v80's EnteranceTeleport script when I first started making it which might sound crazy
+    
     public bool isPowered;
 
     public RoundManager roundManager;
@@ -60,7 +63,7 @@ public class ApparatusDockHandler : NetworkBehaviour
         roundManager = FindObjectOfType<RoundManager>();
     }
 
-    public void FinishOpening() // interacting with dock stuff
+    public void FinishOpening()
     {
         if (!GetDockAnimators())
             return;
@@ -78,15 +81,12 @@ public class ApparatusDockHandler : NetworkBehaviour
         if (localPlayer != null && localPlayer.currentlyHeldObjectServer != null)
         {
             NetworkObject parentNetObj = GetApparatusParentNetworkObject();
-            if (parentNetObj == null)
-                parentNetObj = this.NetworkObject;
+            if (parentNetObj == null) parentNetObj = this.NetworkObject;
             if (parentNetObj != null)
             {
                 localPlayer.DiscardHeldObject(
-                    true,
-                    parentNetObj,
-                    Vector3.zero,
-                    matchRotationOfParent: true
+                    true, parentNetObj,
+                    Vector3.zero, true
                 );
             }
             else
@@ -98,7 +98,7 @@ public class ApparatusDockHandler : NetworkBehaviour
         PlaceApparatusServerRpc(new NetworkObjectReference(apparatus));
     }
 
-    public void CancelOpening() // interacting with dock stuff
+    public void CancelOpening() 
     {
         if (!GetDockAnimators())
         {
@@ -135,8 +135,8 @@ public class ApparatusDockHandler : NetworkBehaviour
     private bool LocalPlayerHoldingApparatus()
     {
         PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
-        if (player == null || !player.isHoldingObject)
-            return false;
+        if (player == null || !player.isHoldingObject) return false;
+        
         return player.currentlyHeldObjectServer is LungProp;
     }
 
@@ -145,7 +145,9 @@ public class ApparatusDockHandler : NetworkBehaviour
     {
         if (isPowered) return;
         if (!apparatusRef.TryGet(out NetworkObject apparatus)) return;
+        
         LungProp prop = apparatus.GetComponent<LungProp>();
+        
         if (prop == null) return;
         
         NetworkObject parentNetObj = GetApparatusParentNetworkObject();
@@ -155,9 +157,9 @@ public class ApparatusDockHandler : NetworkBehaviour
             return;
         }
         isPowered = true;
-        if (apparatus.IsSpawned && apparatus.OwnerClientId != NetworkManager.ServerClientId)
-            apparatus.ChangeOwnership(NetworkManager.ServerClientId);
-        DockApparatusLocal(prop, apparatus, stripHolder: true);
+        
+        if (apparatus.IsSpawned && apparatus.OwnerClientId != NetworkManager.ServerClientId) apparatus.ChangeOwnership(NetworkManager.ServerClientId);
+        DockApparatusLocal(prop, apparatus, true);
         PlaceApparatusClientRpc(apparatusRef);
     }
 
@@ -172,7 +174,7 @@ public class ApparatusDockHandler : NetworkBehaviour
         isPowered = true;
         dockedApparatus = prop;
 
-        DockApparatusLocal(prop, apparatus, stripHolder: true);
+        DockApparatusLocal(prop, apparatus, true);
 
         if (GetDockAnimators())
         {
@@ -187,8 +189,7 @@ public class ApparatusDockHandler : NetworkBehaviour
             triggerScript.disabledHoverTip = "[Locked]";
         }
 
-        if (connectAnimation == null)
-            connectAnimation = StartCoroutine(ConnectToMachinery());
+        if (connectAnimation == null) connectAnimation = StartCoroutine(ConnectToMachinery());
 
         TurnOnRoomLights();
     }
@@ -223,12 +224,9 @@ public class ApparatusDockHandler : NetworkBehaviour
             }
         }
         
-        
-
         if (parentNetObj != null)
         {
-            if (apparatus.transform.parent != parentNetObj.transform)
-                apparatus.TrySetParent(parentNetObj, worldPositionStays: false);
+            if (apparatus.transform.parent != parentNetObj.transform) apparatus.TrySetParent(parentNetObj, worldPositionStays: false);
         }
         else if (dockTransform != null)
         {
@@ -243,21 +241,14 @@ public class ApparatusDockHandler : NetworkBehaviour
         {
             apparatusCollider.enabled = false;
             BoxCollider thisColliderAddition = triggerScript.gameObject.AddComponent<BoxCollider>();
-            thisColliderAddition.center = triggerScript.transform.InverseTransformPoint(
-                apparatusCollider.transform.TransformPoint(apparatusCollider.center));
-            thisColliderAddition.size = triggerScript.transform.InverseTransformVector(
-                apparatusCollider.transform.TransformVector(apparatusCollider.size));
-            thisColliderAddition.size = new Vector3(
-                Mathf.Abs(thisColliderAddition.size.x),
-                Mathf.Abs(thisColliderAddition.size.y),
-                Mathf.Abs(thisColliderAddition.size.z));
+            thisColliderAddition.center = triggerScript.transform.InverseTransformPoint(apparatusCollider.transform.TransformPoint(apparatusCollider.center));
+            thisColliderAddition.size = triggerScript.transform.InverseTransformVector(apparatusCollider.transform.TransformVector(apparatusCollider.size));
+            thisColliderAddition.size = new Vector3(Mathf.Abs(thisColliderAddition.size.x), Mathf.Abs(thisColliderAddition.size.y), Mathf.Abs(thisColliderAddition.size.z));
             thisColliderAddition.isTrigger = false;
         }
 
-        if (dockTransform != null)
-            prop.parentObject = dockTransform;
-        else if (parentNetObj != null)
-            prop.parentObject = parentNetObj.transform;
+        if (dockTransform != null) prop.parentObject = dockTransform;
+        else if (parentNetObj != null) prop.parentObject = parentNetObj.transform;
 
         prop.isHeld = false;
         prop.playerHeldBy = null;
@@ -281,14 +272,12 @@ public class ApparatusDockHandler : NetworkBehaviour
     
     public void FlickerRoomLights()
     {
-        if (roomFlickerAnimation == null)
-            roomFlickerAnimation = StartCoroutine(FlickerPoweredLightsControlRoom());
+        if (roomFlickerAnimation == null) roomFlickerAnimation = StartCoroutine(FlickerPoweredLightsControlRoom());
     }
     
     public void TurnOnRoomLights()
     {
-        if (roomPowerAnimation == null)
-            roomPowerAnimation = StartCoroutine(RoomPowerAnimation());
+        if (roomPowerAnimation == null) roomPowerAnimation = StartCoroutine(RoomPowerAnimation());
     }
 
     private IEnumerator RoomPowerAnimation()
@@ -345,30 +334,24 @@ public class ApparatusDockHandler : NetworkBehaviour
         GameObject newSparkParticle = null;
         if (dockedApparatus != null && dockedApparatus.sparkParticle != null)
         {
-            newSparkParticle = Instantiate(
-                dockedApparatus.sparkParticle,
-                dockedApparatus.transform.position,
-                Quaternion.identity,
-                dockedApparatus.transform);
+            newSparkParticle = Instantiate(dockedApparatus.sparkParticle, dockedApparatus.transform.position, Quaternion.identity, dockedApparatus.transform);
         }
         
         dockingPointAudio.PlayOneShot(dockingAudios[0], 0.7f);
+        
         yield return new WaitForSeconds(0.1f);
-        if (newSparkParticle != null)
-            newSparkParticle.SetActive(true);
+        
+        if (newSparkParticle != null) newSparkParticle.SetActive(true);
         
         yield return new WaitForSeconds(0.3f); 
         
-        //if (DockLightAnimator != null)
-            //DockLightAnimator.SetBool("Light Begin", true);
-        if (roundManager != null)
-            roundManager.FlickerLights();
+        if (roundManager != null) roundManager.FlickerLights();
         
         yield return new WaitForSeconds(1f);
         
-        if (newSparkParticle != null)
-            Destroy(newSparkParticle, 2f); 
+        if (newSparkParticle != null) Destroy(newSparkParticle, 2f); 
         connectAnimation = null;
+        
         yield return null;
     }
 
@@ -378,10 +361,12 @@ public class ApparatusDockHandler : NetworkBehaviour
             return;
         if (!GetDockAnimators() || Time.realtimeSinceStartup - timeAtLastUse < 0.5f)
             return;
+        
         timeAtLastUse = Time.realtimeSinceStartup;
         thisDockAnimator.SetBool("Open", true);
         SyncStartOpeningRpc();
     }
+    
     [Rpc(SendTo.NotMe, RequireOwnership = false)]
     public void SyncStartOpeningRpc()
     {

@@ -11,7 +11,7 @@ namespace OpaliteMoonMod
     {
         public const string PluginGuid = "FlintChips.Contingency";
         public const string PluginName = "48_Contingency";
-        public const string PluginVersion = "0.0.5";
+        public const string PluginVersion = "1.2.1";
         
         internal static ManualLogSource Log = null!;
 
@@ -23,7 +23,7 @@ namespace OpaliteMoonMod
             {
                 if (args.Name.Contains("OpaliteMod"))
                 {
-                    Log.LogDebug("[48contingency] Redirecting OpaliteMod to 48contingency!");
+                    Log.LogDebug("[48contingency] Redirecting OpaliteMod assembally to 48contingency!");
                     return Assembly.GetExecutingAssembly(); 
                 }
                 return null;

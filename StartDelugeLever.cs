@@ -21,6 +21,8 @@ public class StartDelugeLever : NetworkBehaviour
     private Coroutine shakeCoroutine;
     
     public ControlRoomManager controlRoomManager;
+
+    private bool shipLeft = false;
     
     public void LeverAnimation()
     {
@@ -132,7 +134,8 @@ public class StartDelugeLever : NetworkBehaviour
             StopCoroutine(shakeCoroutine);
             shakeCoroutine = null;
         }
-        HUDManager.Instance.StopShakingCamera();
+        if(HUDManager.Instance != null)
+            HUDManager.Instance.StopShakingCamera();
     }
     
     public void PullLever()
@@ -220,5 +223,10 @@ public class StartDelugeLever : NetworkBehaviour
         {
             updateInterval -= Time.deltaTime;
         }
+    }
+
+    public void OnDestroy()
+    {
+        CancelStartingDelugeEffects();
     }
 }

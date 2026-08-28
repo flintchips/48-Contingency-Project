@@ -223,7 +223,7 @@ Material:
     - _DiffusionProfileHash1: 0
     - _DiffusionProfileHash2: 0
     - _DiffusionProfileHash3: 0
-    - _Diffusion_Profile: 3.1157112
+    - _Diffusion_Profile: 2.011347
     - _DisplacementLockObjectScale: 1
     - _DisplacementLockTilingScale: 1
     - _DisplacementMode: 0
@@ -473,8 +473,8 @@ Material:
     - _DiffusionProfileAsset1: {r: 0, g: 0, b: 0, a: 0}
     - _DiffusionProfileAsset2: {r: 0, g: 0, b: 0, a: 0}
     - _DiffusionProfileAsset3: {r: 0, g: 0, b: 0, a: 0}
-    - _Diffusion_Profile_Asset: {r: -0.000048171085, g: 1060.779, b: 4.5820205e-36,
-        a: 0.000000016582398}
+    - _Diffusion_Profile_Asset: {r: -7.935018, g: -3.0072818e+22, b: -2.4033025e+26,
+        a: -2.2818806e-28}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
@@ -518,7 +518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_DiffusionProfileReferences:
-  - {fileID: 11400000, guid: 4f0b4ab8ee988444c9e5c20414718e32, type: 2}
+  - {fileID: 11400000, guid: abebfdc006c8cbe4e9cb46eba1a19091, type: 2}
   m_MaterialReferences: []
 --- !u!114 &5358538881611927090
 MonoBehaviour:

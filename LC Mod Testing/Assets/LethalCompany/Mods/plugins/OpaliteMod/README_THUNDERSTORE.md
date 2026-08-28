@@ -1,5 +1,5 @@
 <p align="center">
-  
+
 ## **[ 48 CONTINGENCY ]**
 
   <img width="49%" alt="Screenshot 2026-08-26 234033" src="https://github.com/user-attachments/assets/be0bfbe6-8a8d-4db7-9e91-0d6bff6cb577" />
@@ -25,12 +25,12 @@ A few mods I recommend are, [![Generic_Scraps](https://thunderstore.io/c/lethal-
 
 <details>
 <summary><b>[ Screenshots & Lore (SPOILERS) ]</b></summary>
-  
+
 <p align="center">
   <img width="32%" alt="john4" src="https://github.com/user-attachments/assets/daf44d77-afda-46ea-9927-3ee6c3b2ba4a" />
   <img width="32%" alt="john2" src="https://github.com/user-attachments/assets/9d59efca-73ab-45d5-b21c-c6b744d61de8" />
   <img width="32%" alt="john7" src="https://github.com/user-attachments/assets/9a0340eb-a0c7-4637-bd7f-90014df61901" />
-  
+
   <img width="32%" alt="john8" src="https://github.com/user-attachments/assets/362c2255-1215-4da8-9e74-82f3ceb6916e" />
   <img width="32%" alt="john9" src="https://github.com/user-attachments/assets/74c17ca7-842d-48d4-a2cf-d6d6b7a6295c" />
   <img width="32%" alt="john10" src="https://github.com/user-attachments/assets/7e91b28a-5044-4b81-9086-839abf5ebe2d" />
@@ -81,7 +81,7 @@ Feel free to visit this project on [![its Github](https://github.com/flintchips/
 
 ***FlintChips*** - Creator of 48 Contingency
 
-***JacobG55*** - For JLL scripts, some of which I used as reference within my own
+***JacobG55*** - For JLL scripts, some of which I used as reference within my own scripts
 
 ***WaterGun*** - For making 48 Velit, and reminding me to use the newer networking flags
 

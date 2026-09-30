@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 56574569
+CRC: 1430705416
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b8446604a63699f977eca52265042a1f
+    Hash: c98670470c275c982c558044269d84f1
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 4e9e5e45d1befc37d4db61e3d9b1779a
+    Hash: f9e0faf106fe88d56c581915d459a491
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b8446604a63699f977eca52265042a1f
+    Hash: c98670470c275c982c558044269d84f1
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -164,6 +164,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: c5a15fd86cfe211173eb68d9b08fcff2, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7e9e4ed5a6f56fb4ebd693e39684f36f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 441482e8936e35048a1dffac814e3ef8, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: bcf384b154398e341b6b29969c078198, type: 3}
 - Class: 114
@@ -346,4 +348,4 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/LethalCompany/Mods/plugins/OpaliteMod/Content/Moons/OpaliteV1/Opalite.unity
 Dependencies:
-- C:/Users/noah3/OpaliteMoonScripts/LC Mod Testing/Assets/LethalCompany/Mods/plugins/OpaliteMod/AssetBundles2/templateitemassets
+- C:/Users/noah3/OpaliteMoonScripts/LC Mod Testing/Assets/LethalCompany/Mods/plugins/OpaliteMod/AssetBundles2/muddyassets

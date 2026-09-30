@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 215719217
+CRC: 1821712543
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d18d8137f1ff2655f20161fbba3440b5
+    Hash: ba0176952cbad8d331c309713a72aba4
   TypeTreeHash:
     serializedVersion: 2
-    Hash: f22bd8069421de5664e0a701221c7cf3
+    Hash: 496a575eecca91c49aedc78c57e0731b
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: d18d8137f1ff2655f20161fbba3440b5
+    Hash: ba0176952cbad8d331c309713a72aba4
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -44,6 +44,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 108
   Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: -1966734763, guid: 004815ef18f163442968299437e2e015, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 5863c135c13a608a689df5227baa7104, type: 3}
 - Class: 114
@@ -88,6 +90,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 199
   Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
 - Class: 241
   Script: {instanceID: 0}
 - Class: 243
@@ -95,6 +99,8 @@ ClassTypes:
 - Class: 245
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: Battery
 - AssemblyName: Assembly-CSharp
   ClassName: EnemySize
 - AssemblyName: Assembly-CSharp
@@ -143,5 +149,4 @@ SerializeReferenceClassIdentifiers:
   ClassName: Dawn.NamespacedKey`1[Dawn.IMoonSceneInfo]
 Assets:
 - Assets/LethalCompany/Mods/plugins/OpaliteMod/Content/Moons/OpaliteV1/Registry/OpaliteDefinition.asset
-Dependencies:
-- C:/Users/noah3/OpaliteMoonScripts/LC Mod Testing/Assets/LethalCompany/Mods/plugins/OpaliteMod/AssetBundles2/templateitemassets
+Dependencies: []

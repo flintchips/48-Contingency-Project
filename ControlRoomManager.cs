@@ -195,7 +195,27 @@ public class ControlRoomManager : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     public void OnEndPowerClientRpc()
     {
-        StartCoroutine(BigDoorClose());
+        if (PCAnimator != null) PCAnimator.SetBool("On", false);
+
+        if (garageDoorAnimator != null)
+        {
+            if (garageDoorAnimator.GetBool("Open"))
+            {
+                // FIX: Check if custom array audio exists first. If missing, drop back to doorOpeningSfx safely
+                if (DoorAudio != null && miscClips != null && miscClips.Length > 2 && miscClips[2] != null)
+                {
+                    DoorAudio.Stop();
+                    DoorAudio.PlayOneShot(miscClips[2], 1f); 
+                }
+                else if (DoorAudio != null && doorOpeningSfx != null)
+                {
+                    DoorAudio.Stop();
+                    DoorAudio.PlayOneShot(doorOpeningSfx, 1f); // Safe default layout backup sound
+                }
+            }
+            
+            garageDoorAnimator.SetBool("Open", false);
+        }
     }
 
     private void SetExitReferences()
@@ -203,7 +223,6 @@ public class ControlRoomManager : NetworkBehaviour
         InitExitListeners();
     }
 
-    // called from RoundManager.LoadNewLevel Prefix patch
     public void BeforeLoadNewLevel(int currentSeed)
     {
         if (!RoundManager.Instance.hasInitializedLevelRandomSeed) OpaliteMoonPlugin.Log.LogDebug("[ControlRoomManager.BeforeLoadNewLevel] wtf.");
@@ -227,26 +246,61 @@ public class ControlRoomManager : NetworkBehaviour
         
         int scrapSeed = StartOfRound.Instance.randomMapSeed + 393;
         BasinRandom = new System.Random(scrapSeed);
-        int scrapSpawnCount = 6 + BasinRandom.Next(2);
+        int scrapSpawnCount = 10 + BasinRandom.Next(4);
         
-        Debug.Log($"[ControlRoomManager] setting up {scrapSpawnCount} basins scrap item spawners");
+        bool spawnMuddyScrapInstead = !OpaliteMoonPlugin.SoppingZedDogEnabled.Value || OpaliteMoonPlugin.ReplaceWithRegularScrap.Value;
+        Debug.Log($"[ControlRoomManager] setting up basin scrap item spawners. Spawn Muddy Regular Scrap: {spawnMuddyScrapInstead}");
         
-        var dawnItem = LethalContent.Items[NamespacedKey<DawnItemInfo>.From("opalite_moon", "sopping_zed_dog")].Item;
-        var list = new ItemSpawner.WeightedItemRefrence[]
+        ItemSpawner.WeightedItemRefrence[] customListArray = null;
+
+        if (spawnMuddyScrapInstead)
         {
-            new ItemSpawner.WeightedItemRefrence
+            scrapSpawnCount = 10 + BasinRandom.Next(4);
+            List<ItemSpawner.WeightedItemRefrence> highValueScrapList = new List<ItemSpawner.WeightedItemRefrence>();
+
+            if (RoundManager.Instance != null && RoundManager.Instance.currentLevel != null)
             {
-                Weight = 100,
-                Item = dawnItem,
-                ItemName = "",
-                FindRegisteredItem = false,
+                foreach (var itemRarity in RoundManager.Instance.currentLevel.spawnableScrap)
+                {
+                    if (itemRarity == null || itemRarity.spawnableItem == null) continue;
+
+                    if (itemRarity.spawnableItem.minValue >= 70)
+                    { highValueScrapList.Add(new ItemSpawner.WeightedItemRefrence() { Item = itemRarity.spawnableItem, Weight = itemRarity.rarity, FindRegisteredItem = false }); }
+                }
             }
-        };
+
+            if (highValueScrapList.Count == 0 && RoundManager.Instance?.currentLevel?.spawnableScrap != null)
+            {
+                foreach (var itemRarity in RoundManager.Instance.currentLevel.spawnableScrap)
+                {
+                    if (itemRarity.spawnableItem.maxValue >= 70)
+                    { highValueScrapList.Add(new ItemSpawner.WeightedItemRefrence() { Item = itemRarity.spawnableItem, Weight = itemRarity.rarity }); }
+                }
+            }
+
+            customListArray = highValueScrapList.ToArray();
+        }
+        else
+        {
+            scrapSpawnCount = 6 + BasinRandom.Next(2);
+            var itemKey = NamespacedKey<DawnItemInfo>.From("opalite_moon", "sopping_zed_dog");
+            if (LethalContent.Items != null && LethalContent.Items.ContainsKey(itemKey))
+            {
+                customListArray = [new ItemSpawner.WeightedItemRefrence { Weight = 100, Item = LethalContent.Items[itemKey].Item, ItemName = "", FindRegisteredItem = false }];
+            }
+            else
+            {
+                List<ItemSpawner.WeightedItemRefrence> highValueScrapList = new List<ItemSpawner.WeightedItemRefrence>();
+                foreach (var itemRarity in RoundManager.Instance.currentLevel.spawnableScrap)
+                { if (itemRarity.spawnableItem.minValue >= 70) highValueScrapList.Add(new ItemSpawner.WeightedItemRefrence() { Item = itemRarity.spawnableItem, Weight = itemRarity.rarity }); }
+                customListArray = highValueScrapList.ToArray();
+            }
+        }
         
         for (int i = 0; i < scrapSpawnCount; i++)
         {
             int selectedNode = BasinRandom.Next(0, foundNodes.Length);
-            
+    
             ItemSpawner spawner = new GameObject().AddComponent<ItemSpawner>();
             Vector2 randomOffset = GetRandomPointInCircleForBasin(5f);
             spawner.transform.position = foundNodes[selectedNode].transform.position + new Vector3(randomOffset.x, 5, randomOffset.y);
@@ -257,14 +311,13 @@ public class ControlRoomManager : NetworkBehaviour
             }
             spawner.enabled = false;
             spawner.spawnOnEnabled = true;
-            spawner.SourcePool = SpawnPoolSource.CustomList;
-            spawner.CustomList = list;
+            spawner.SourcePool = SpawnPoolSource.CustomList; 
+            spawner.CustomList = customListArray;
             spawner.spawnRotation = RotationType.RandomRotation;
             spawner.transform.localEulerAngles = new Vector3(0, BasinRandom.Next(0, 360), 0);
             basinScrapSpawners.Add(spawner);
             spawner.gameObject.SetActive(false);
         }
-        
         Debug.Log($"[ControlRoomManager] added {basinScrapSpawners.Count} item spawners to list");
     }
     
@@ -280,7 +333,6 @@ public class ControlRoomManager : NetworkBehaviour
         return new Vector2(x, y);
     }
     
-    //[ServerRpc(RequireOwnership = false)]
     [Rpc(SendTo.Server, RequireOwnership = false)]
     private void SetupLockersServerRpc()
     {
@@ -370,7 +422,45 @@ public class ControlRoomManager : NetworkBehaviour
         Debug.LogWarning("[ControlRoomManager] basinScrapSpawners is null on this client!");
     }
     
-    yield return new WaitForSeconds(0.25f);
+    // Wait a brief frame sequence block to allow network items to settle on the floor
+    yield return new WaitForSeconds(0.6f);
+    
+    bool dogDisabled = OpaliteMoonPlugin.SoppingZedDogEnabled != null && !OpaliteMoonPlugin.SoppingZedDogEnabled.Value;
+    bool replaceWithRegularScrap = OpaliteMoonPlugin.ReplaceWithRegularScrap != null && OpaliteMoonPlugin.ReplaceWithRegularScrap.Value;
+    bool shouldBeMuddy = dogDisabled || replaceWithRegularScrap;
+
+    if (shouldBeMuddy && basinScrapSpawners != null)
+    {
+        foreach (ItemSpawner spawner in basinScrapSpawners)
+        {
+            if (spawner == null) continue;
+
+            for (int attempt = 0; attempt < 8; attempt++)
+            {
+                Collider[] hitColliders = Physics.OverlapSphere(spawner.transform.position, 4f);
+                bool foundItemThisSpawner = false;
+
+                foreach (var col in hitColliders)
+                {
+                    GrabbableObject scrapItem = col.GetComponentInParent<GrabbableObject>();
+                    if (scrapItem == null) continue;
+
+                    if (col.gameObject.GetComponentInParent<PlayerControllerB>() != null) continue;
+
+                    foundItemThisSpawner = true;
+
+                    if (scrapItem.GetComponent<MudVariantApplier>() == null)
+                    {
+                        scrapItem.gameObject.AddComponent<MudVariantApplier>();
+                        Debug.Log($"[ControlRoomManager] Successfully converted basin item {scrapItem.itemProperties.itemName} to Muddy Variant via OverlapSphere sweep.");
+                    }
+                }
+
+                if (foundItemThisSpawner) break; 
+                yield return new WaitForSeconds(0.1f); 
+            }
+        }
+    }
 
     var itemKey = NamespacedKey<DawnItemInfo>.From("opalite_moon", "sopping_zed_dog");
     Item soppyzedProperties = null;
@@ -387,7 +477,6 @@ public class ControlRoomManager : NetworkBehaviour
         {
             if (grabbableObject == null || string.IsNullOrEmpty(grabbableObject.name) || !grabbableObject.name.Contains("SoppingZed")) continue;
             
-            // Check random instance
             if (BasinRandom != null) grabbableObject.floorYRot = BasinRandom.Next(360);
             
             if (grabbableObject.itemProperties != soppyzedProperties)

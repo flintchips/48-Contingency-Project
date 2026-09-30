@@ -1,6 +1,9 @@
+using System;
+using System.IO;
 using System.Reflection;
 using UnityEngine;
 using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 
@@ -11,13 +14,33 @@ namespace OpaliteMoonMod
     {
         public const string PluginGuid = "FlintChips.Contingency";
         public const string PluginName = "48_Contingency";
-        public const string PluginVersion = "1.2.1";
+        public const string PluginVersion = "1.3.0";
         
         internal static ManualLogSource Log = null!;
+        
+        // Static config tracking field
+        public static ConfigEntry<bool> ReplaceWithRegularScrap = null!;
+        public static ConfigEntry<bool> SoppingZedDogEnabled = null!;
 
         private void Awake()
         {
             Log = Logger;
+
+            // Bind the toggle from [Basin Scrap Options]
+            ReplaceWithRegularScrap = Config.Bind(
+                "Basin Scrap Options",
+                "Sopping Zed Dog | Replace With Regular Scrap",
+                true,
+                "Whether the basin spawns basic scrap from the moons loot table or the sopping zed dog (false)."
+            );
+
+            // Bind the toggle from [SoppingZedDogConfig Options]
+            SoppingZedDogEnabled = Config.Bind(
+                "SoppingZedDogConfig Options",
+                "Enabled",
+                true,
+                "Whether SoppingZedDogConfig is enabled."
+            );
             
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
@@ -42,9 +65,45 @@ namespace OpaliteMoonMod
                     }
                 }
             }
+
+            LoadMudAssets();
             
             new Harmony(PluginGuid).PatchAll();
             Logger.LogInfo($"Loaded [{PluginGuid} v{PluginVersion}]");
+        }
+
+        private void LoadMudAssets()
+        {
+            try
+            {
+                string modFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string bundlePath = Path.Combine(modFolder, "Assets", "muddyassets"); 
+
+                if (File.Exists(bundlePath))
+                {
+                    AssetBundle bundle = AssetBundle.LoadFromFile(bundlePath);
+                    if (bundle != null)
+                    {
+                        MudVariantApplier.MudBaseMaterial = bundle.LoadAsset<Material>("MudMaterial");
+                        MudVariantApplier.MuddyDropSFX = bundle.LoadAsset<AudioClip>("DropMuddyObject");
+                        MudVariantApplier.MuddyPickupSFX = bundle.LoadAsset<AudioClip>("MuddyPickup");
+
+                        Log.LogInfo("[OpaliteMoonMod] Muddy variant assets successfully initialized!");
+                    }
+                    else
+                    {
+                        Log.LogError("[OpaliteMoonMod] Found asset bundle file, but failed to load it.");
+                    }
+                }
+                else
+                {
+                    Log.LogError($"[OpaliteMoonMod] AssetBundle not found at path: {bundlePath}. Muddy variants will be broken.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.LogError($"[OpaliteMoonMod] Critical error loading asset assets: {ex.Message}");
+            }
         }
         
         [HarmonyPatch(typeof(RoundManager))]
@@ -65,9 +124,8 @@ namespace OpaliteMoonMod
                     Debug.Log($"[SeedCheckPatch] ControlRoomManager not found!");
                 }
 
-            Debug.Log($"[SeedCheckPatch] Prefix called before LoadNewLevel(), seed is {currentSeed}");
+                Debug.Log($"[SeedCheckPatch] Prefix called before LoadNewLevel(), seed is {currentSeed}");
             }
         }
     }
 }
-

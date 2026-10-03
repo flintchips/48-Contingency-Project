@@ -66,6 +66,7 @@
     <Compile Include="ControlRoomTeleport.cs" />
     <Compile Include="FloodWaterZone.cs" />
     <Compile Include="KyividManager.cs" />
+    <Compile Include="MuddyItem.cs" />
     <Compile Include="MuddyScrapInjectionPatch.cs" />
     <Compile Include="MudVariantApplier.cs" />
     <Compile Include="OpaliteMoonPlugin.cs" />

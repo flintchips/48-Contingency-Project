@@ -77,15 +77,12 @@ Originally, I named this moon **"Opalite-28"**, but I renamed it, suddenly becom
 
 ---
 
-Feel free to visit this project on [![its Github](https://github.com/flintchips/48-Contingency-Project)](https://github.com/flintchips/48-Contingency-Project) if you want to learn more about this mod's development!
-
 <p align="right">
   <img width="20%" alt="0821(1)" src="https://github.com/user-attachments/assets/d0a9ee81-4e4b-479f-bc17-6ca1828f2155" />
 </p>
 
 ---
 ## CREDITS
----
 
 
 ***FlintChips*** - Creator of 48 Contingency

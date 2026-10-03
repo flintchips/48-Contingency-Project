@@ -4,7 +4,8 @@
 
   <img width="33%" alt="Screenshot 2026-08-26 234033" src="https://github.com/user-attachments/assets/be0bfbe6-8a8d-4db7-9e91-0d6bff6cb577" />
   <img width="33%" alt="Screenshot 2026-08-26 234033yytr" src="https://github.com/user-attachments/assets/befe9d81-ca0c-4dbd-a60e-442ea995bd94" />
-  
+  <img width="33% alt="ss" src="https://github.com/user-attachments/assets/3b37776f-7700-4376-8970-91134d91c595" />
+
 </p>
 
 spoilers!

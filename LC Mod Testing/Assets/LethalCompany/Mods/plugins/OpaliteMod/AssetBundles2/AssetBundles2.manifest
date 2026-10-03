@@ -1,0 +1,20 @@
+ManifestFileVersion: 0
+CRC: 743223377
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: opilate_moon_definition
+      Dependencies: {}
+    Info_1:
+      Name: opalitescene
+      Dependencies:
+        Dependency_0: muddyassets
+    Info_2:
+      Name: opalitemainassets.duskmod
+      Dependencies: {}
+    Info_3:
+      Name: soppingzeddogdefinition
+      Dependencies: {}
+    Info_4:
+      Name: muddyassets
+      Dependencies: {}

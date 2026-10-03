@@ -19,11 +19,12 @@ MonoBehaviour:
   lockedForDemo: 0
   spawnEnemiesAndScrap: 1
   PlanetName: 48 Contingency
-  LevelDescription: 'CONDITIONS: Sister moon to 48 Velit, Contingency contains lush
-    oases home to large rainwater collection dams and reservoirs.
+  LevelDescription: 'CONDITIONS: Sister to 48 Velit, Contingency is home to large
+    mammals and machines.
 
-    FAUNA: Has
-    adapted to amythist-rich soil.'
+    FAUNA: Has adapted to amethyst rich soil.
+
+'
   videoReel: {fileID: 0}
   riskLevel: B+
   timeToArrive: 3
@@ -548,7 +549,7 @@ MonoBehaviour:
   - enemyType: {fileID: 11400000, guid: 5891fa91ed44b7c45a9c941a56d7848e, type: 2}
     rarity: 36
   - enemyType: {fileID: 11400000, guid: b0e0521c7d1bf004e9dbf0b9d43f9913, type: 2}
-    rarity: 24
+    rarity: 2
   DaytimeEnemies:
   - enemyType: {fileID: 11400000, guid: 9c528253be6415e4b9865b9c6a326de6, type: 2}
     rarity: 100

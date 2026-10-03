@@ -27,6 +27,9 @@
       <HintPath>$(BepinEx)\core\0Harmony.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\..\Program Files (x86)\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
     <Reference Include="JLL">
       <HintPath>$(BepinEx)\plugins\JacobG5-JLL\JLL\JLL.dll</HintPath>
       <Private>false</Private>
@@ -66,10 +69,11 @@
     <Compile Include="ControlRoomTeleport.cs" />
     <Compile Include="FloodWaterZone.cs" />
     <Compile Include="KyividManager.cs" />
-    <Compile Include="MuddyScrapInjectionPatch.cs" />
     <Compile Include="MudVariantApplier.cs" />
     <Compile Include="OpaliteMoonPlugin.cs" />
     <Compile Include="RandomizedDropSoundObject.cs" />
+    <Compile Include="RuntimeIconsInteractionPatch.cs" />
+    <Compile Include="ShipPositionTracker.cs" />
     <Compile Include="StartDelugeLever.cs" />
     <!-- include more if needed, this is so the csproj ignores everything in the unity project -->
   </ItemGroup>

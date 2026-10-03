@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 2421079445
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: opilate_moon_definition
+      Dependencies: {}
+    Info_1:
+      Name: opalitescene
+      Dependencies: {}
+    Info_2:
+      Name: opalitemainassets.duskmod
+      Dependencies: {}
+    Info_3:
+      Name: mudmaterial
+      Dependencies: {}

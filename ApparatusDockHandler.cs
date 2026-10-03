@@ -2,6 +2,7 @@
 using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
+using System.Reflection;
 
 namespace OpaliteMoonMod;
 
@@ -32,6 +33,8 @@ public class ApparatusDockHandler : NetworkBehaviour
     private LungProp dockedApparatus;
     
     public Animator DockLightAnimator;
+
+    public string removeAppTip = "Remove Apparatus : [LMB]";
 
     public float timeAtLastUse;
 
@@ -68,7 +71,39 @@ public class ApparatusDockHandler : NetworkBehaviour
         if (!GetDockAnimators())
             return;
 
+        // Check if the door is still busy performing an opening animation loop
+        AnimatorStateInfo stateInfo = thisDockAnimator.GetCurrentAnimatorStateInfo(0);
+        
+        // Assuming your open animation state is named "Open" or similar.
+        // If it's still playing and hasn't reached full completion (1.0f), cancel out early to prevent snapping.
+        if (stateInfo.IsName("Open") && stateInfo.normalizedTime < 1.0f)
+        {
+            OpaliteMoonPlugin.Log.LogDebug("[ApparatusDockHandler] Waiting for opening animation to finish before allowing interaction completion.");
+            CancelOpening();
+            return;
+        }
+
         thisDockAnimator.SetBool("Open", false);
+
+        bool configAllowsRemoval = OpaliteMoonPlugin.CanRemoveDockedApparatus != null && OpaliteMoonPlugin.CanRemoveDockedApparatus.Value;
+        
+        if (isPowered && configAllowsRemoval)
+        {
+            if (LocalPlayerHoldingNothing())
+            {
+                if (dockedApparatus != null)
+                {
+                    StartCoroutine(RemoveFromMachinery(dockedApparatus.NetworkObject));
+                    return; 
+                }
+                else
+                {
+                    OpaliteMoonPlugin.Log.LogError("[ApparatusDockHandler] isPowered is true but dockedApparatus reference is null!");
+                }
+            }
+            CancelOpening();
+            return;
+        }
 
         NetworkObject apparatus = GetApparatusFromInteractingPlayer();
         if (apparatus == null)
@@ -97,6 +132,7 @@ public class ApparatusDockHandler : NetworkBehaviour
 
         PlaceApparatusServerRpc(new NetworkObjectReference(apparatus));
     }
+
 
     public void CancelOpening() 
     {
@@ -138,6 +174,22 @@ public class ApparatusDockHandler : NetworkBehaviour
         if (player == null || !player.isHoldingObject) return false;
         
         return player.currentlyHeldObjectServer is LungProp;
+    }
+    
+    private bool LocalPlayerHoldingNothing()
+    {
+        PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
+        if (player == null || player.isHoldingObject) return false;
+        
+        return !player.isHoldingObject;
+    }
+
+    private bool CanGrabFromMachinery()
+    {
+        if (!isPowered || !LocalPlayerHoldingNothing()) return false;
+        if (!(OpaliteMoonPlugin.CanRemoveDockedApparatus != null &&
+              OpaliteMoonPlugin.CanRemoveDockedApparatus.Value)) return false;
+        return true;
     }
 
     [Rpc(SendTo.Server, RequireOwnership = false)]
@@ -257,7 +309,174 @@ public class ApparatusDockHandler : NetworkBehaviour
         prop.grabbableToEnemies = false;
         prop.fallTime = 1f;
     }
-    
+
+    [Rpc(SendTo.Server, RequireOwnership = false)]
+    private void RemoveApparatusServerRpc(NetworkObjectReference apparatusRef, RpcParams rpcParams = default)
+    {
+        if (!isPowered) return;
+        if (!apparatusRef.TryGet(out NetworkObject apparatus)) return;
+
+        LungProp prop = apparatus.GetComponent<LungProp>();
+        if (prop == null) return;
+
+        isPowered = false;
+        
+        // Remove parenting on the server via Netcode infrastructure
+        if (apparatus.transform.parent != null)
+        {
+            apparatus.TryRemoveParent(worldPositionStays: true);
+        }
+
+        // FIX: Extract the sender client's ID safely from the RpcParams struct metadata
+        ulong interactingClientId = rpcParams.Receive.SenderClientId;
+        
+        if (apparatus.IsSpawned)
+        {
+            apparatus.ChangeOwnership(interactingClientId);
+        }
+
+        RemoveApparatusClientRpc(apparatusRef);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void RemoveApparatusClientRpc(NetworkObjectReference apparatusRef)
+    {
+        if (!apparatusRef.TryGet(out NetworkObject apparatus)) return;
+
+        LungProp prop = apparatus.GetComponent<LungProp>();
+        if (prop == null) return;
+
+        isPowered = false;
+        dockedApparatus = null;
+
+        if (GetDockAnimators())
+        {
+            // FIX: Force state updates clearly so the animator transitions to its shut/unpowered sequence
+            thisDockAnimator.SetBool("Open", false);
+            thisDockAnimator.SetBool("Powered", false);
+            
+            // OPTIONAL: If your door animator relies on a trigger for sudden closure, uncomment the line below:
+            // thisDockAnimator.SetTrigger("SlamDoor"); 
+        }
+
+        if (triggerScript != null)
+        {
+            BoxCollider[] currentColliders = triggerScript.gameObject.GetComponents<BoxCollider>();
+            foreach (BoxCollider col in currentColliders)
+            {
+                if (!col.isTrigger)
+                {
+                    Destroy(col);
+                }
+            }
+            triggerScript.interactable = true;
+        }
+
+        if (connectAnimation != null) { StopCoroutine(connectAnimation); connectAnimation = null; }
+        if (roomPowerAnimation != null) { StopCoroutine(roomPowerAnimation); roomPowerAnimation = null; }
+        if (roomFlickerAnimation != null) { StopCoroutine(roomFlickerAnimation); roomFlickerAnimation = null; }
+
+        PlayerControllerB localPlayer = GameNetworkManager.Instance.localPlayerController;
+        bool shouldWield = localPlayer != null && LocalPlayerHoldingNothing() && 
+                           Vector3.Distance(localPlayer.transform.position, transform.position) < 5f;
+
+        UndockAndGrabApparatusLocal(prop, apparatus, shouldWield);
+        
+        // FIX: Safely check array indexing before playing the sound effect
+        if (dockingPointAudio != null && dockingAudios != null && dockingAudios.Length > 0)
+        {
+            // Assuming index 0 is your placement sound, or another index for removal slam
+            dockingPointAudio.PlayOneShot(dockingAudios[0], 0.7f); 
+        }
+
+        foreach (GameObject obj in poweredRoomObjects)
+        {
+            obj.SetActive(false);
+            var animator = obj.GetComponent<Animator>();
+            if (animator != null) animator.SetBool("on", false);
+        }
+    }
+    private void UndockAndGrabApparatusLocal(LungProp prop, NetworkObject apparatus, bool holderWield)
+    {
+        if (prop == null || apparatus == null) return;
+
+        // Restore collider so the item can be targeted / physics can interact again
+        BoxCollider apparatusCollider = prop.GetComponent<BoxCollider>();
+        if (apparatusCollider != null)
+        {
+            apparatusCollider.enabled = true;
+        }
+
+        // Always restore grabbable state first so the item is never left permanently locked
+        prop.grabbable = true;
+        prop.grabbableToEnemies = true;
+        prop.isPocketed = false;
+        prop.fallTime = 0f;
+
+        if (holderWield && LocalPlayerHoldingNothing())
+        {
+            PlayerControllerB localPlayer = GameNetworkManager.Instance.localPlayerController;
+            if (localPlayer != null)
+            {
+                prop.transform.SetParent(localPlayer.localItemHolder, worldPositionStays: false);
+                prop.transform.localPosition = Vector3.zero;
+
+                prop.parentObject = localPlayer.localItemHolder;
+                prop.isHeld = true;
+                prop.playerHeldBy = localPlayer;
+                prop.hasHitGround = false;
+
+                try
+                {
+                    MethodInfo grabObjectServerRpc = typeof(PlayerControllerB).GetMethod(
+                        "GrabObjectServerRpc",
+                        BindingFlags.NonPublic | BindingFlags.Instance
+                    );
+
+                    if (grabObjectServerRpc != null)
+                    {
+                        NetworkObjectReference netObjRef = new NetworkObjectReference(apparatus);
+                        grabObjectServerRpc.Invoke(localPlayer, new object[] { netObjRef });
+                        prop.GrabItemOnClient();
+                    }
+                    else
+                    {
+                        OpaliteMoonPlugin.Log.LogError("Could not find GrabObjectServerRpc via Reflection.");
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    OpaliteMoonPlugin.Log.LogError($"Failed to force reflect grab layout: {ex}");
+                }
+            }
+        }
+        else
+        {
+            // Drop to floor as a normal free apparatus — fully unparented and pickable
+            if (apparatus.IsSpawned && apparatus.transform.parent != null)
+            {
+                apparatus.TryRemoveParent(worldPositionStays: true);
+            }
+            else
+            {
+                prop.transform.SetParent(null, worldPositionStays: true);
+            }
+
+            prop.parentObject = null;
+            prop.isHeld = false;
+            prop.playerHeldBy = null;
+            prop.hasHitGround = true;
+            prop.grabbable = true;
+            prop.grabbableToEnemies = true;
+            prop.isPocketed = false;
+            prop.fallTime = 1f;
+
+            // Nudge slightly so it does not clip into the dock and becomes unreachable
+            prop.transform.position += Vector3.up * 0.15f;
+            prop.transform.position += transform.forward * 0.25f;
+        }
+    }
+
     private NetworkObject GetApparatusParentNetworkObject()
     {
         if (apparatusPoint != null)
@@ -355,6 +574,20 @@ public class ApparatusDockHandler : NetworkBehaviour
         yield return null;
     }
 
+    private IEnumerator RemoveFromMachinery(NetworkObject apparatus)
+    {
+        Debug.Log("[ApparatusDockHandler] RemoveFromMachinery CALLED");
+    
+        if (apparatus != null)
+        {
+            RemoveApparatusServerRpc(new NetworkObjectReference(apparatus));
+        }
+    
+        yield return null;
+    }
+    
+    
+
     public void StartOpening()
     {
         if (isPowered || !LocalPlayerHoldingApparatus())
@@ -383,14 +616,64 @@ public class ApparatusDockHandler : NetworkBehaviour
     {
         if (triggerScript == null)
             return;
+
         if (!isPowered)
         {
-            thisDockAnimator.SetBool("Powered", value: false);
+            thisDockAnimator.SetBool("Powered", false);
         }
+
+        // Query current animation state frames
+        AnimatorStateInfo stateInfo = thisDockAnimator.GetCurrentAnimatorStateInfo(0);
+        bool isAnimating = (stateInfo.IsName("Open") && stateInfo.normalizedTime < 1.0f) || 
+                           (stateInfo.IsName("Close") && stateInfo.normalizedTime < 1.0f);
+
+        bool configAllowsRemoval = OpaliteMoonPlugin.CanRemoveDockedApparatus != null && OpaliteMoonPlugin.CanRemoveDockedApparatus.Value;
         bool canDock = LocalPlayerHoldingApparatus() && !isPowered;
-        triggerScript.interactable = canDock;
-        triggerScript.hoverTip = canDock ? "Insert Apparatus : [LMB]" : "";
-        triggerScript.disabledHoverTip = isPowered ? "[Locked]" : "[Requires Apparatus]";
+        bool canRemove = isPowered && configAllowsRemoval && LocalPlayerHoldingNothing();
+    
+        // Lock out interactable status completely if the animator is transitioning/animating
+        if (isAnimating)
+        {
+            triggerScript.interactable = false;
+            triggerScript.hoverTip = "";
+            triggerScript.disabledHoverTip = "[Busy]";
+            return;
+        }
+
+        triggerScript.interactable = canDock || canRemove;
+
+        if (canDock)
+        {
+            triggerScript.hoverTip = "Insert Apparatus : [LMB]";
+        }
+        else if (canRemove)
+        {
+            triggerScript.hoverTip = "Remove Apparatus : [LMB]";
+        }
+        else
+        {
+            triggerScript.hoverTip = "";
+        }
+
+        if (isPowered && configAllowsRemoval)
+        {
+            if (!LocalPlayerHoldingNothing())
+            {
+                triggerScript.disabledHoverTip = "[Hands Full]";
+            }
+            else
+            {
+                triggerScript.disabledHoverTip = "Remove Apparatus : [LMB]";
+            }
+        }
+        else if (isPowered && !configAllowsRemoval)
+        {
+            triggerScript.disabledHoverTip = "[Locked]";
+        }
+        else
+        {
+            triggerScript.disabledHoverTip = "[Requires Apparatus]";
+        }
     }
 }
 

@@ -6,52 +6,53 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using Dawn.Utils;
 
 namespace OpaliteMoonMod
 {
     [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
     public sealed class OpaliteMoonPlugin : BaseUnityPlugin
     {
+        public static OpaliteMoonPlugin Instance;
+
         public const string PluginGuid = "FlintChips.Contingency";
         public const string PluginName = "48_Contingency";
         public const string PluginVersion = "1.3.0";
-        
+
         internal static ManualLogSource Log = null!;
-        
-        // Static config tracking field
-        public static ConfigEntry<bool> ReplaceWithRegularScrap = null!;
-        public static ConfigEntry<bool> SoppingZedDogEnabled = null!;
+
+        public static ConfigEntry<BoundedRange> BasinScrapRange = null!;
+        public static ConfigEntry<bool> CanRemoveDockedApparatus = null!;
 
         private void Awake()
         {
+            Instance = this;
             Log = Logger;
 
-            // Bind the toggle from [Basin Scrap Options]
-            ReplaceWithRegularScrap = Config.Bind(
+            BasinScrapRange = Config.Bind(
                 "Basin Scrap Options",
-                "Sopping Zed Dog | Replace With Regular Scrap",
-                true,
-                "Whether the basin spawns basic scrap from the moons loot table or the sopping zed dog (false)."
+                "Basin | Min/Max Scrap",
+                new BoundedRange(7, 10),
+                "Min/Max number of muddy scrap items to spawn in the drained basin."
             );
 
-            // Bind the toggle from [SoppingZedDogConfig Options]
-            SoppingZedDogEnabled = Config.Bind(
-                "SoppingZedDogConfig Options",
-                "Enabled",
+            CanRemoveDockedApparatus = Config.Bind(
+                "Control Room",
+                "Can Remove Docked Apparatus",
                 true,
-                "Whether SoppingZedDogConfig is enabled."
+                "Whether or not you can remove the apparatus after docking it in the control room."
             );
-            
+
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
                 if (args.Name.Contains("OpaliteMod"))
                 {
-                    Log.LogDebug("[48contingency] Redirecting OpaliteMod assembally to 48contingency!");
-                    return Assembly.GetExecutingAssembly(); 
+                    Log.LogDebug("[48contingency] Redirecting OpaliteMod assembly to 48contingency!");
+                    return Assembly.GetExecutingAssembly();
                 }
                 return null;
             };
-            
+
             var types = Assembly.GetExecutingAssembly().GetTypes();
             foreach (var type in types)
             {
@@ -67,45 +68,68 @@ namespace OpaliteMoonMod
             }
 
             LoadMudAssets();
-            
+
             new Harmony(PluginGuid).PatchAll();
             Logger.LogInfo($"Loaded [{PluginGuid} v{PluginVersion}]");
         }
 
+        /// <summary>
+        /// Loads MudMaterial + optional SFX from a plugin-side asset bundle.
+        /// Place the file at: BepInEx/plugins/.../Assets/mudmaterial
+        /// (or Assets/muddyassets for backwards compatibility).
+        /// Bundle should contain a Material named "MudMaterial".
+        /// Optional: AudioClips "DropMuddyObject", "MuddyPickup".
+        /// </summary>
         private void LoadMudAssets()
         {
             try
             {
                 string modFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string bundlePath = Path.Combine(modFolder, "Assets", "muddyassets"); 
-
-                if (File.Exists(bundlePath))
+                string[] candidates =
                 {
-                    AssetBundle bundle = AssetBundle.LoadFromFile(bundlePath);
-                    if (bundle != null)
-                    {
-                        MudVariantApplier.MudBaseMaterial = bundle.LoadAsset<Material>("MudMaterial");
-                        MudVariantApplier.MuddyDropSFX = bundle.LoadAsset<AudioClip>("DropMuddyObject");
-                        MudVariantApplier.MuddyPickupSFX = bundle.LoadAsset<AudioClip>("MuddyPickup");
+                    Path.Combine(modFolder, "Assets", "mudmaterial"),
+                    Path.Combine(modFolder, "Assets", "muddyassets"),
+                    Path.Combine(modFolder, "mudmaterial"),
+                };
 
-                        Log.LogInfo("[OpaliteMoonMod] Muddy variant assets successfully initialized!");
-                    }
-                    else
+                string bundlePath = null;
+                foreach (string path in candidates)
+                {
+                    if (File.Exists(path))
                     {
-                        Log.LogError("[OpaliteMoonMod] Found asset bundle file, but failed to load it.");
+                        bundlePath = path;
+                        break;
                     }
                 }
+
+                if (bundlePath == null)
+                {
+                    Log.LogWarning("[OpaliteMoonMod] No mud material bundle found (tried Assets/mudmaterial, Assets/muddyassets). Basin scrap will spawn without mud visuals.");
+                    return;
+                }
+
+                AssetBundle bundle = AssetBundle.LoadFromFile(bundlePath);
+                if (bundle == null)
+                {
+                    Log.LogError($"[OpaliteMoonMod] Failed to load asset bundle at: {bundlePath}");
+                    return;
+                }
+
+                MudVariantApplier.MudBaseMaterial = bundle.LoadAsset<Material>("MudMaterial");
+                MudVariantApplier.MuddyDropSFX = bundle.LoadAsset<AudioClip>("DropMuddyObject");
+                MudVariantApplier.MuddyPickupSFX = bundle.LoadAsset<AudioClip>("MuddyPickup");
+
+                if (MudVariantApplier.MudBaseMaterial != null)
+                    Log.LogInfo($"[OpaliteMoonMod] Loaded MudMaterial from {bundlePath}");
                 else
-                {
-                    Log.LogError($"[OpaliteMoonMod] AssetBundle not found at path: {bundlePath}. Muddy variants will be broken.");
-                }
+                    Log.LogWarning($"[OpaliteMoonMod] Bundle loaded but MudMaterial asset not found inside {bundlePath}");
             }
             catch (Exception ex)
             {
-                Log.LogError($"[OpaliteMoonMod] Critical error loading asset assets: {ex.Message}");
+                Log.LogError($"[OpaliteMoonMod] Error loading mud assets: {ex.Message}");
             }
         }
-        
+
         [HarmonyPatch(typeof(RoundManager))]
         [HarmonyPatch("LoadNewLevel")]
         public class SeedCheckPatch
@@ -121,7 +145,7 @@ namespace OpaliteMoonMod
                 }
                 else
                 {
-                    Debug.Log($"[SeedCheckPatch] ControlRoomManager not found!");
+                    Debug.Log("[SeedCheckPatch] ControlRoomManager not found!");
                 }
 
                 Debug.Log($"[SeedCheckPatch] Prefix called before LoadNewLevel(), seed is {currentSeed}");

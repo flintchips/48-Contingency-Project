@@ -6,6 +6,7 @@ using JLL.Components;
 using UnityEngine.Events;
 using Dawn;
 using BepInEx.Logging;
+using HarmonyLib;
 
 namespace OpaliteMoonMod;
 
@@ -232,95 +233,134 @@ public class ControlRoomManager : NetworkBehaviour
         SetupLockersServerRpc();
         SetupBasinScrap();
     }
-    
+
     private void SetupBasinScrap()
     {
+        Debug.Log("[ControlRoomManager] >>> SetupBasinScrap STARTED <<<");
+
         GameObject parent = GameObject.Find("BasinScrapSpawns");
         if (parent == null)
         {
             Debug.LogError("[ControlRoomManager] Could not find BasinScrapSpawns parent");
             return;
         }
+
+        Debug.Log("[ControlRoomManager] Step 1: Found BasinScrapSpawns GameObject.");
+
         GameObject[] foundNodes = parent.GetComponentsInChildren<Transform>(true)
-            .Where(t => t.name.StartsWith("ScrapNode")).Select(t => t.gameObject).ToArray();
-        
-        int scrapSeed = StartOfRound.Instance.randomMapSeed + 393;
-        BasinRandom = new System.Random(scrapSeed);
-        int scrapSpawnCount = 10 + BasinRandom.Next(4);
-        
-        bool spawnMuddyScrapInstead = !OpaliteMoonPlugin.SoppingZedDogEnabled.Value || OpaliteMoonPlugin.ReplaceWithRegularScrap.Value;
-        Debug.Log($"[ControlRoomManager] setting up basin scrap item spawners. Spawn Muddy Regular Scrap: {spawnMuddyScrapInstead}");
-        
-        ItemSpawner.WeightedItemRefrence[] customListArray = null;
+            .Where(t => t != null && t.name.StartsWith("ScrapNode"))
+            .Select(t => t.gameObject)
+            .ToArray();
 
-        if (spawnMuddyScrapInstead)
+        Debug.Log($"[ControlRoomManager] Step 2: Found {foundNodes.Length} ScrapNodes.");
+
+        if (foundNodes.Length == 0)
         {
-            scrapSpawnCount = 10 + BasinRandom.Next(4);
-            List<ItemSpawner.WeightedItemRefrence> highValueScrapList = new List<ItemSpawner.WeightedItemRefrence>();
+            Debug.LogError("[ControlRoomManager] BasinScrapSpawns has no children starting with 'ScrapNode'");
+            return;
+        }
 
-            if (RoundManager.Instance != null && RoundManager.Instance.currentLevel != null)
+        int scrapSeed = StartOfRound.Instance != null ? StartOfRound.Instance.randomMapSeed + 393 : 393;
+        BasinRandom = new System.Random(scrapSeed);
+
+        if (StartOfRound.Instance.currentLevel == null)
+        {
+            Debug.LogError("[ControlRoomManager] !!! CRITICAL ERROR: targetLevel passed into SetupBasinScrap is NULL !!!");
+            return;
+        }
+        if (StartOfRound.Instance.currentLevel.spawnableScrap == null)
+        {
+            Debug.LogError("[ControlRoomManager] !!! CRITICAL ERROR: targetLevel.spawnableScrap is NULL !!!");
+            return;
+        }
+        Debug.Log($"[ControlRoomManager] Step 3: targetLevel spawnableScrap count is {StartOfRound.Instance.currentLevel.spawnableScrap.Count}");
+
+        int scrapSpawnCount = 10 + BasinRandom.Next(4);
+        List<JLL.Components.ItemSpawner.WeightedItemRefrence> highValueScrapList = new();
+
+        if (StartOfRound.Instance.currentLevel != null && StartOfRound.Instance.currentLevel.spawnableScrap != null)
+        {
+            foreach (var itemRarity in StartOfRound.Instance.currentLevel.spawnableScrap)
             {
-                foreach (var itemRarity in RoundManager.Instance.currentLevel.spawnableScrap)
+                if (itemRarity == null) { Debug.Log("[ControlRoomManager] Warning: itemRarity entry is null"); continue; }
+                if (itemRarity.spawnableItem == null) { Debug.Log("[ControlRoomManager] Warning: spawnableItem inside entry is null"); continue; }
+
+
+                if (itemRarity.spawnableItem.minValue >= 70)
+                {
+                    highValueScrapList.Add(new JLL.Components.ItemSpawner.WeightedItemRefrence() { Item = itemRarity.spawnableItem, Weight = itemRarity.rarity, FindRegisteredItem = false });
+                }
+            }
+
+            if (highValueScrapList.Count == 0)
+            {
+                Debug.Log("[ControlRoomManager] No items found with minValue >= 70, checking maxValue...");
+                foreach (var itemRarity in StartOfRound.Instance.currentLevel.spawnableScrap)
                 {
                     if (itemRarity == null || itemRarity.spawnableItem == null) continue;
 
-                    if (itemRarity.spawnableItem.minValue >= 70)
-                    { highValueScrapList.Add(new ItemSpawner.WeightedItemRefrence() { Item = itemRarity.spawnableItem, Weight = itemRarity.rarity, FindRegisteredItem = false }); }
-                }
-            }
-
-            if (highValueScrapList.Count == 0 && RoundManager.Instance?.currentLevel?.spawnableScrap != null)
-            {
-                foreach (var itemRarity in RoundManager.Instance.currentLevel.spawnableScrap)
-                {
                     if (itemRarity.spawnableItem.maxValue >= 70)
-                    { highValueScrapList.Add(new ItemSpawner.WeightedItemRefrence() { Item = itemRarity.spawnableItem, Weight = itemRarity.rarity }); }
+                    {
+                        highValueScrapList.Add(new JLL.Components.ItemSpawner.WeightedItemRefrence() { Item = itemRarity.spawnableItem, Weight = itemRarity.rarity, FindRegisteredItem = false });
+                    }
                 }
             }
+        }
 
-            customListArray = highValueScrapList.ToArray();
-        }
-        else
+        var customListArray = highValueScrapList.ToArray();
+        Debug.Log($"[ControlRoomManager] Step 4: customListArray generated. Built list contains {customListArray.Length} item variants.");
+
+        if (customListArray == null || customListArray.Length == 0)
         {
-            scrapSpawnCount = 6 + BasinRandom.Next(2);
-            var itemKey = NamespacedKey<DawnItemInfo>.From("opalite_moon", "sopping_zed_dog");
-            if (LethalContent.Items != null && LethalContent.Items.ContainsKey(itemKey))
-            {
-                customListArray = [new ItemSpawner.WeightedItemRefrence { Weight = 100, Item = LethalContent.Items[itemKey].Item, ItemName = "", FindRegisteredItem = false }];
-            }
-            else
-            {
-                List<ItemSpawner.WeightedItemRefrence> highValueScrapList = new List<ItemSpawner.WeightedItemRefrence>();
-                foreach (var itemRarity in RoundManager.Instance.currentLevel.spawnableScrap)
-                { if (itemRarity.spawnableItem.minValue >= 70) highValueScrapList.Add(new ItemSpawner.WeightedItemRefrence() { Item = itemRarity.spawnableItem, Weight = itemRarity.rarity }); }
-                customListArray = highValueScrapList.ToArray();
-            }
+            Debug.LogWarning("[ControlRoomManager] customListArray for scrap spawners is empty!");
+            return;
         }
-        
+
+        Debug.Log($"[ControlRoomManager] Step 5: Preparing to loop and spawn {scrapSpawnCount} templates.");
+        int successfullyCreatedSpawners = 0;
+
         for (int i = 0; i < scrapSpawnCount; i++)
         {
             int selectedNode = BasinRandom.Next(0, foundNodes.Length);
-    
-            ItemSpawner spawner = new GameObject().AddComponent<ItemSpawner>();
+            if (foundNodes[selectedNode] == null) continue;
+
+            JLL.Components.ItemSpawner spawner = new GameObject("BasinItemSpawner").AddComponent<JLL.Components.ItemSpawner>();
+            if(spawner == null) Debug.LogError("[ControlRoomManager] Could not find BasinItemSpawner");
             Vector2 randomOffset = GetRandomPointInCircleForBasin(5f);
             spawner.transform.position = foundNodes[selectedNode].transform.position + new Vector3(randomOffset.x, 5, randomOffset.y);
-            while (!Physics.Raycast(spawner.transform.position, -Vector3.up, out var hitInfo, 80f, 268437761, QueryTriggerInteraction.Ignore))
+
+            int attempts = 0;
+            while (!Physics.Raycast(spawner.transform.position, -Vector3.up, out var hitInfo, 80f, 268437761, QueryTriggerInteraction.Ignore) && attempts < 10)
             {
                 randomOffset = GetRandomPointInCircleForBasin(5f);
                 spawner.transform.position = foundNodes[selectedNode].transform.position + new Vector3(randomOffset.x, 5, randomOffset.y);
+                attempts++;
             }
+
             spawner.enabled = false;
             spawner.spawnOnEnabled = true;
-            spawner.SourcePool = SpawnPoolSource.CustomList; 
+
+            if (SpawnPoolSource.LevelItems != null)
+            {
+                spawner.SourcePool = SpawnPoolSource.LevelItems;
+            }
+            else
+            {
+                Debug.LogError($"[ControlRoomManager] Spawner loop index {i}: SpawnPoolSource.LevelItems is NULL! Items will not instantiate.");
+            }
             spawner.CustomList = customListArray;
             spawner.spawnRotation = RotationType.RandomRotation;
             spawner.transform.localEulerAngles = new Vector3(0, BasinRandom.Next(0, 360), 0);
+
             basinScrapSpawners.Add(spawner);
-            spawner.gameObject.SetActive(false);
+
+            spawner.gameObject.SetActive(true);
+            successfullyCreatedSpawners++;
         }
-        Debug.Log($"[ControlRoomManager] added {basinScrapSpawners.Count} item spawners to list");
+
+        Debug.Log($"[ControlRoomManager] >>> SetupBasinScrap FINISHED <<< Successfully queued {successfullyCreatedSpawners} spawners.");
     }
-    
+
     public Vector2 GetRandomPointInCircleForBasin(float radius)
     {
         float randomAngle = (float)(BasinRandom.NextDouble() * 2 * Mathf.PI);

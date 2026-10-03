@@ -19,12 +19,10 @@ MonoBehaviour:
   lockedForDemo: 0
   spawnEnemiesAndScrap: 1
   PlanetName: 48 Contingency
-  LevelDescription: 'CONDITIONS: Sister to 48 Velit, Contingency is home to large
-    mammals and machines.
+  LevelDescription: 'CONDITIONS: Sister moon to 48 Velit. Contingency contains lush
+    oases, large dams and reservoirs
 
-    FAUNA: Has adapted to amethyst rich soil.
-
-'
+    FAUNA: Has adapted to amethyst rich soil.'
   videoReel: {fileID: 0}
   riskLevel: B+
   timeToArrive: 3
@@ -51,16 +49,16 @@ MonoBehaviour:
   overrideWeather: 0
   overrideWeatherType: 0
   currentWeather: -1
-  factorySizeMultiplier: 1
+  factorySizeMultiplier: 1.1
   dungeonFlowTypes:
   - id: 0
     rarity: 249
     overrideLevelAmbience: {fileID: 0}
   - id: 4
-    rarity: 89
+    rarity: 77
     overrideLevelAmbience: {fileID: 0}
   - id: 1
-    rarity: 4
+    rarity: 29
     overrideLevelAmbience: {fileID: 0}
   spawnableMapObjects:
   - prefabToSpawn: {fileID: 1636541647186656, guid: 4b5196efe011090419766cfed614de8b,
@@ -493,8 +491,6 @@ MonoBehaviour:
     rarity: 12
   - spawnableItem: {fileID: 11400000, guid: 93142872d0ef796439617a7a3a49da20, type: 2}
     rarity: 2
-  - spawnableItem: {fileID: 11400000, guid: 42c85b235c6462b4b8b97720cfbb2879, type: 2}
-    rarity: 5
   - spawnableItem: {fileID: 11400000, guid: 05b684aae64e5054298b0b21cecbff98, type: 2}
     rarity: 25
   - spawnableItem: {fileID: 11400000, guid: 90e36ac924c964544b761de4aba48b96, type: 2}
@@ -508,14 +504,14 @@ MonoBehaviour:
   minTotalScrapValue: 300
   maxTotalScrapValue: 700
   levelAmbienceClips: {fileID: 11400000, guid: 9603e6bd92615bc45bbb4a5e3a1b9e89, type: 2}
-  maxEnemyPowerCount: 6
+  maxEnemyPowerCount: 7
   maxOutsideEnemyPowerCount: 8
   maxDaytimeEnemyPowerCount: 20
   maxInsideDiversityPowerCount: 100
   maxOutsideDiversityPowerCount: 100
   Enemies:
   - enemyType: {fileID: 11400000, guid: d5af7b19ae961be4f979cc3d301d7c7d, type: 2}
-    rarity: 13
+    rarity: 9
   - enemyType: {fileID: 11400000, guid: c24e5fbca2a20e048bfefd869a6e08d6, type: 2}
     rarity: 22
   - enemyType: {fileID: 11400000, guid: 9d2b24c9a79b7134ea2a996a79dcd9b7, type: 2}
@@ -549,7 +545,7 @@ MonoBehaviour:
   - enemyType: {fileID: 11400000, guid: 5891fa91ed44b7c45a9c941a56d7848e, type: 2}
     rarity: 36
   - enemyType: {fileID: 11400000, guid: b0e0521c7d1bf004e9dbf0b9d43f9913, type: 2}
-    rarity: 2
+    rarity: 27
   DaytimeEnemies:
   - enemyType: {fileID: 11400000, guid: 9c528253be6415e4b9865b9c6a326de6, type: 2}
     rarity: 100
@@ -558,7 +554,7 @@ MonoBehaviour:
   - enemyType: {fileID: 11400000, guid: ad92cb2adec3c844db6b53997a9538d7, type: 2}
     rarity: 40
   - enemyType: {fileID: 11400000, guid: 68f9f59da11b36045a998eb18e91717d, type: 2}
-    rarity: 9
+    rarity: 4
   enemySpawnChanceThroughoutDay:
     serializedVersion: 2
     m_Curve:

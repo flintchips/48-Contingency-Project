@@ -25,22 +25,6 @@ namespace OpaliteMoonMod
         private void Awake()
         {
             Log = Logger;
-
-            // Bind the toggle from [Basin Scrap Options]
-            ReplaceWithRegularScrap = Config.Bind(
-                "Basin Scrap Options",
-                "Sopping Zed Dog | Replace With Regular Scrap",
-                true,
-                "Whether the basin spawns basic scrap from the moons loot table or the sopping zed dog (false)."
-            );
-
-            // Bind the toggle from [SoppingZedDogConfig Options]
-            SoppingZedDogEnabled = Config.Bind(
-                "SoppingZedDogConfig Options",
-                "Enabled",
-                true,
-                "Whether SoppingZedDogConfig is enabled."
-            );
             
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {

@@ -1,5 +1,19 @@
+## Version 1.3.0
+* Changed the moons cost from 30 to 100.
+* Added many various changes to the moon including new and updated areas.
+* A second fire exit has been added.
+* Baboon hawk spawn chance has incresed dramatically from basically nothing.
+* New Muddy item variants now found in the basin reservoir.
+* REMOVED SOPPING ZED DOG. rip (will return someday in another universe)
+* A rewrite of the moons description in the ship.
+* Increased mineshaft spawn chance.
+* Lowered the water level of the post-flood flooded side of the moon.
+* Cleaned up the config files of useless stuff.
+
+ I do plan on updating the moons scrap table when version 85+ of the game releases.
+
 ## Version 1.2.1
-* Fixed kill triggeres in the control room magically walking away (i think).
+* Fixed kill triggers in the control room magically walking away (i think).
 * Added Toothpaste, pill bottle, dust pan, and toy train into the scrap table.
 * Added Jester with a wopping rarity of 1.
 * Decreased Factory Size Multiplier from 1.1 --> 1
